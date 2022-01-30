@@ -1,0 +1,9 @@
+[
+  "test_coloring.py::test_ambiguous_subtree",
+  "test_distant_leaves.py::test_find_distant_leaves",
+  "test_distant_leaves.py::test_find_distant_leaves_2",
+  "test_distant_leaves.py::test_find_distant_leaves_binary_tree",
+  "test_distant_leaves.py::test_find_distant_leaves_binary_tree_2",
+  "test_distant_leaves.py::test_to_binary_tree",
+  "test_guess.py::test_ambiguous_subtree"
+]
