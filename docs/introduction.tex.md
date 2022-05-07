@@ -10,16 +10,16 @@ So how do you choose products for manual labeling? And how do you infer automate
 Formalizing problem
 -------------------
 
-If $$\mathcal{Y}$$ is a set of classes (labels or shop departments in our example), and $$\mathcal{X}$$ is a space of all possible products and product groups, then our goal is to find a classifier function $$f: \mathcal{X} \to \mathcal{Y}$$. This sounds like a [multiclass classification](https://en.wikipedia.org/wiki/Multiclass_classification) problem, although we are not necessarily going to use machine learning to solve it. 
+If $\mathcal{Y}$ is a set of classes (labels or shop departments in our example), and $\mathcal{X}$ is a space of all possible products and product groups, then our goal is to find a classifier function $f: \mathcal{X} \to \mathcal{Y}$. This sounds like a [multiclass classification](https://en.wikipedia.org/wiki/Multiclass_classification) problem, although we are not necessarily going to use machine learning to solve it. 
 
 Obviously, we have bent reality a bit assuming that:
 
 * each product can be found only in one department (otherwise that would be [multi-label classification](https://en.wikipedia.org/wiki/Multi-label_classification)), 
 * and all products can be found in a considered grocery store.
 
-We have the budget to manually label only $$n$$ of $$m$$ products, where $$m=\vert\mathcal{X}\vert$$ and $$n \ll m$$. 
+We have the budget to manually label only $n$ of $m$ products, where $m=\vert\mathcal{X}\vert$ and $n \ll m$. 
 
-Products are organized in categories that make up a taxonomy $$T$$. More formally, a taxonomy, is a tree, where leaves stand 
+Products are organized in categories that make up a taxonomy $T$. More formally, a taxonomy, is a tree, where leaves stand 
 for products and inner nodes are product categories.
 
 Labelling in iterations
@@ -29,23 +29,23 @@ My idea is to label products iteratively.
 
 First iteration is somehow special:
 
-1. Sample $$X_1 \subset \mathcal{X}$$ products.
-2. Label $$X_1$$ manually.
-3. Predict labels for remaining products ($$\mathcal{X} \setminus X_1$$) based on labels for $$X_1$$ and relations in 
-   $$T$$.
+1. Sample $X_1 \subset \mathcal{X}$ products.
+2. Label $X_1$ manually.
+3. Predict labels for remaining products ($\mathcal{X} \setminus X_1$) based on labels for $X_1$ and relations in 
+   $T$.
 
-There will be products ($$R_1$$) with only one matching label and products ($$S_1$$) with ambiguous predictions, i.e., 
-multiple label candidates, that require manual clarification. In subsequent iterations $$i=2,3,\dots$$ we will gradually 
+There will be products ($R_1$) with only one matching label and products ($S_1$) with ambiguous predictions, i.e., 
+multiple label candidates, that require manual clarification. In subsequent iterations $i=2,3,\dots$ we will gradually 
 clarify those ambiguous predictions:
 
-1. Sample $$X_i \subset S_{i-1}$$ products. 
-2. Label $$X_i$$ manually.
-3. Predict labels for products without manual labels ($$\mathcal{X} \setminus \bigcup_{j=1}^{i}{X_{j}}$$) based on all 
-   manual labels collected so far (i.e. labels for $$\bigcup_{j=1}^{i}{X_{j}}$$) and relations in $$T$$.
+1. Sample $X_i \subset S_{i-1}$ products. 
+2. Label $X_i$ manually.
+3. Predict labels for products without manual labels ($\mathcal{X} \setminus \bigcup_{j=1}^{i}{X_{j}}$) based on all 
+   manual labels collected so far (i.e. labels for $\bigcup_{j=1}^{i}{X_{j}}$) and relations in $T$.
 
-Repeat until there are no products with ambiguous predictions ($$\vert S_i \vert = 0$$) or you have consumed whole
-budget ($$\sum_{j=1}^{i}{\vert X_j \vert} \geq n $$). The ultimate labelling will come from both manual labels
-(for $$\bigcup_{j=1}^{i}{X_{j}}$$) and unambiguous predictions (for $$\bigcup_{j=1}^{i}{R_{j}}$$).
+Repeat until there are no products with ambiguous predictions ($\vert S_i \vert = 0$) or you have consumed whole
+budget ($\sum_{j=1}^{i}{\vert X_j \vert} \geq n $). The ultimate labelling will come from both manual labels
+(for $\bigcup_{j=1}^{i}{X_{j}}$) and unambiguous predictions (for $\bigcup_{j=1}^{i}{R_{j}}$).
 
 Manual labelling
 ----------------
@@ -60,7 +60,7 @@ Predicting labels
 Both product and category nodes in a taxonomy can be labelled. Each can have one or more labels predicted. If a node
 has multiple labels predicted, then we call it ambiguous prediction.
 
-The process of labelling consists of two phases. In first phase we learn labels of all categories based on manual labels of products, moving from leaves to the root of $$T$$. Each inner node of $$T$$ gets a union of labels of its leaves. In second phase we move backwards: each leaf unlabelled so far gets labels of its labelled ancestors.
+The process of labelling consists of two phases. In first phase we learn labels of all categories based on manual labels of products, moving from leaves to the root of $T$. Each inner node of $T$ gets a union of labels of its leaves. In second phase we move backwards: each leaf unlabelled so far gets labels of its labelled ancestors.
 
 
 Sampling products for manual labelling
@@ -72,46 +72,46 @@ Requirements:
 
 
 
-Given a tree $$T$$, we want to find a subset $$N$$ of $$n$$ leaves that are the farthest apart. I.e., we want to find $$N$$ that maximizes function:
+Given a tree $T$, we want to find a subset $N$ of $n$ leaves that are the farthest apart. I.e., we want to find $N$ that maximizes function:
 
-$$g(N)=\sum\limits_{x_1,x_2 \in N}{d(x_1,x_2)}$$  
+$g(N)=\sum\limits_{x_1,x_2 \in N}{d(x_1,x_2)}$  
 
-where $$d(x_1, x_2)$$ is a distance between two vertices/nodes $$x_1$$ and $$x_2$$. Now imagine, there is a subtree in $$T$$ with many very deep leaves that are close to each other but very far from leaves in other subtrees of $$T$$. If we defined the distance as just the shortest number of edges between two nodes, then maximizing $$g(N)$$ would lead to solutions where many related categories get selected, e.g. `>Alkohol>Alkohole mocne>Whisky>Szkocka`, `>Alkohol>Alkohole mocne>Whisky>Irlandzka`, `>Alkohol>Alkohole mocne>Whisky>Angielska` rather than `>Alkohol>Alkohole mocne>Whisky>Szkocka`, `Alkohol>Piwo>Piwo bezalkoholowe>Piwo bezalkoholowe` and `Alkohol>Wino>Wino bezalkoholowe>Wino bezalkoholowe`. 
+where $d(x_1, x_2)$ is a distance between two vertices/nodes $x_1$ and $x_2$. Now imagine, there is a subtree in $T$ with many very deep leaves that are close to each other but very far from leaves in other subtrees of $T$. If we defined the distance as just the shortest number of edges between two nodes, then maximizing $g(N)$ would lead to solutions where many related categories get selected, e.g. `>Alkohol>Alkohole mocne>Whisky>Szkocka`, `>Alkohol>Alkohole mocne>Whisky>Irlandzka`, `>Alkohol>Alkohole mocne>Whisky>Angielska` rather than `>Alkohol>Alkohole mocne>Whisky>Szkocka`, `Alkohol>Piwo>Piwo bezalkoholowe>Piwo bezalkoholowe` and `Alkohol>Wino>Wino bezalkoholowe>Wino bezalkoholowe`. 
 
 TODO Make a nice picture here
 
-Therefore, we introduce weight $$w$$ to edges that gives more preferences to paths going closer to the root:
+Therefore, we introduce weight $w$ to edges that gives more preferences to paths going closer to the root:
 
-$$w(x_{i+1}, x_i) = w(x_i, x_{i+1})=10^{-depth(x_{i+1})}$$  
+$w(x_{i+1}, x_i) = w(x_i, x_{i+1})=10^{-depth(x_{i+1})}$  
 
-where $$x_{i+1}$$ is a child of $$x_i$$. Now
+where $x_{i+1}$ is a child of $x_i$. Now
 
-$$d(x_1, x_m)=\sum\limits_{i=1}^{m-1}{w(x_i,x_{i+1})}$$  
+$d(x_1, x_m)=\sum\limits_{i=1}^{m-1}{w(x_i,x_{i+1})}$  
 
-where $$x_1, x_2, ..., x_m$$ is a walk (sequence of nodes).
+where $x_1, x_2, ..., x_m$ is a walk (sequence of nodes).
 
 Finding farthest leaves in a tree
 ---------------------------------
 
 
-If we have a binary tree, we should be able to solve this using [dynamic programming][3].  Let $$A[v,j,k]$$ denote the maximum possible value of the objective function
+If we have a binary tree, we should be able to solve this using [dynamic programming][3].  Let $A[v,j,k]$ denote the maximum possible value of the objective function
 
-$$g'(N) = \sum_{x_1,x_2 \in N} d(x_1,x_2) + k \sum_{x \in N} d(v,x)$$
+$g'(N) = \sum_{x_1,x_2 \in N} d(x_1,x_2) + k \sum_{x \in N} d(v,x)$
 
-where $$N$$ ranges over all subsets of exactly $$j$$ leaves from among those that are descendants of $$v$$ (i.e., leaves of the subtree rooted at $$v$$) and $$k$$ is the number of leaves in the remaining part of the tree (i.e., not being descendants of $$v$$).
+where $N$ ranges over all subsets of exactly $j$ leaves from among those that are descendants of $v$ (i.e., leaves of the subtree rooted at $v$) and $k$ is the number of leaves in the remaining part of the tree (i.e., not being descendants of $v$).
 
-If $$v$$ is a leaf, then $$A[v,j,k]=0$$ for all $$j,k$$. If $$v$$ has one child $$v'$$, it is easy to compute that $$A[v,j,k]=A[v',j,k] + jk$$ for all $$j,k$$.
+If $v$ is a leaf, then $A[v,j,k]=0$ for all $j,k$. If $v$ has one child $v'$, it is easy to compute that $A[v,j,k]=A[v',j,k] + jk$ for all $j,k$.
 
-So now suppose $$v$$ has two children $$v',v''$$.  Then we can work out a recursive equation for $$A[v,j,k]$$ in terms of values $$A[w,\cdot,\cdot]$$ where the $$w$$'s are descendants of $$v$$:
+So now suppose $v$ has two children $v',v''$.  Then we can work out a recursive equation for $A[v,j,k]$ in terms of values $A[w,\cdot,\cdot]$ where the $w$'s are descendants of $v$:
 
 
-$$
+$
 A[v,j,k] = \max A[v',j',k+j''] + A[v'',j'',k+j'] + 2 j' j'' + jk
-$$
+$
 
-where $$j',j''$$ range over all values such that $$j'+j'' = j$$, $$0 \le j',j'' \le j$$.  The intended meaning is that $$j'$$ counts the number of leaves in $$N$$ that are descendants of $$v'$$ and $$j''$$ counts the number of leaves in $$N$$ that are descendants of $$v''$$.  In other words, we split $$N=N' \cup N''$$ where $$N'$$ contains $$j'$$ leaves from the descendants of $$v'$$, and $$N''$$ contains $$j''$$ leaves from the descendants of $$v''$$; then (loosely speaking) we compute the maximum value of $$g'(N)$$ in terms of the maximum values of $$g'(N')$$ and $$g'(N'')$$.  The $$2jj'$$ term counts distances of the form $$d(x_1,x_2)$$ where $$x_1 \in N'$$ and $$x_2 \in N''$$.  The $$jk$$ term accounts for the fact that the $$j$$ root-to-leaf paths all need to be extended by one edge.
+where $j',j''$ range over all values such that $j'+j'' = j$, $0 \le j',j'' \le j$.  The intended meaning is that $j'$ counts the number of leaves in $N$ that are descendants of $v'$ and $j''$ counts the number of leaves in $N$ that are descendants of $v''$.  In other words, we split $N=N' \cup N''$ where $N'$ contains $j'$ leaves from the descendants of $v'$, and $N''$ contains $j''$ leaves from the descendants of $v''$; then (loosely speaking) we compute the maximum value of $g'(N)$ in terms of the maximum values of $g'(N')$ and $g'(N'')$.  The $2jj'$ term counts distances of the form $d(x_1,x_2)$ where $x_1 \in N'$ and $x_2 \in N''$.  The $jk$ term accounts for the fact that the $j$ root-to-leaf paths all need to be extended by one edge.
 
-$$A$$ can be calculated by traversing $$T$$ in post order.
+$A$ can be calculated by traversing $T$ in post order.
 
 If we have an arbitrary tree, not necessarily a binary tree, then it can be converted to a binary tree as follows. Children from the original tree are encoded as a left child in the binary tree and edges to left children preserve their original weights. Remaining edges, those to right children, have 0 weight. TODO Add an image.
 
@@ -122,7 +122,7 @@ If we have an arbitrary tree, not necessarily a binary tree, then it can be conv
 Distributing labelling budget
 -----------------------------
 
-We have one annotator, predicting next label costs nothing (compared to manual cost), so given a budget $$n$$, so we can have $$n$$ iterations, in each we select only one product for manual labelling.
+We have one annotator, predicting next label costs nothing (compared to manual cost), so given a budget $n$, so we can have $n$ iterations, in each we select only one product for manual labelling.
 
 The problem then boils down, which product to select next?
 - The one that resolves most conflicts: products with the highest number of label candidates?
