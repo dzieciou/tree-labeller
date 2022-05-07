@@ -1,0 +1,1 @@
+<p align="center"><img src="svgs/23b85479e5d53b98864941c60c2a4279.svg?invert_in_darkmode" align=middle width=40.798591349999995pt height=32.990165999999995pt/></p>
