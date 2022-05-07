@@ -31,8 +31,7 @@ First iteration is somehow special:
 
 1. Sample <img src="svgs/b4fdbf4e9e08385fb7c6dd70d18f51b6.svg?invert_in_darkmode" align=middle width=57.043308299999985pt height=22.465723500000017pt/> products.
 2. Label <img src="svgs/4a0dab614eaf1e6dc58146666d67ace8.svg?invert_in_darkmode" align=middle width=20.17129784999999pt height=22.465723500000017pt/> manually.
-3. Predict labels for remaining products (<img src="svgs/03c23a1fe5a7b9dee5217b678ef3e840.svg?invert_in_darkmode" align=middle width=49.82872784999999pt height=24.65753399999998pt/>) based on labels for <img src="svgs/4a0dab614eaf1e6dc58146666d67ace8.svg?invert_in_darkmode" align=middle width=20.17129784999999pt height=22.465723500000017pt/> and relations in 
-   $T$.
+3. Predict labels for remaining products (<img src="svgs/03c23a1fe5a7b9dee5217b678ef3e840.svg?invert_in_darkmode" align=middle width=49.82872784999999pt height=24.65753399999998pt/>) based on labels for <img src="svgs/4a0dab614eaf1e6dc58146666d67ace8.svg?invert_in_darkmode" align=middle width=20.17129784999999pt height=22.465723500000017pt/> and relations in <img src="svgs/2f118ee06d05f3c2d98361d9c30e38ce.svg?invert_in_darkmode" align=middle width=11.889314249999991pt height=22.465723500000017pt/>.
 
 There will be products (<img src="svgs/4e1dcfc6c3009ba241e86add0e87a9d1.svg?invert_in_darkmode" align=middle width=19.034022149999988pt height=22.465723500000017pt/>) with only one matching label and products (<img src="svgs/264fba1c7ab2f0bc1611dac6780708a6.svg?invert_in_darkmode" align=middle width=16.632471899999988pt height=22.465723500000017pt/>) with ambiguous predictions, i.e., 
 multiple label candidates, that require manual clarification. In subsequent iterations <img src="svgs/a07e538fdb521b27534795a0845f6f0f.svg?invert_in_darkmode" align=middle width=77.80903184999998pt height=21.68300969999999pt/> we will gradually 
@@ -40,8 +39,7 @@ clarify those ambiguous predictions:
 
 1. Sample <img src="svgs/d537974612b119219327f3d9633751a2.svg?invert_in_darkmode" align=middle width=72.56657099999998pt height=22.465723500000017pt/> products. 
 2. Label <img src="svgs/1338d1e5163ba5bc872f1411dd30b36a.svg?invert_in_darkmode" align=middle width=18.269651399999987pt height=22.465723500000017pt/> manually.
-3. Predict labels for products without manual labels (<img src="svgs/d1dfb5f289dc5485aecfbf46ef4b1275.svg?invert_in_darkmode" align=middle width=89.38933574999999pt height=31.75825949999999pt/>) based on all 
-   manual labels collected so far (i.e. labels for $\bigcup_{j=1}^{i}{X_{j}}$) and relations in $T$.
+3. Predict labels for products without manual labels (<img src="svgs/d1dfb5f289dc5485aecfbf46ef4b1275.svg?invert_in_darkmode" align=middle width=89.38933574999999pt height=31.75825949999999pt/>) based on all manual labels collected so far (i.e. labels for <img src="svgs/8b5f51cbd69b19bcd7d49c6f07f6272a.svg?invert_in_darkmode" align=middle width=59.73190574999998pt height=31.75825949999999pt/>) and relations in <img src="svgs/2f118ee06d05f3c2d98361d9c30e38ce.svg?invert_in_darkmode" align=middle width=11.889314249999991pt height=22.465723500000017pt/>.
 
 Repeat until there are no products with ambiguous predictions (<img src="svgs/c14048522285c45bc782814beee94acd.svg?invert_in_darkmode" align=middle width=54.82200899999998pt height=24.65753399999998pt/>) or you have consumed whole
 budget (<img src="svgs/77e26f659508bed2a277eb15d2113492.svg?invert_in_darkmode" align=middle width=105.12371594999999pt height=31.75825949999999pt/>). The ultimate labelling will come from both manual labels
