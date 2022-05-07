@@ -26,7 +26,7 @@ where $x_1, x_2, ..., x_m$ is a walk (sequence of nodes).
 
 ## Finding farthest leaves in a tree
 
-If we have a binary tree, we should be able to solve this using [dynamic programming][3].  Let $A[v,j,k]$ denote the maximum possible value of the objective function
+If we have a binary tree, we should be able to solve this using [dynamic programming][1].  Let $A[v,j,k]$ denote the maximum possible value of the objective function
 
 $g'(N) = \sum_{x_1,x_2 \in N} d(x_1,x_2) + k \sum_{x \in N} d(v,x)$
 
@@ -47,5 +47,5 @@ $A$ can be calculated by traversing $T$ in post order.
 
 If we have an arbitrary tree, not necessarily a binary tree, then it can be converted to a binary tree as follows. Children from the original tree are encoded as a left child in the binary tree and edges to left children preserve their original weights. Remaining edges, those to right children, have 0 weight. TODO Add an image.
 
-
+[1]: https://en.wikipedia.org/wiki/Dynamic_programming
 

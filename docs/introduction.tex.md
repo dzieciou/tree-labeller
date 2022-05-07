@@ -110,4 +110,3 @@ I would like to thank people from StackExchange for help in developing algorithm
 
 [1]: https://link.springer.com/content/pdf/10.1007/978-3-642-30284-8_27.pdf
 [2]: http://www.filosofiacienciaarte.org/attachments/article/1129/Je%CC%81ro%CC%82me%20Euzenat-Ontology%20Matching.pdf
-[3]: https://en.wikipedia.org/wiki/Dynamic_programming
