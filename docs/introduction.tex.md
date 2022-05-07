@@ -31,8 +31,7 @@ First iteration is somehow special:
 
 1. Sample $X_1 \subset \mathcal{X}$ products.
 2. Label $X_1$ manually.
-3. Predict labels for remaining products ($\mathcal{X} \setminus X_1$) based on labels for $X_1$ and relations in 
-   $T$.
+3. Predict labels for remaining products ($\mathcal{X} \setminus X_1$) based on labels for $X_1$ and relations in $T$.
 
 There will be products ($R_1$) with only one matching label and products ($S_1$) with ambiguous predictions, i.e., 
 multiple label candidates, that require manual clarification. In subsequent iterations $i=2,3,\dots$ we will gradually 
@@ -40,8 +39,7 @@ clarify those ambiguous predictions:
 
 1. Sample $X_i \subset S_{i-1}$ products. 
 2. Label $X_i$ manually.
-3. Predict labels for products without manual labels ($\mathcal{X} \setminus \bigcup_{j=1}^{i}{X_{j}}$) based on all 
-   manual labels collected so far (i.e. labels for $\bigcup_{j=1}^{i}{X_{j}}$) and relations in $T$.
+3. Predict labels for products without manual labels ($\mathcal{X} \setminus \bigcup_{j=1}^{i}{X_{j}}$) based on all manual labels collected so far (i.e. labels for $\bigcup_{j=1}^{i}{X_{j}}$) and relations in $T$.
 
 Repeat until there are no products with ambiguous predictions ($\vert S_i \vert = 0$) or you have consumed whole
 budget ($\sum_{j=1}^{i}{\vert X_j \vert} \geq n $). The ultimate labelling will come from both manual labels
