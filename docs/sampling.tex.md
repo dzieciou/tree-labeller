@@ -1,8 +1,7 @@
-Sampling products for manual labelling
---------------------------------------
+# Sampling taxonomy leaves for manual labelling
 
 Requirements:
-* Cover all products
+* Cover all leaves
 * Cover all labels
 
 
@@ -25,9 +24,7 @@ $d(x_1, x_m)=\sum\limits_{i=1}^{m-1}{w(x_i,x_{i+1})}$
 
 where $x_1, x_2, ..., x_m$ is a walk (sequence of nodes).
 
-Finding farthest leaves in a tree
----------------------------------
-
+## Finding farthest leaves in a tree
 
 If we have a binary tree, we should be able to solve this using [dynamic programming][3].  Let $A[v,j,k]$ denote the maximum possible value of the objective function
 
