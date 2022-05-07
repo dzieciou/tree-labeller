@@ -1,8 +1,7 @@
-Sampling products for manual labelling
---------------------------------------
+# Sampling taxonomy leaves for manual labelling
 
 Requirements:
-* Cover all products
+* Cover all leaves
 * Cover all labels
 
 
@@ -25,11 +24,9 @@ where <img src="svgs/7c5d09796fa72f50fc8f541920f3d44a.svg?invert_in_darkmode" al
 
 where <img src="svgs/715f1d9bbd0efc96188daed9f2a78c9a.svg?invert_in_darkmode" align=middle width=90.21505514999998pt height=14.15524440000002pt/> is a walk (sequence of nodes).
 
-Finding farthest leaves in a tree
----------------------------------
+## Finding farthest leaves in a tree
 
-
-If we have a binary tree, we should be able to solve this using [dynamic programming][3].  Let <img src="svgs/789737ac1507bda7fca8f102735e5d6f.svg?invert_in_darkmode" align=middle width=60.503389649999995pt height=24.65753399999998pt/> denote the maximum possible value of the objective function
+If we have a binary tree, we should be able to solve this using [dynamic programming][1].  Let <img src="svgs/789737ac1507bda7fca8f102735e5d6f.svg?invert_in_darkmode" align=middle width=60.503389649999995pt height=24.65753399999998pt/> denote the maximum possible value of the objective function
 
 <img src="svgs/b3003206bc2792d9ccbf0617943d8215.svg?invert_in_darkmode" align=middle width=325.3718094pt height=24.7161288pt/>
 
@@ -48,5 +45,5 @@ where <img src="svgs/c6e69007f01adcf9c3411036de93368b.svg?invert_in_darkmode" al
 
 If we have an arbitrary tree, not necessarily a binary tree, then it can be converted to a binary tree as follows. Children from the original tree are encoded as a left child in the binary tree and edges to left children preserve their original weights. Remaining edges, those to right children, have 0 weight. TODO Add an image.
 
-
+[1]: https://en.wikipedia.org/wiki/Dynamic_programming
 
