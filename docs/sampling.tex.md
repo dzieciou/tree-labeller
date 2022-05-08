@@ -47,3 +47,8 @@ $A$ can be calculated by traversing $T$ in post order.
 If we have an arbitrary tree, not necessarily a binary tree, then it can be converted to a binary tree as follows. Children from the original tree are encoded as a left child in the binary tree and edges to left children preserve their original weights. Remaining edges, those to right children, have 0 weight.
 
 TODO Add an image.
+
+## Acknowledgements
+
+The original dynamic programming algorithm, without weights, comes from:
+* D.W. (https://cs.stackexchange.com/users/755/d-w), Finding n farthest leaves in a tree, URL (version: 2021-01-18): https://cs.stackexchange.com/q/134439
