@@ -1,18 +1,18 @@
 # Sampling taxonomy leaves for manual labelling
 
-Our goal is to select a sample of taxonomy leaves that an annotator will manually label. Based on manual labels we will infer labels for other unlabelled leaves. Since we can select only a small subset of unlabelled leaves, we need to do it wisely. If we select leaves that have the same parent, there is high chance both will be annotated with the same label. For instance, "Alcoholic Drinks > Whiskies > Jack Daniel's" and "Alcoholic Drinks > Whiskies > Johnnie Walker's" both can be labelled with "Alcohols department". On the other hand, if we select "Alcoholic Drinks > Beers > Guinness" instead of Johnnie Walker's whisky, we could cover two different shop departments: Alcohols and Beers. 
+Our goal is to select a sample of taxonomy leaves that an annotator will manually label. Based on manual labels we will infer labels for other unlabelled leaves. Since we can select only a small subset of unlabelled leaves, we need to do it wisely. If we select leaves that have the same parent, there is high chance both will be annotated with the same label. For instance, Jack Daniel's and Johnnie Walker's both can be labelled with "Alcohols department". On the other hand, if we select Guinness beer instead of Johnnie Walker's whisky, we could cover two different shop departments: Alcohols and Beers. 
 
 ![Example of labelling](imgs/tree_1.png)
 
 ## Math, math, math
 
-More formally, we want to select leaves that [lowest common ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA) is as close to the root as possible. 
+More formally, we want to select leaves that have [lowest common ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA) as close to the root as possible. 
 
 Even more formally, given a taxonomy tree $T$, we want to find a subset $N$ of $n$ leaves that are farthest apart. I.e., we want to find $N$ that maximizes function:
 
-$g(N)=\sum\limits_{x_1,x_2 \in N}{d(x_1,x_2)}$  
+$$g(N)=\sum\limits_{x_1,x_2 \in N}{d(x_1,x_2)}$$  
 
-where $d(x_1, x_2)$ is a distance between two vertices/nodes $x_1$ and $x_2$. Now imagine, there is a subtree in $T$ with many very deep leaves that are close to each other but very far from leaves in other subtrees of $T$. If we defined the distance as just the shortest number of edges between two nodes, then maximizing $g(N)$ would lead to solutions where many related leaves (i.e., leaves with same parent or close ancestor) get selected as in the example with whiskies. Therefore, we introduce weight $w$ to edges that gives more preferences to paths going closer to the root:
+where $d(x_1, x_2)$ is a distance between two vertices/nodes $x_1$ and $x_2$. Now imagine, there is a subtree in $T$ with many very deep leaves that are close to each other but very far from leaves in other subtrees of $T$. If we defined the distance as just the shortest number of edges between two nodes, then maximizing $g(N)$ would lead to solutions where many related leaves (i.e., leaves with same parent or close ancestor) get selected as in the example with whiskies. Therefore, we introduce weight $w$ that is higher for edges closer to the taxonomy root:
 
 $w(x_{i+1}, x_i) = w(x_i, x_{i+1})=10^{-depth(x_{i+1})}$  
 
