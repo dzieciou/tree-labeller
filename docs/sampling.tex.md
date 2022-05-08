@@ -1,20 +1,18 @@
 # Sampling taxonomy leaves for manual labelling
 
-Requirements:
-* Cover all leaves
-* Cover all labels
+Our goal is to select a sample of taxonomy leaves that an annotator will manually label. Based on manual labels we will infer labels for other unlabelled leaves. Since we can select only a small subset of unlabelled leaves, we need to do it wisely. If we select leaves that have the same parent, there is high chance both will be annotated with the same label. For instance, "Alcoholic Drinks > Whiskies > Jack Daniel's" and "Alcoholic Drinks > Whiskies > Johnnie Walker's" both can be labelled with "Alcohols department". On the other hand, if we select "Alcoholic Drinks > Beers > Guinness" instead of Johnnie Walker's whisky, we could cover two different shop departments: Alcohols and Beers. 
 
+![Example of labelling](imgs/tree_1.png)
 
+## Math, math, math
 
-Given a tree $T$, we want to find a subset $N$ of $n$ leaves that are the farthest apart. I.e., we want to find $N$ that maximizes function:
+More formally, we want to select leaves that [lowest common ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA) is as close to the root as possible. 
+
+Even more formally, given a taxonomy tree $T$, we want to find a subset $N$ of $n$ leaves that are farthest apart. I.e., we want to find $N$ that maximizes function:
 
 $g(N)=\sum\limits_{x_1,x_2 \in N}{d(x_1,x_2)}$  
 
-where $d(x_1, x_2)$ is a distance between two vertices/nodes $x_1$ and $x_2$. Now imagine, there is a subtree in $T$ with many very deep leaves that are close to each other but very far from leaves in other subtrees of $T$. If we defined the distance as just the shortest number of edges between two nodes, then maximizing $g(N)$ would lead to solutions where many related categories get selected, e.g. `>Alkohol>Alkohole mocne>Whisky>Szkocka`, `>Alkohol>Alkohole mocne>Whisky>Irlandzka`, `>Alkohol>Alkohole mocne>Whisky>Angielska` rather than `>Alkohol>Alkohole mocne>Whisky>Szkocka`, `Alkohol>Piwo>Piwo bezalkoholowe>Piwo bezalkoholowe` and `Alkohol>Wino>Wino bezalkoholowe>Wino bezalkoholowe`. 
-
-TODO Make a nice picture here
-
-Therefore, we introduce weight $w$ to edges that gives more preferences to paths going closer to the root:
+where $d(x_1, x_2)$ is a distance between two vertices/nodes $x_1$ and $x_2$. Now imagine, there is a subtree in $T$ with many very deep leaves that are close to each other but very far from leaves in other subtrees of $T$. If we defined the distance as just the shortest number of edges between two nodes, then maximizing $g(N)$ would lead to solutions where many related leaves (i.e., leaves with same parent or close ancestor) get selected as in the example with whiskies. Therefore, we introduce weight $w$ to edges that gives more preferences to paths going closer to the root:
 
 $w(x_{i+1}, x_i) = w(x_i, x_{i+1})=10^{-depth(x_{i+1})}$  
 
@@ -24,9 +22,9 @@ $d(x_1, x_m)=\sum\limits_{i=1}^{m-1}{w(x_i,x_{i+1})}$
 
 where $x_1, x_2, ..., x_m$ is a walk (sequence of nodes).
 
-## Finding farthest leaves in a tree
+## Finding the farthest leaves in a tree
 
-If we have a binary tree, we should be able to solve this using [dynamic programming][1].  Let $A[v,j,k]$ denote the maximum possible value of the objective function
+If we have a binary tree, we should be able to solve this using [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming).  Let $A[v,j,k]$ denote the maximum possible value of the objective function
 
 $g'(N) = \sum_{x_1,x_2 \in N} d(x_1,x_2) + k \sum_{x \in N} d(v,x)$
 
@@ -36,7 +34,6 @@ If $v$ is a leaf, then $A[v,j,k]=0$ for all $j,k$. If $v$ has one child $v'$, it
 
 So now suppose $v$ has two children $v',v''$.  Then we can work out a recursive equation for $A[v,j,k]$ in terms of values $A[w,\cdot,\cdot]$ where the $w$'s are descendants of $v$:
 
-
 $
 A[v,j,k] = \max A[v',j',k+j''] + A[v'',j'',k+j'] + 2 j' j'' + jk
 $
@@ -45,7 +42,8 @@ where $j',j''$ range over all values such that $j'+j'' = j$, $0 \le j',j'' \le j
 
 $A$ can be calculated by traversing $T$ in post order.
 
-If we have an arbitrary tree, not necessarily a binary tree, then it can be converted to a binary tree as follows. Children from the original tree are encoded as a left child in the binary tree and edges to left children preserve their original weights. Remaining edges, those to right children, have 0 weight. TODO Add an image.
+## Non-binary tree case
 
-[1]: https://en.wikipedia.org/wiki/Dynamic_programming
+If we have an arbitrary tree, not necessarily a binary tree, then it can be converted to a binary tree as follows. Children from the original tree are encoded as a left child in the binary tree and edges to left children preserve their original weights. Remaining edges, those to right children, have 0 weight.
 
+TODO Add an image.
