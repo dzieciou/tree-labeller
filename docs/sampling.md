@@ -46,7 +46,7 @@ where <img src="svgs/c6e69007f01adcf9c3411036de93368b.svg?invert_in_darkmode" al
 
 If we have an arbitrary tree, not necessarily a binary tree, then it can be converted to a binary tree as follows. Children from the original tree are encoded as a left child in the binary tree and edges to left children preserve their original weights. Remaining edges, those to right children, have 0 weight. Here is an example of how such conversion could look like.
 
-![Binary tree mapping](imgs/tree_1.png)
+![Binary tree mapping](imgs/tree_2.png)
 
 In the example above, dotted line indicates 0 weight.
 
