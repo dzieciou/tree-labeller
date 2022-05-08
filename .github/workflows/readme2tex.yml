@@ -33,7 +33,7 @@ jobs:
           pip3 install readme2tex
       - name: Remove previous .svg files
         run: |
-          rm docs/svgs/*.svg
+          rm -f docs/svgs/*.svg
       - name: Build readmes
         run: |
           find . -type f -name '*.tex.md' -execdir python3 -m readme2tex --readme "{}" --nocdn --output "{}.temp" \;
