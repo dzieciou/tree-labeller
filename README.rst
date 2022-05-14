@@ -1,8 +1,18 @@
-================
-Product Labeller
-================
+=============
+Tree Labeller
+=============
 
-Helps label training data using taxonomy information.
+Labels all leaves of a tree based only on a small sample of labelled leaves.
+
+
+
+Sample scenarios include:
+
+- Assign shop departments to products organized in a taxonomy of categories
+- Map taxonomy of book categories in one library to flat vocabulary of book categories in another library
+- Annotate training data
+
+
 
 The output has format:
 

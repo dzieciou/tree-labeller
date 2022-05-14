@@ -6,7 +6,7 @@ name: readme2tex-action
 # events but only for the master branch
 on:
   push:
-    branches: [feature/docs]
+    branches: [feature/docs-2]
   pull_request:
     branches: [main]
 
