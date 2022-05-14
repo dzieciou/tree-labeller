@@ -2,17 +2,13 @@
 Tree Labeller
 =============
 
-Labels all leaves of a tree based only on a small sample of labelled leaves.
-
-
+Labels all leaves of a tree based only on a small sample of manually labelled leaves.
 
 Sample scenarios include:
 
 - Assigning shop departments to products organized in a taxonomy of categories
 - Mapping taxonomy of book categories in one library to flat vocabulary of book categories in another library
 - Annotating training data organized in a tree
-
-
 
 The output has format:
 
@@ -24,6 +20,22 @@ The output has format:
 
 Install
 =======
+
+Install with pip:
+
+.. code-block:: bash
+
+    pip install tree-labeller
+
+
+Usage
+=====
+
+
+
+
+Development
+===========
 
 Install poetry:
 
@@ -103,17 +115,6 @@ If you decide to continue, you can do one or more of the following actions:
 - If one of departments have no products labeled so far, you can search for matching products manually and add them to the sample with correct label. For search you can use last TSV file with univocal predicted labels.
 - You can also occasionally review univocal predicted labels and correct them by adding to the sample.
 
-
-Generating name variants
-------------------------
-
-Generate name variants of labelled products:
-
-.. code-block:: bash
-
-    generate \
-        labels/${TARGET_SHOP}/...-good-labels.tsv \
-        datasets/labelled/${TARGET_SHOP}/train/frisco_products.tsv
 
 Development
 ===========
