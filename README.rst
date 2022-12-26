@@ -10,6 +10,24 @@ Sample scenarios include:
 - Mapping taxonomy of book categories in one library to flat vocabulary of book categories in another library
 - Annotating training data organized in a tree
 
+The input has format:
+
+.. code-block:: yaml
+
+    name: categories
+    id: 0
+    children:
+    - name: Bakalie, pestki, ziarna
+      id: 2970
+      children:
+      - name: Bakalie
+        id: 586
+        children:
+        - name: Figi
+          id: 11823
+        - name: Imbir kandyzowany
+          id: 11945
+
 The output has format:
 
 .. code-block:: tsv
