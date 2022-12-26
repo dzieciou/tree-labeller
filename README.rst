@@ -58,17 +58,15 @@ Create labelling task:
         --tree ./products.yaml \
         --allowed-labels Alcohols,Beers
 
-Generate a sample and run predictions:
+Generate a sample:
 
 .. code-block:: bash
 
     label --dir ./my_labels --sample 10
 
-Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible label candidates.
-
 Annotate a file with samples.
 
-Run predictions and generate another sample of ambiguous and non labeled items:
+Run predictions and generate another sample of ambiguous and non labeled items. Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible label candidates.
 
 .. code-block:: bash
 
