@@ -34,11 +34,11 @@ The output has format:
 
 .. code-block:: tsv
 
-    name	            label
-    Jack Daniel's	    Alcohols department
-    Johnnie Walker's    Alcohols department
-    Cabernet Sauvignon  Alcohols department
-    Guiness             Beers department
+    name	label
+    Jack Daniel's	Alcohols department
+    Johnnie Walker's	Alcohols department
+    Cabernet Sauvignon	Alcohols department
+    Guiness	Beers department
     ...
 
 Install
