@@ -102,6 +102,13 @@ Download sample taxonomy file of products and their categories form Frisco.pl on
 
 TODO
 
+Background
+==========
+
+See theoretical background_.
+
+.. _background: docs/introduction.md
+
 Development
 ===========
 
