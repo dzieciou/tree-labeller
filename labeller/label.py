@@ -4,6 +4,7 @@ import logging
 import fire
 
 from labeller.parsers.frisco import parse
+from labeller.parsers.yaml import YamlTreeParser
 from labeller.predict import predict_labels
 from labeller.labelling_task import (
     LabellingTask,
@@ -13,18 +14,18 @@ from labeller.types import TO_REJECT_LABEL, TO_SKIP_LABEL
 
 logging.basicConfig(level=logging.INFO)
 
-FRISCO_PRODUCTS_PATH = (
-    "https://commerce.frisco.pl/api/v1/integration/feeds/public?language=pl"
+PRODUCTS_PATH = (
+    "products.yaml"
 )
 
 
 def label(
     labels: str,
     allowed_labels: str,
-    products_path: str = FRISCO_PRODUCTS_PATH,
+    products_path: str = PRODUCTS_PATH,
     n_sample: int = 100,
 ):
-    tree, content_hash = parse(products_path)
+    tree, content_hash = YamlTreeParser().parse_tree(products_path)
     task = LabellingTask(tree, content_hash, load_allowed_labels(allowed_labels))
     task.init_manual_labels(labels)
 

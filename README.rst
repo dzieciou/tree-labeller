@@ -86,39 +86,20 @@ Labelling is a semi-automatic iterative process. You start by labeling few sampl
 
 The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of belonging to the same shop department. Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible labels.
 
-Here are the steps to follow.
+Create labelling task:
 
-Define a name of shop. It will be used to locate data and model:
+..code-block:: bash
 
-.. code-block:: bash
-
-    export TARGET_SHOP=shop
-
-Create a folder where new labels will be stored:
-
-.. code-block:: bash
-
-    mkdir -p labels/${TARGET_SHOP}
-
-Define list of available departments in the shop in ``labels/${TARGET_SHOP}/departments.txt`` with each department
-in a separate line, e.g.:
-
-.. code-block:: bash
-
-    Drogeria
-    Dżemy i miody
-    Herbata
-    Kawa
-    Konserwy mięsne i rybne
+  create_task \
+      --dir ./my_labels \
+      --tree ./products.yaml
+      --allowed-labels Alcohols,Beers
 
 To generate a sample and run predictions:
 
 .. code-block:: bash
 
-    label \
-        --allowed-labels labels/${TARGET_SHOP}/departments.txt \
-        --labels labels/${TARGET_SHOP}/ \
-        --n-sample 10
+    label --dir ./my_labels --sample 10
 
 After each iteration you will get statistics to help you decide when to stop labelling:
 

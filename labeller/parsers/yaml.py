@@ -11,7 +11,7 @@ class YamlTreeParser(TreeParser):
     def parse_tree(self, path: str) -> Tuple[RawCategory, ContentHash]:
         with open(path) as input:
             dct = yaml.full_load(input)
-        return CustomDictImporter().import_(dct)
+        return CustomDictImporter().import_(dct), None
 
 class CustomDictImporter(object):
 

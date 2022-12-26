@@ -14,6 +14,8 @@ from labeller.parsers.treeparser import TreeParser, ContentHash
 from labeller.tree.utils import internals
 from labeller.types import RawCategory, RawProduct
 
+ROOT_CATEGORY_NAME = "categories"
+
 Json = Dict[str, Any]
 
 
@@ -58,7 +60,7 @@ class FriscoTreeParser(TreeParser):
             for node, parent_id in parse_one(category):
                 indexed_nodes[node.id] = (node, parent_id)
 
-        root = RawCategory("categories", id=0)
+        root = RawCategory(ROOT_CATEGORY_NAME, id=0)
         for node, parent_id in tqdm(indexed_nodes.values(), desc="Parsing categories"):
             parent, _ = indexed_nodes.get(parent_id, (root, None))
             node.parent = parent
