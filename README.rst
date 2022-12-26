@@ -12,7 +12,7 @@ Sample scenarios include:
 
 Here's example of the first task:
 
-![image-title](docs/imgs/tree_1.png)
+.. image:: docs/imgs/tree_1.png
 
 The input of the tool is YAML file describing a tree to label:
 
