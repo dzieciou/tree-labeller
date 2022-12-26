@@ -88,11 +88,11 @@ The algorithm suggests the most diverse sample of items to label, i.e. coming fr
 
 Create labelling task:
 
-..code-block:: bash
+.. code-block:: bash
 
     create_task \
         --dir ./my_labels \
-        --tree ./products.yaml
+        --tree ./products.yaml \
         --allowed-labels Alcohols,Beers
 
 To generate a sample and run predictions:
