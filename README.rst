@@ -4,6 +4,8 @@ Tree Labeller
 
 Command line tools that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
 
+Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided. The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label.
+
 Sample scenarios include:
 
 - Assigning shop departments to products organized in a taxonomy of categories
@@ -56,10 +58,6 @@ Install with pip:
 Usage
 =====
 
-Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided.
-
-The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label. Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible label candidates.
-
 Create labelling task:
 
 .. code-block:: bash
@@ -74,6 +72,9 @@ To generate a sample and run predictions:
 .. code-block:: bash
 
     label --dir ./my_labels --sample 10
+
+Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible label candidates.
+
 
 After each iteration you will get statistics to help you decide when to stop labelling:
 
