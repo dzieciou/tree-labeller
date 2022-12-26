@@ -2,7 +2,7 @@
 Tree Labeller
 =============
 
-Labels all leaves of a tree based only on a small sample of manually labelled leaves.
+Command line tools that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
 
 Sample scenarios include:
 
@@ -10,7 +10,11 @@ Sample scenarios include:
 - Mapping taxonomy of book categories in one library to flat vocabulary of book categories in another library
 - Annotating training data organized in a tree
 
-The input is YAML file with taxonomy of categories and their products:
+Here's example of the first task:
+
+![image-title](docs/imgs/tree_1.png)
+
+The input of the tool is YAML file describing a tree to label:
 
 .. code-block:: yaml
 
@@ -29,8 +33,7 @@ The input is YAML file with taxonomy of categories and their products:
         children:
         - name: Guinness
 
-
-The output is a TSV file of labelled products:
+The ultimate output is a TSV file of leaves of the tree:
 
 .. csv-table::
 
