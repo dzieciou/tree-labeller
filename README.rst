@@ -56,29 +56,6 @@ Install with pip:
 Usage
 =====
 
-
-
-
-Development
-===========
-
-Install poetry:
-
-.. code-block:: bash
-
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-
-Install the labelling tool:
-
-.. code-block:: bash
-
-    poetry install --no-dev
-    poetry shell
-
-
-Usage
-=====
-
 Labelling
 ---------
 
@@ -121,23 +98,19 @@ If you decide to continue, you can do one or more of the following actions:
 - If one of departments have no products labeled so far, you can search for matching products manually and add them to the sample with correct label. For search you can use last TSV file with univocal predicted labels.
 - You can also occasionally review univocal predicted labels and correct them by adding to the sample.
 
-
 Development
 ===========
 
-Install poetry.
-
-
-Install environment:
+Install poetry:
 
 .. code-block:: bash
 
-    poetry install
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
-
-Publish package to dev registry.
+Install the labelling tool:
 
 .. code-block:: bash
 
-    poetry publish -r dev --build
+    poetry install --no-dev
+    poetry shell
 
