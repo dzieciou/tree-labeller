@@ -97,6 +97,13 @@ If you decide to continue, you can do one or more of the following actions:
 - If one of departments have no products labeled so far, you can search for matching products manually and add them to the sample with correct label. For search you can use last TSV file with univocal predicted labels.
 - You can also occasionally review univocal predicted labels and correct them by adding to the sample.
 
+Demo
+====
+
+Download sample taxonomy file of products and their categories form Frisco.pl online shop.
+
+TODO
+
 Development
 ===========
 
