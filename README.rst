@@ -33,7 +33,7 @@ The input of the tool is YAML file describing a tree to label:
         children:
         - name: Guinness
 
-The ultimate output is a TSV file of leaves of the tree:
+The ultimate output is a TSV file with labelled leaves of the tree:
 
 .. csv-table::
 
