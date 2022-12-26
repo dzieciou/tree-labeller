@@ -15,25 +15,30 @@ The input has format:
 .. code-block:: yaml
 
     name: categories
-    id: 0
     children:
-    - name: Bakalie, pestki, ziarna
-      id: 2970
+    - name: Alholic Drinks
       children:
-      - name: Bakalie
-        id: 586
+      - name: Whiskies
         children:
-        - name: Figi
-          id: 11823
-        - name: Imbir kandyzowany
-          id: 11945
+        - name: Jack Daniel's
+        - name: Johnnie Walker's
+      - name: Wines
+        children:
+        - name: Cabernet Sauvignon
+      - name: Beers
+        children:
+        - name: Guinness
+
 
 The output has format:
 
 .. code-block:: tsv
 
-    name	label
-    absolut	Alkohole
+    name	            label
+    Jack Daniel's	    Alcohols department
+    Johnnie Walker's    Alcohols department
+    Cabernet Sauvignon  Alcohols department
+    Guiness             Beers department
     ...
 
 Install
