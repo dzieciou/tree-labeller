@@ -30,7 +30,7 @@ Install with pip:
 Usage
 =====
 
-Describe your taxonomy in form of YAML file, e.g.: `products.yaml`
+Describe your taxonomy in form of YAML file, e.g.: ``products.yaml``
 
 .. code-block:: yaml
 
