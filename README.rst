@@ -84,7 +84,7 @@ Labelling
 
 Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided.
 
-The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of belonging to the same shop department. Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible labels.
+The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label. Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible label candidates.
 
 Create labelling task:
 
