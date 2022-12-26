@@ -1,6 +1,6 @@
 from anytree import PreOrderIter
 
-from labeller.shop import Product, Shop, Category
+from labeller.types import Category, Product
 from labeller.tree.coloring import (
     ColoredNode,
     color_tree,
@@ -10,12 +10,11 @@ from labeller.tree.distant_leaves import find_distant_leaves
 from labeller.tree.utils import internals
 
 
-def predict_labels(shop: Shop, n_sample: int):
-    root = shop.root
+def predict_labels(root: Category, n_sample: int):
     assert all(isinstance(leaf, Product) for leaf in root.leaves)
     assert all(isinstance(internal, Category) for internal in internals(root))
-    assert all(node.labels.predicted is None for node in PreOrderIter(shop.root))
-    assert all(category.labels.manual is None for category in internals(shop.root))
+    assert all(node.labels.predicted is None for node in PreOrderIter(root))
+    assert all(category.labels.manual is None for category in internals(root))
 
     colored_root = to_colored_tree(root)
     if any(leaf.labels.manual for leaf in root.leaves):

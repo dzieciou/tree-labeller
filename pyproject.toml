@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "labeller"
+name = "tree-labeller"
 version = "0.1.0"
 description = "Labels training data"
 authors = ["dzieciou <mgawinecki@gmail.com>"]
@@ -16,6 +16,7 @@ tabulate = "^0.8.9"
 fsspec = {extras = ["http"], version = "^2021.11.1"}
 spacy = "^3.2.1"
 pl-core-news-sm = {url = "https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.2.0/pl_core_news_sm-3.2.0.tar.gz"}
+PyYAML = "^6.0"
 
 
 [tool.poetry.dev-dependencies]
@@ -31,8 +32,3 @@ build-backend = "poetry.core.masonry.api"
 label = "labeller.label:cli"
 generate = "variants.generate:cli"
 
-[[tool.poetry.source]]
-name = "dev"
-url = "http://localhost:3141/testuser/dev/+simple"
-secondary = true
-default = false

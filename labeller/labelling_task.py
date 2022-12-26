@@ -6,153 +6,54 @@ import logging
 import os.path
 import re
 from collections import Counter
-from dataclasses import dataclass
 from datetime import datetime
-from typing import Iterable, Set, Optional, Dict
+from typing import Iterable, Set, Optional, Dict, List
 
-from anytree import NodeMixin, PreOrderIter
 from jsonlines import jsonlines
 from tabulate import tabulate
 from termgraph.termgraph import chart, AVAILABLE_COLORS
 
-TO_REJECT_LABEL = "!"
-
-TO_SKIP_LABEL = "?"
+from labeller.labelled_tree import (
+    remove_leaf_categories_without_product,
+)
+from labeller.types import TO_REJECT_LABEL, TO_SKIP_LABEL, ProductId, Label, Category, Product
 
 START_TIME_FORMAT = "%Y%m%d%H%M%S"
 
-ProductName = str
-ProductId = int
-Label = str
 
-
-@dataclass
-class Labels:
-    manual: Label = None
-    predicted: Set[Label] = None
-    selected: bool = False
-
-    @property
-    def is_ambiguous(self):
-        return self.predicted is not None and len(self.predicted) > 1
-
-    @property
-    def is_missing(self):
-        return not self.predicted
-
-    @property
-    def to_skip(self):
-        return self.manual == TO_SKIP_LABEL
-
-    @property
-    def to_reject(self):
-        return self.manual == TO_REJECT_LABEL
-
-    @property
-    def is_good(self):
-        return self.predicted is not None and len(self.predicted) == 1
-
-    @property
-    def good_label(self) -> Optional[str]:
-        return next(iter(self.predicted)) if self.is_good else None
-
-    @property
-    def ambiguous(self) -> Set[str]:
-        return self.predicted if self.is_ambiguous else set()
-
-    def requires_verification(self):
-        return self.is_missing or self.is_ambiguous
-
-    @property
-    def to_verify(self):
-        if self.predicted:
-            return self.predicted
-        if self.manual:
-            return {self.manual}
-        return {}
-
-
-class Category(NodeMixin):
-    def __init__(self, name: str, id: str, parent_id: str = None):
-        self.name = name
-        self.id = id
-        self.parent_id = parent_id
-        self.labels = Labels()
-        self.products = set()
-
-    def __copy__(self):
-        return Category(self.name, self.id, self.parent_id)
-
-    @property
-    def long_name(self):
-        return ">".join(n.name for n in self.path)
-
-    def __str__(self):
-        return self.long_name
-
-    def __repr__(self):
-        return self.long_name
-
-    def add_product(self, product: "Product"):
-        self.products.add(product)
-
-
-class Product(NodeMixin):
-    id: ProductId
-    name: ProductName
-    brand: str
-    labels: Labels
-
+class LabellingTask:
     def __init__(
-        self, id: ProductId, name: ProductName, brand: str, category: Category
+        self, root: Category, content_hash: str, allowed_provided_labels: Set[str]
     ):
-        self.id = id
-        self.name = name
-        self.brand = brand
-        self.parent = category
-        self.labels = Labels()
 
-    @property
-    def category(self):
-        return self.parent
+        remove_leaf_categories_without_product(root)
 
-    @property
-    def category_id(self):
-        return self.category.id
-
-    @property
-    def category_name(self):
-        return self.category.long_name
-
-    @property
-    def product_id(self):
-        return self.id
-
-
-class Shop:
-    def __init__(self, root: Category, content_hash: str):
         self.root = root
         self.content_hash = content_hash
-        categories = (node for node in PreOrderIter(root) if isinstance(node, Category))
-        self._categories_by_id = {int(category.id): category for category in categories}
-        self._products_by_id = {int(product.id): product for product in self.products}
+
+        self._categories_by_id = {
+            int(category.id): category for category in self.root.categories
+        }
+        self._products_by_id = {
+            int(product.id): product for product in self.root.products
+        }
+
         self.labelling_start: datetime = None
         self.labelling_iteration: int = None
         self.labelling_dir: str = None
-        self.allowed_provided_labels: Set[str] = None
-        self.allowed_labels: Set[str] = None
+
+        unique_labels = set(allowed_provided_labels)
+        assert len(unique_labels) == len(allowed_provided_labels), "Redundant labels"
+        self.allowed_provided_labels: Set[str] = unique_labels
+        self.allowed_labels: Set[str] = unique_labels | {TO_REJECT_LABEL, TO_SKIP_LABEL}
 
     @property
-    def products(self):
-        return [node for node in self.root.leaves if isinstance(node, Product)]
+    def n_products(self):
+        return self.root.n_products
 
     @property
-    def categories(self):
-        return [
-            node
-            for node in PreOrderIter(self.root)
-            if not node.is_leaf and isinstance(node, Category)
-        ]
+    def n_categories(self):
+        return self.root.n_categories
 
     def get_category(self, category_id: int):
         return self._categories_by_id[int(category_id)]
@@ -195,6 +96,7 @@ class Shop:
                 labels[product_id] = next(iter(label))
 
         logging.info(f"Loaded manual labels from {path}.")
+
         if selected and missing:
             logging.warning(
                 f"{missing} of {selected} products selected lack label. You don't need to label all "
@@ -211,14 +113,6 @@ class Shop:
             self.content_hash == content_hash
         ), "Different Frisco products dump was used"
         self.set_manual_labels(dir, start, iteration, labels)
-
-    def load_allowed_labels(self, path: str):
-        with open(path) as f:
-            labels = [label.strip() for label in f.readlines()]
-        unique_labels = set(labels)
-        assert len(unique_labels) == len(labels), "Redundant labels"
-        self.allowed_provided_labels = unique_labels
-        self.allowed_labels = unique_labels | {TO_REJECT_LABEL, TO_SKIP_LABEL}
 
     def set_manual_labels(
         self, dir: str, start: datetime, iteration: int, labels: Dict[ProductId, Label]
@@ -262,7 +156,7 @@ class Shop:
 
             to_verify = [
                 product
-                for product in self.products
+                for product in self.root.products
                 if product.labels.selected or product.labels.manual
             ]
             to_verify = sorted(
@@ -308,7 +202,7 @@ class Shop:
                 fieldnames=["product_id", "name", "brand", "category", "label"],
             )
             writer.writeheader()
-            for product in self.products:
+            for product in self.root.products:
                 if product.labels.is_good:
                     writer.writerow(
                         {
@@ -353,31 +247,20 @@ class Shop:
         self.labelling_iteration = 1
         self.labelling_dir = labelling_dir
 
-    def remove_leaf_categories_without_product(self):
-        removed = True
-        while removed:
-            removed = False
-            for leaf in self.root.leaves:
-                if isinstance(leaf, Category):
-                    leaf.parent = None
-                    removed = True
-
     @property
     def shop_stats(self):
-        n_categories_per_depth = Counter(category.depth for category in self.categories)
+        n_categories_per_depth = Counter(
+            category.depth for category in self.root.categories
+        )
         n_categories_per_depth = {
             depth: n_categories
             for depth, n_categories in n_categories_per_depth.most_common()
         }
         return {
-            "n_products": self.n_products,
-            "n_categories": len(self.categories),
+            "n_products": self.root.n_products,
+            "n_categories": self.root.n_categories,
             "n_categories_per_depth": n_categories_per_depth,
         }
-
-    @property
-    def n_products(self):
-        return len(self.products)
 
     @property
     def manual_labels_stats(self):
@@ -401,7 +284,7 @@ class Shop:
     def allowed_labels_used(self):
         return set(
             product.labels.manual
-            for product in self.products
+            for product in self.root.products
             if product.labels.manual and product.labels.manual in self.allowed_labels
         )
 
@@ -409,7 +292,7 @@ class Shop:
     def allowed_provided_labels_used(self):
         return set(
             product.labels.manual
-            for product in self.products
+            for product in self.root.products
             if product.labels.manual
             and product.labels.manual in self.allowed_provided_labels
         )
@@ -436,7 +319,7 @@ class Shop:
     def n_products_per_manual_label(self):
         n_products_per_manual_label = Counter(
             product.labels.manual
-            for product in self.products
+            for product in self.root.products
             if product.labels.manual is not None
         )
         if self.allowed_labels:
@@ -452,7 +335,7 @@ class Shop:
     def n_products_per_ambiguous_label(self):
         ambiguous_labels = itertools.chain.from_iterable(
             product.labels.ambiguous
-            for product in self.products
+            for product in self.root.products
             if product.labels.is_ambiguous
         )
 
@@ -470,7 +353,7 @@ class Shop:
     def n_products_per_good_label(self):
         n_products_per_good_label = Counter(
             product.labels.good_label
-            for product in self.products
+            for product in self.root.products
             if product.labels.is_good
         )
         if self.allowed_labels:
@@ -489,7 +372,7 @@ class Shop:
             "n_unique_good_labels": len(
                 set(
                     product.labels.good_label
-                    for product in self.products
+                    for product in self.root.products
                     if product.labels.is_good
                 )
             ),
@@ -509,7 +392,7 @@ class Shop:
     def n_selected_for_verification_ambiguous_labels(self):
         return sum(
             1
-            for product in self.products
+            for product in self.root.products
             if product.labels.selected and product.labels.is_ambiguous
         )
 
@@ -517,19 +400,19 @@ class Shop:
     def n_selected_for_verification_missing_labels(self):
         return sum(
             1
-            for product in self.products
+            for product in self.root.products
             if product.labels.selected and product.labels.is_missing
         )
 
     @property
     def n_selected_for_verification_labels(self):
-        return sum(1 for product in self.products if product.labels.selected)
+        return sum(1 for product in self.root.products if product.labels.selected)
 
     @property
     def n_requires_verification_ambiguous_labels(self):
         return sum(
             1
-            for product in self.products
+            for product in self.root.products
             if product.labels.requires_verification() and product.labels.is_ambiguous
         )
 
@@ -537,35 +420,37 @@ class Shop:
     def n_required_verification_missing_labels(self):
         return sum(
             1
-            for product in self.products
+            for product in self.root.products
             if product.labels.requires_verification() and product.labels.is_missing
         )
 
     @property
     def n_requires_verification_labels(self):
         return sum(
-            1 for product in self.products if product.labels.requires_verification()
+            1
+            for product in self.root.products
+            if product.labels.requires_verification()
         )
 
     @property
     def n_ambiguous_labels(self):
-        return sum(1 for product in self.products if product.labels.is_ambiguous)
+        return sum(1 for product in self.root.products if product.labels.is_ambiguous)
 
     @property
     def n_missing_labels(self):
-        return sum(1 for product in self.products if product.labels.is_missing)
+        return sum(1 for product in self.root.products if product.labels.is_missing)
 
     @property
     def n_to_reject_labels(self):
-        return sum(1 for product in self.products if product.labels.to_reject)
+        return sum(1 for product in self.root.products if product.labels.to_reject)
 
     @property
     def n_to_skip_labels(self):
-        return sum(1 for product in self.products if product.labels.to_skip)
+        return sum(1 for product in self.root.products if product.labels.to_skip)
 
     @property
     def n_good_labels(self):
-        return sum(1 for product in self.products if product.labels.is_good)
+        return sum(1 for product in self.root.products if product.labels.is_good)
 
     @property
     def stats(self):
@@ -578,7 +463,7 @@ class Shop:
 
     @property
     def n_manual_labels(self):
-        return sum(1 for product in self.products if product.labels.manual)
+        return sum(1 for product in self.root.products if product.labels.manual)
 
     def save_stats(self, path: Optional[str] = None):
         if path is None:
@@ -728,3 +613,9 @@ def get_label_name(label: str) -> str:
         TO_REJECT_LABEL: f"({TO_REJECT_LABEL}) Rejected",
         TO_SKIP_LABEL: f"({TO_SKIP_LABEL}) Skipped",
     }.get(label, label)
+
+
+def load_allowed_labels(path: str) -> List[str]:
+    with open(path) as f:
+        labels = [label.strip() for label in f.readlines()]
+    return labels
