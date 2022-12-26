@@ -10,13 +10,13 @@ Sample scenarios include:
 - Mapping taxonomy of book categories in one library to flat vocabulary of book categories in another library
 - Annotating training data organized in a tree
 
-The input has format:
+The input is YAML file with taxonomy of categories and their products:
 
 .. code-block:: yaml
 
     name: categories
     children:
-    - name: Alholic Drinks
+    - name: Alcoholic Drinks
       children:
       - name: Whiskies
         children:
@@ -30,15 +30,15 @@ The input has format:
         - name: Guinness
 
 
-The output has format:
+The output is a TSV file of labelled products:
 
 .. csv-table::
 
     name, label
-    Jack Daniel's,Alcohols department
-    Johnnie Walker's,Alcohols department
-    Cabernet Sauvignon,Alcohols department
-    Guiness	Beers,department
+    Jack Daniel's,Alcohols
+    Johnnie Walker's,Alcohols
+    Cabernet Sauvignon,Alcohols
+    Guiness,Beers
 
 Install
 =======
