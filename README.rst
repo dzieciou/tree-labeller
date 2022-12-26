@@ -16,7 +16,21 @@ Here's example of the first task:
 
 .. image:: docs/imgs/tree_1.png
 
-The input of the tool is YAML file describing a tree to label:
+
+Install
+=======
+
+Install with pip:
+
+.. code-block:: bash
+
+    pip install tree-labeller
+
+
+Usage
+=====
+
+Describe your taxonomy in form of YAML file, e.g.: `products.yaml`
 
 .. code-block:: yaml
 
@@ -35,29 +49,6 @@ The input of the tool is YAML file describing a tree to label:
         children:
         - name: Guinness
 
-The ultimate output is a TSV file with labelled leaves of the tree:
-
-.. csv-table::
-
-    name, label
-    Jack Daniel's,Alcohols
-    Johnnie Walker's,Alcohols
-    Cabernet Sauvignon,Alcohols
-    Guiness,Beers
-
-Install
-=======
-
-Install with pip:
-
-.. code-block:: bash
-
-    pip install tree-labeller
-
-
-Usage
-=====
-
 Create labelling task:
 
 .. code-block:: bash
@@ -67,13 +58,23 @@ Create labelling task:
         --tree ./products.yaml \
         --allowed-labels Alcohols,Beers
 
-To generate a sample and run predictions:
+Generate a sample and run predictions:
 
 .. code-block:: bash
 
     label --dir ./my_labels --sample 10
 
 Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible label candidates.
+
+Annotate a file with samples.
+
+Run predictions and generate another sample of ambiguous and non labeled items:
+
+.. code-block:: bash
+
+    label --dir ./my_labels --sample 10
+
+Repeat the process until you are satisfied.
 
 
 After each iteration you will get statistics to help you decide when to stop labelling:
