@@ -1,7 +1,6 @@
 import csv
 import glob
 import itertools
-import json
 import logging
 import os.path
 import re
@@ -11,14 +10,19 @@ from datetime import datetime
 from typing import Iterable, Set, Optional, Dict, List
 
 import yaml
-from jsonlines import jsonlines
-from tabulate import tabulate
-from termgraph.termgraph import chart, AVAILABLE_COLORS
+from anytree import PreOrderIter
 
 from labeller.labelled_tree import (
     remove_leaf_categories_without_product,
 )
 from labeller.parsers.yaml import YamlTreeParser
+from labeller.tree.coloring import (
+    ColoredNode,
+    color_tree,
+    select_subtree_requiring_verification,
+)
+from labeller.tree.distant_leaves import find_distant_leaves
+from labeller.tree.utils import internals
 from labeller.types import (
     TO_REJECT_LABEL,
     TO_SKIP_LABEL,
@@ -391,7 +395,9 @@ class LabellingTask:
     @property
     def n_allowed_provided_labels(self):
         return (
-            len(self.config.allowed_provided_labels) if self.config.allowed_provided_labels else None
+            len(self.config.allowed_provided_labels)
+            if self.config.allowed_provided_labels
+            else None
         )
 
     @property
@@ -513,15 +519,21 @@ class LabellingTask:
 
     @property
     def n_ambiguous_labels(self):
-        return sum(1 for product in self.state.tree.products if product.labels.is_ambiguous)
+        return sum(
+            1 for product in self.state.tree.products if product.labels.is_ambiguous
+        )
 
     @property
     def n_missing_labels(self):
-        return sum(1 for product in self.state.tree.products if product.labels.is_missing)
+        return sum(
+            1 for product in self.state.tree.products if product.labels.is_missing
+        )
 
     @property
     def n_to_reject_labels(self):
-        return sum(1 for product in self.state.tree.products if product.labels.to_reject)
+        return sum(
+            1 for product in self.state.tree.products if product.labels.to_reject
+        )
 
     @property
     def n_to_skip_labels(self):
@@ -544,16 +556,6 @@ class LabellingTask:
     def n_manual_labels(self):
         return sum(1 for product in self.state.tree.products if product.labels.manual)
 
-    def save_stats(self, path: Optional[str] = None):
-        if path is None:
-            path = self.to_path(
-                "stats",
-                "json",
-            )
-        with open(path, "w") as f:
-            json.dump(self.stats, f, indent=2, cls=CustomEncoder)
-        logging.info(f"Saved stats to {path}.")
-
     @property
     def progress(self):
         return {
@@ -565,99 +567,57 @@ class LabellingTask:
             / self.n_allowed_provided_labels,
         }
 
-    def update_all_stats(self, path: Optional[str] = None):
-        if path is None:
-            path = self.all_stats_path
-
-        iteration_stats = {
-            "start_time": self.config.start_time.isoformat(),
-            "iteration": self.state.iteration,
-            "stats": self.stats,
-        }
-        encoder = CustomEncoder()
-        with jsonlines.open(path, "a", dumps=encoder.encode) as writer:
-            writer.write(iteration_stats)
-        logging.info(f"Updated all iterations stats in {path}.")
-
     @property
     def all_stats_path(self):
-        return os.path.join(self.dir, "all-stats.jsonl");
+        return os.path.join(self.dir, "all-stats.jsonl")
 
-    @property
-    def progress_table(self):
-        rows = []
-        with jsonlines.open(self.all_stats_path) as reader:
-            for iteration_stats in reader:
-                row = [
-                    iteration_stats["iteration"],
-                    iteration_stats["stats"]["progress"]["manual"],
-                    iteration_stats["stats"]["progress"]["univocal"],
-                    iteration_stats["stats"]["progress"]["ambiguous"],
-                    iteration_stats["stats"]["progress"]["missing"],
-                    iteration_stats["stats"]["shop"]["n_products"],
-                    iteration_stats["stats"]["progress"]["allowed_labels"],
-                ]
-                rows.append(row)
+    def predict_labels(self, n_sample: int):
+        tree = self.state.tree
 
-        return tabulate(
-            rows,
-            headers=[
-                "Iteration",
-                "Manual",
-                "Univocal",
-                "Ambiguous",
-                "Missing",
-                "Total",
-                "Allowed Labels",
-            ],
-            floatfmt=".0%",
+        assert all(isinstance(leaf, Product) for leaf in tree.leaves)
+        assert all(isinstance(internal, Category) for internal in internals(tree))
+        assert all(node.labels.predicted is None for node in PreOrderIter(tree))
+        assert all(category.labels.manual is None for category in internals(tree))
+
+        colored_tree = to_colored_tree(tree)
+        if any(leaf.labels.manual for leaf in tree.leaves):
+            color_tree(colored_tree)
+            for node in PreOrderIter(colored_tree):
+                node.target.labels.predicted = node.colors
+
+            good_leaves = [
+                leaf for leaf in colored_tree.leaves if len(leaf.colors) == 1
+            ]
+            for leaf in good_leaves:
+                leaf.target.labels.predicted = leaf.colors
+
+        requires_verification = select_subtree_requiring_verification(colored_tree)
+        if requires_verification:
+            sampled_requires_verification, _ = find_distant_leaves(
+                requires_verification, n_sample
+            )
+            sampled_requires_verification = [
+                node.target for node in sampled_requires_verification
+            ]
+            for leaf in sampled_requires_verification:
+                leaf.target.labels.selected = True
+
+        self.state.iteration += 1
+
+
+def to_colored_tree(tree):
+    mapping = {}
+    for node in PreOrderIter(tree):
+        if node.labels.to_skip:
+            continue
+        new_parent = mapping.get(node.parent)
+        new_node = ColoredNode(
+            node,
+            parent=new_parent,
+            colors={node.labels.manual} if node.labels.manual else set(),
         )
-
-    def print_manual_labels_coverage(self):
-        coverage = sorted(
-            self.n_products_per_manual_label.items(),
-            key=lambda label_count: (label_count[1], label_count[0]),
-        )
-        labels = [get_label_name(label_count[0]) for label_count in coverage]
-        data = [[label_count[1]] for label_count in coverage]
-        args = {
-            "histogram": False,
-            "stacked": False,
-            "different_scale": False,
-            "width": 50,
-            "no_labels": False,
-            "no_values": False,
-            "format": "{:.0f}",
-            "suffix": "",
-            "vertical": False,
-        }
-        chart([AVAILABLE_COLORS["blue"]], data, args, labels)
-
-    def print_predicted_labels_coverage(self):
-        good = self.n_products_per_good_label
-        ambiguous = self.n_products_per_ambiguous_label
-        coverage = {
-            label: (good[label], ambiguous[label])
-            for label in self.config.allowed_provided_labels | {TO_REJECT_LABEL}
-        }
-        coverage = sorted(
-            coverage.items(),
-            key=lambda label_count: (label_count[1][0], label_count[0]),
-        )
-        labels = [get_label_name(label_count[0]) for label_count in coverage]
-        data = [[label_count[1][0], label_count[1][1]] for label_count in coverage]
-        args = {
-            "histogram": False,
-            "stacked": True,
-            "different_scale": False,
-            "width": 50,
-            "no_labels": False,
-            "no_values": False,
-            "format": "{:.0f}",
-            "suffix": "",
-            "vertical": False,
-        }
-        chart([AVAILABLE_COLORS["green"], AVAILABLE_COLORS["red"]], data, args, labels)
+        mapping[node] = new_node
+    return mapping[tree]
 
 
 def save_products(products: Iterable[Product], path: str):
@@ -667,20 +627,6 @@ def save_products(products: Iterable[Product], path: str):
         writer.writeheader()
         for product in products:
             writer.writerow(product.asdict())
-
-
-class CustomEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, set):
-            return list(obj)
-        return json.JSONEncoder.default(self, obj)
-
-
-def get_label_name(label: str) -> str:
-    return {
-        TO_REJECT_LABEL: f"({TO_REJECT_LABEL}) Rejected",
-        TO_SKIP_LABEL: f"({TO_SKIP_LABEL}) Skipped",
-    }.get(label, label)
 
 
 def load_allowed_labels(path: str) -> List[str]:

@@ -3,10 +3,10 @@ import logging
 
 import fire
 
+from labeller.reporter import Reporter
 from labeller.task import (
     LabellingTask,
 )
-from labeller.predict import predict_labels
 from labeller.types import TO_REJECT_LABEL, TO_SKIP_LABEL
 
 logging.basicConfig(level=logging.INFO)
@@ -20,24 +20,23 @@ def label(
 ):
 
     task = LabellingTask.from_dir(dir)
-
-    predict_labels(task, sample)
-
-    task.save_stats()
-    task.update_all_stats()
+    task.predict_labels(sample)
+    reporter = Reporter(task)
+    reporter.save_stats()
+    reporter.update_all_stats()
 
     print("\nHere is the labelling progress made so far:\n")
     # FIXME If we don't save stats (e.g. with check_only flag) they won't be seen here
     #       perhaps we should get that information from memory, not from file
-    print(task.progress_table)
+    print(reporter.progress_table)
     print("\nHere is how many products you labelled for each department so far: \n")
-    task.print_manual_labels_coverage()
+    reporter.print_manual_labels_coverage()
 
     print(
         "\nHere is how many products we predicted for each department so far "
         "(good predicted vs. ambiguous) : \n"
     )
-    task.print_predicted_labels_coverage()
+    reporter.print_predicted_labels_coverage()
 
     path = task.try_save_good_predicted_labels()
     if path:
