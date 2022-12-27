@@ -100,7 +100,9 @@ Demo
 
 Download sample taxonomy file of products and their categories form Frisco.pl online shop.
 
-TODO
+.. code-block:: bash
+
+    fetch_frisco
 
 Background
 ==========

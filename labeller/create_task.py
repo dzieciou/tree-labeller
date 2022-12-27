@@ -22,6 +22,8 @@ def create_task(dir: str, tree: str, allowed_labels: Set[str]):
     with open(os.path.join(dir, "config.yaml"), "w") as out:
         yaml.dump(config, out)
 
+def cli():
+    fire.Fire(create_task)
 
 if __name__ == "__main__":
-    fire.Fire(create_task)
+    cli()

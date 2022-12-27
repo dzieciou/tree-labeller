@@ -30,5 +30,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 label = "labeller.label:cli"
-generate = "variants.generate:cli"
-
+create_task = "labeller.create_task:cli"
+fetch_fresco = "labeller.fetch_fresco:cli"
