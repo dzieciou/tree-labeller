@@ -21,7 +21,7 @@ def label(
 
     task = LabellingTask.from_dir(dir)
 
-    predict_labels(task.root, sample)
+    predict_labels(task.tree, sample)
 
     task.save_stats()
     task.update_all_stats()

@@ -4,7 +4,7 @@ from anytree.exporter import DictExporter
 from labeller.types import RawCategory
 
 
-def export(root: RawCategory, path: str):
+def export_tree(root: RawCategory, path: str):
     assert root != None
     assert path.endswith(".yaml")
     dct = DictExporter().export(root)
