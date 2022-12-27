@@ -9,6 +9,7 @@ from collections import Counter
 from datetime import datetime
 from typing import Iterable, Set, Optional, Dict, List
 
+import yaml
 from jsonlines import jsonlines
 from tabulate import tabulate
 from termgraph.termgraph import chart, AVAILABLE_COLORS
@@ -16,18 +17,42 @@ from termgraph.termgraph import chart, AVAILABLE_COLORS
 from labeller.labelled_tree import (
     remove_leaf_categories_without_product,
 )
-from labeller.types import TO_REJECT_LABEL, TO_SKIP_LABEL, ProductId, Label, Category, Product
+from labeller.parsers.yaml import YamlTreeParser
+from labeller.types import (
+    TO_REJECT_LABEL,
+    TO_SKIP_LABEL,
+    ProductId,
+    Label,
+    Category,
+    Product,
+)
 
 START_TIME_FORMAT = "%Y%m%d%H%M%S"
 
 
 class LabellingTask:
+    @staticmethod
+    def from_dir(dir: str) -> "LabellingTask":
+        with open(os.path.join(dir, "config.yaml")) as f:
+            config = yaml.safe_load(f)
+        tree_path = os.path.join(dir, config["tree"])
+        tree, content_hash = YamlTreeParser().parse_tree(tree_path)
+        allowed_labels = set(config["allowed_labels"])
+        task = LabellingTask(dir, tree, content_hash, allowed_labels)
+        task.init_manual_labels(dir)
+        return task
+
     def __init__(
-        self, root: Category, content_hash: str, allowed_provided_labels: Set[str]
+        self,
+        labelling_dir: str,
+        root: Category,
+        content_hash: str,
+        allowed_provided_labels: Set[str],
     ):
 
         remove_leaf_categories_without_product(root)
 
+        self.labelling_dir = labelling_dir
         self.root = root
         self.content_hash = content_hash
 
@@ -138,7 +163,6 @@ class LabellingTask:
 
         if path is None:
             path = self.to_path(
-                self.labelling_dir,
                 self.content_hash,
                 self.labelling_start,
                 self.labelling_iteration,
@@ -188,7 +212,6 @@ class LabellingTask:
 
         if path is None:
             path = self.to_path(
-                self.labelling_dir,
                 self.content_hash,
                 self.labelling_start,
                 self.labelling_iteration,
@@ -230,9 +253,8 @@ class LabellingTask:
         iteration = int(path_parts["iteration"])
         return root_dir, fname, content_hash, starttime, iteration
 
-    @staticmethod
     def to_path(
-        root_dir: str,
+        self,
         content_hash: str,
         starttime: datetime,
         iteration: int,
@@ -240,7 +262,7 @@ class LabellingTask:
         extension: str,
     ):
         fname = f"{content_hash}-{starttime.strftime(START_TIME_FORMAT)}-{iteration}-{suffix}.{extension}"
-        return os.path.join(root_dir, fname)
+        return os.path.join(self.labelling_dir, fname)
 
     def _start_labelling(self, labelling_dir: str):
         self.labelling_start = datetime.now()
@@ -468,7 +490,6 @@ class LabellingTask:
     def save_stats(self, path: Optional[str] = None):
         if path is None:
             path = self.to_path(
-                self.labelling_dir,
                 self.content_hash,
                 self.labelling_start,
                 self.labelling_iteration,
@@ -507,7 +528,6 @@ class LabellingTask:
     @property
     def all_stats_path(self):
         return self.to_path(
-            self.labelling_dir,
             self.content_hash,
             self.labelling_start,
             "all",

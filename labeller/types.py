@@ -87,7 +87,9 @@ class RawCategory(NodeMixin):
 
     @property
     def categories(self):
-        return [node for node in PreOrderIter(self.root) if isinstance(node, RawCategory)]
+        return [
+            node for node in PreOrderIter(self.root) if isinstance(node, RawCategory)
+        ]
 
     @property
     def n_products(self):
@@ -99,10 +101,10 @@ class RawCategory(NodeMixin):
 
 
 class Category(RawCategory):
-
     def __init__(self, name: str, id: str, parent: "Category" = None):
         super().__init__(name, id, parent)
         self.labels = Labels()
+
 
 class RawProduct(NodeMixin):
     id: ProductId
@@ -132,6 +134,7 @@ class RawProduct(NodeMixin):
     @property
     def product_id(self):
         return self.id
+
 
 class Product(RawProduct):
     labels: Labels

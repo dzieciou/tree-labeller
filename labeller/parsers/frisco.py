@@ -27,7 +27,6 @@ CACHE_OPTIONS = {
 
 
 class FriscoTreeParser(TreeParser):
-
     def parse_tree(self, path: str) -> Tuple[RawCategory, ContentHash]:
         logging.info(f"Downloading Frisco products dump form {path}...")
         with fs.open(
@@ -44,7 +43,6 @@ class FriscoTreeParser(TreeParser):
         return tree, content_hash
 
     def _parse_categories(self, content: Json) -> RawCategory:
-
         def parse_one(category: Json):
             name = category["name"]["pl"]
             parent_path = category["parentPath"].split(",")
