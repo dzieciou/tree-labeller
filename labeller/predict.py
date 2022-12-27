@@ -1,5 +1,6 @@
 from anytree import PreOrderIter
 
+from labeller.task import LabellingTask
 from labeller.types import Category, Product
 from labeller.tree.coloring import (
     ColoredNode,
@@ -10,14 +11,18 @@ from labeller.tree.distant_leaves import find_distant_leaves
 from labeller.tree.utils import internals
 
 
-def predict_labels(root: Category, n_sample: int):
-    assert all(isinstance(leaf, Product) for leaf in root.leaves)
-    assert all(isinstance(internal, Category) for internal in internals(root))
-    assert all(node.labels.predicted is None for node in PreOrderIter(root))
-    assert all(category.labels.manual is None for category in internals(root))
+def predict_labels(task: LabellingTask, n_sample: int):
+    tree = task.state.tree
 
-    colored_root = to_colored_tree(root)
-    if any(leaf.labels.manual for leaf in root.leaves):
+    assert all(isinstance(leaf, Product) for leaf in tree.leaves)
+    assert all(isinstance(internal, Category) for internal in internals(tree))
+    assert all(node.labels.predicted is None for node in PreOrderIter(tree))
+    assert all(category.labels.manual is None for category in internals(tree))
+
+
+
+    colored_root = to_colored_tree(tree)
+    if any(leaf.labels.manual for leaf in tree.leaves):
         color_tree(colored_root)
         for node in PreOrderIter(colored_root):
             node.target.labels.predicted = node.colors
@@ -37,10 +42,11 @@ def predict_labels(root: Category, n_sample: int):
         for leaf in sampled_requires_verification:
             leaf.target.labels.selected = True
 
+    task.state.iteration += 1
 
-def to_colored_tree(root):
+def to_colored_tree(tree):
     mapping = {}
-    for node in PreOrderIter(root):
+    for node in PreOrderIter(tree):
         if node.labels.to_skip:
             continue
         new_parent = mapping.get(node.parent)
@@ -50,4 +56,4 @@ def to_colored_tree(root):
             colors={node.labels.manual} if node.labels.manual else set(),
         )
         mapping[node] = new_node
-    return mapping[root]
+    return mapping[tree]

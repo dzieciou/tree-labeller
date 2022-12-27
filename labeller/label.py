@@ -3,7 +3,7 @@ import logging
 
 import fire
 
-from labeller.labelling_task import (
+from labeller.task import (
     LabellingTask,
 )
 from labeller.predict import predict_labels
@@ -21,7 +21,7 @@ def label(
 
     task = LabellingTask.from_dir(dir)
 
-    predict_labels(task.tree, sample)
+    predict_labels(task, sample)
 
     task.save_stats()
     task.update_all_stats()

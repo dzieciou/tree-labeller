@@ -93,38 +93,70 @@ def parse_path(path: str):
     return iteration
 
 
-class LabellingTask:
-    @classmethod
-    def initialize(
-        cls, dir: str, tree_path: str, allowed_labels: Set[Label]
-    ) -> "LabellingTask":
-        dir = os.path.abspath(dir)
-        try:
-            os.makedirs(dir, exist_ok=False)
-        except FileExistsError:
-            print(f"Directory {dir} already exists. Perhaps this is a previous task?")
-            return
+class Config:
+    dir: str
+    tree_path: str
+    original_tree_path: str
+    allowed_provided_labels: Set[str]
+    start_time: datetime
 
-        dest_tree_path = os.path.join(dir)
-        shutil.copy(tree_path, dest_tree_path)
+    def __init__(
+        self,
+        dir: str,
+        tree_path: str,
+        original_tree_path: str,
+        allowed_labels: Set[str],
+        start_time: Optional[datetime] = None,
+    ):
+        assert os.path.isdir(dir)
 
-        return cls.from_dir(dir)
-
-    @classmethod
-    def from_dir(cls, dir: str) -> "LabellingTask":
-        with open(os.path.join(dir, CONFIGURATION_FILE)) as f:
-            config = yaml.safe_load(f)
-
-        allowed_provided_labels = set(config["allowed_labels"])
-        start_time = config["start_time"]
-        unique_labels = set(allowed_provided_labels)
+        unique_labels = set(allowed_labels)
         assert len(unique_labels) == len(
-            allowed_provided_labels
-        ), f"Redundant labels in: {allowed_provided_labels}"
-        allowed_labels = unique_labels | {TO_REJECT_LABEL, TO_SKIP_LABEL}
+            allowed_labels
+        ), f"Redundant labels in: {allowed_labels}"
 
-        tree_path = os.path.join(dir, config["tree"])
+        self.dir = dir
+        self.tree_path = tree_path
+        self.original_tree_path = original_tree_path
+        self.allowed_provided_labels = set(allowed_labels)
+        self.start_time: datetime = start_time or datetime.now()
+
+    @classmethod
+    def from_yaml(cls, path: str):
+        with open(path) as f:
+            config = yaml.safe_load(f)
+        return cls(**config)
+
+    def to_yaml(self, path: str):
+        config = {
+            "dir": self.dir,
+            "tree_path": self.tree_path,
+            "original_tree_path": self.original_tree_path,
+            "allowed_labels": list(self.allowed_provided_labels),
+            "start_time": self.start_time,
+        }
+        with open(path, "w") as out:
+            yaml.dump(config, out)
+
+
+class State:
+    tree: Category
+    iteration: int
+
+    def __init__(self, tree: Category, iteration: int):
+        self.tree = tree
+        self.iteration = iteration
+        self._categories_by_id = {
+            int(category.id): category for category in self.tree.categories
+        }
+        self._products_by_id = {
+            int(product.id): product for product in self.tree.products
+        }
+
+    @classmethod
+    def from_dir(cls, dir: str, tree_path: str, allowed_labels: Set[str]):
         tree, _ = YamlTreeParser().parse_tree(tree_path)
+        remove_leaf_categories_without_product(tree)
 
         iteration = 0
         paths = glob.glob(os.path.join(dir, "*.tsv"))
@@ -135,99 +167,9 @@ class LabellingTask:
             last_iteration = parse_path(path)
             iteration = last_iteration + 1
 
-        task = LabellingTask(
-            dir, tree, allowed_provided_labels, allowed_labels, start_time, iteration
-        )
-        return task
+        return State(tree, iteration)
 
-    def __init__(
-        self,
-        dir: str,
-        tree: Category,
-        allowed_provided_labels: Set[str],
-        allowed_labels: Set[str],
-        start_time: datetime = None,
-        iteration: int = 0,
-    ):
-
-        remove_leaf_categories_without_product(tree)
-
-        assert dir != None
-        assert os.path.isdir(dir)
-        assert tree != None
-
-        self.dir = dir
-        self.tree = tree
-        self.allowed_provided_labels = allowed_provided_labels
-        self.allowed_labels = allowed_labels
-        self.start_time: datetime = start_time or datetime.now()
-        self.iteration: int = iteration
-
-        self._categories_by_id = {
-            int(category.id): category for category in self.tree.categories
-        }
-        self._products_by_id = {
-            int(product.id): product for product in self.tree.products
-        }
-
-    def save_config(self):
-        config = {
-            "dir": dir,
-            "tree": self.tree_path,
-            "allowed_provided_labels": list(self.allowed_provided_labels),
-            "start_time": self.start_time,
-        }
-        with open(os.path.join(dir, CONFIGURATION_FILE), "w") as out:
-            yaml.dump(config, out)
-
-    @property
-    def n_products(self):
-        return self.tree.n_products
-
-    @property
-    def n_categories(self):
-        return self.tree.n_categories
-
-    def get_category(self, category_id: int):
-        return self._categories_by_id[int(category_id)]
-
-    def get_product(self, product_id: int):
-        return self._products_by_id[int(product_id)]
-
-    def init_manual_labels(self):
-        if os.path.isdir(self.dir):
-
-            if not paths:
-                self._start_labelling()
-            else:
-
-                self.load_manual_labels(path)
-
-    def load_manual_labels(self, path: str):
-        labels = self.load_labels(path)
-        dir, _, content_hash, start, iteration = self.parse_path(path)
-        self.set_manual_labels(dir, start, iteration, labels)
-
-    def set_manual_labels(
-        self, start: datetime, iteration: int, labels: Dict[ProductId, Label]
-    ):
-        self.start_time = start
-        self.iteration = iteration + 1  # Let's prepare for the next iteration...
-
-    def try_save_labels_to_verify(self, path: Optional[str] = None) -> Optional[str]:
-
-        if self.n_selected_for_verification_labels == 0:
-            return None
-
-        if path is None:
-            path = self.to_path(
-                self.content_hash,
-                self.start_time,
-                self.iteration,
-                "to-verify",
-                "tsv",
-            )
-
+    def save_to_verify(self, path: str):
         with open(path, "w") as f:
             writer = csv.DictWriter(
                 f,
@@ -259,23 +201,7 @@ class LabellingTask:
                     }
                 )
 
-        return path
-
-    def try_save_good_predicted_labels(
-        self, path: Optional[str] = None
-    ) -> Optional[str]:
-
-        if self.n_good_labels == 0:
-            return None
-
-        if path is None:
-            path = self.to_path(
-                self.content_hash,
-                self.start_time,
-                self.iteration,
-                "good-labels",
-                "tsv",
-            )
+    def save_good_predicted_labels(self, path: str):
         with open(path, "w") as f:
             writer = csv.DictWriter(
                 f,
@@ -294,35 +220,124 @@ class LabellingTask:
                             "label": next(iter(product.labels.predicted)),
                         }
                     )
+
+    def get_category(self, category_id: int):
+        return self._categories_by_id[int(category_id)]
+
+    def get_product(self, product_id: int):
+        return self._products_by_id[int(product_id)]
+
+
+class LabellingTask:
+    @classmethod
+    def initialize(
+        cls, dir: str, tree_path: str, allowed_provided_labels: Set[Label]
+    ) -> "LabellingTask":
+        dir = os.path.abspath(dir)
+        try:
+            os.makedirs(dir, exist_ok=False)
+        except FileExistsError:
+            print(f"Directory {dir} already exists. Perhaps this is a previous task?")
+            return
+
+        tree_path = os.path.abspath(tree_path)
+        dest_tree_path = os.path.join(dir, os.path.basename(tree_path))
+        shutil.copy(tree_path, dest_tree_path)
+
+        config = Config(
+            dir=dir,
+            tree_path=dest_tree_path,
+            original_tree_path=tree_path,
+            allowed_labels=allowed_provided_labels,
+        )
+        config.to_yaml(os.path.join(dir, CONFIGURATION_FILE))
+
+        return cls.from_dir(dir)
+
+    @classmethod
+    def from_dir(cls, dir: str) -> "LabellingTask":
+        config = Config.from_yaml(os.path.join(dir, CONFIGURATION_FILE))
+        allowed_labels = config.allowed_provided_labels | {
+            TO_REJECT_LABEL,
+            TO_SKIP_LABEL,
+        }
+        state = State.from_dir(dir, config.tree_path, allowed_labels)
+        task = LabellingTask(dir, config, state, allowed_labels)
+        return task
+
+    def __init__(
+        self, dir: str, config: Config, state: State, allowed_labels: Set[Label]
+    ):
+
+        assert dir != None
+        assert config != None
+        assert state != None
+
+        self.dir = dir
+        self.config = config
+        self.state = state
+        self.allowed_labels = allowed_labels
+
+    @property
+    def n_products(self):
+        return self.state.tree.n_products
+
+    @property
+    def n_categories(self):
+        return self.state.tree.n_categories
+
+    def try_save_labels_to_verify(self, path: Optional[str] = None) -> Optional[str]:
+
+        if self.n_selected_for_verification_labels == 0:
+            return None
+
+        if path is None:
+            path = self.to_path(
+                "to-verify",
+                "tsv",
+            )
+
+        self.state.save_to_verify(path)
+
+        return path
+
+    def try_save_good_predicted_labels(
+        self, path: Optional[str] = None
+    ) -> Optional[str]:
+
+        if self.n_good_labels == 0:
+            return None
+
+        if path is None:
+            path = self.to_path(
+                "good-labels",
+                "tsv",
+            )
+
+        self.state.save_good_predicted_labels(path)
+
         return path
 
     def to_path(
         self,
-        content_hash: str,
-        starttime: datetime,
-        iteration: int,
         suffix: str,
         extension: str,
     ):
-        fname = f"{content_hash}-{starttime.strftime(START_TIME_FORMAT)}-{iteration}-{suffix}.{extension}"
+        fname = f"{self.state.iteration}-{suffix}.{extension}"
         return os.path.join(self.dir, fname)
 
-    def _start_labelling(self):
-        self.start_time = datetime.now()
-        self.iteration = 1
-
     @property
-    def shop_stats(self):
+    def tree_stats(self):
         n_categories_per_depth = Counter(
-            category.depth for category in self.tree.categories
+            category.depth for category in self.state.tree.categories
         )
         n_categories_per_depth = {
             depth: n_categories
             for depth, n_categories in n_categories_per_depth.most_common()
         }
         return {
-            "n_products": self.tree.n_products,
-            "n_categories": self.tree.n_categories,
+            "n_products": self.state.tree.n_products,
+            "n_categories": self.state.tree.n_categories,
             "n_categories_per_depth": n_categories_per_depth,
         }
 
@@ -348,7 +363,7 @@ class LabellingTask:
     def allowed_labels_used(self):
         return set(
             product.labels.manual
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.manual and product.labels.manual in self.allowed_labels
         )
 
@@ -356,9 +371,9 @@ class LabellingTask:
     def allowed_provided_labels_used(self):
         return set(
             product.labels.manual
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.manual
-            and product.labels.manual in self.allowed_provided_labels
+            and product.labels.manual in self.config.allowed_provided_labels
         )
 
     @property
@@ -367,7 +382,7 @@ class LabellingTask:
 
     @property
     def allowed_provided_labels_not_used(self) -> Set[str]:
-        return self.allowed_provided_labels - self.allowed_provided_labels_used
+        return self.config.allowed_provided_labels - self.allowed_provided_labels_used
 
     @property
     def n_allowed_labels(self):
@@ -376,14 +391,14 @@ class LabellingTask:
     @property
     def n_allowed_provided_labels(self):
         return (
-            len(self.allowed_provided_labels) if self.allowed_provided_labels else None
+            len(self.config.allowed_provided_labels) if self.config.allowed_provided_labels else None
         )
 
     @property
     def n_products_per_manual_label(self):
         n_products_per_manual_label = Counter(
             product.labels.manual
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.manual is not None
         )
         if self.allowed_labels:
@@ -399,7 +414,7 @@ class LabellingTask:
     def n_products_per_ambiguous_label(self):
         ambiguous_labels = itertools.chain.from_iterable(
             product.labels.ambiguous
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.is_ambiguous
         )
 
@@ -417,7 +432,7 @@ class LabellingTask:
     def n_products_per_good_label(self):
         n_products_per_good_label = Counter(
             product.labels.good_label
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.is_good
         )
         if self.allowed_labels:
@@ -436,7 +451,7 @@ class LabellingTask:
             "n_unique_good_labels": len(
                 set(
                     product.labels.good_label
-                    for product in self.tree.products
+                    for product in self.state.tree.products
                     if product.labels.is_good
                 )
             ),
@@ -456,7 +471,7 @@ class LabellingTask:
     def n_selected_for_verification_ambiguous_labels(self):
         return sum(
             1
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.selected and product.labels.is_ambiguous
         )
 
@@ -464,19 +479,19 @@ class LabellingTask:
     def n_selected_for_verification_missing_labels(self):
         return sum(
             1
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.selected and product.labels.is_missing
         )
 
     @property
     def n_selected_for_verification_labels(self):
-        return sum(1 for product in self.tree.products if product.labels.selected)
+        return sum(1 for product in self.state.tree.products if product.labels.selected)
 
     @property
     def n_requires_verification_ambiguous_labels(self):
         return sum(
             1
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.requires_verification() and product.labels.is_ambiguous
         )
 
@@ -484,7 +499,7 @@ class LabellingTask:
     def n_required_verification_missing_labels(self):
         return sum(
             1
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.requires_verification() and product.labels.is_missing
         )
 
@@ -492,34 +507,34 @@ class LabellingTask:
     def n_requires_verification_labels(self):
         return sum(
             1
-            for product in self.tree.products
+            for product in self.state.tree.products
             if product.labels.requires_verification()
         )
 
     @property
     def n_ambiguous_labels(self):
-        return sum(1 for product in self.tree.products if product.labels.is_ambiguous)
+        return sum(1 for product in self.state.tree.products if product.labels.is_ambiguous)
 
     @property
     def n_missing_labels(self):
-        return sum(1 for product in self.tree.products if product.labels.is_missing)
+        return sum(1 for product in self.state.tree.products if product.labels.is_missing)
 
     @property
     def n_to_reject_labels(self):
-        return sum(1 for product in self.tree.products if product.labels.to_reject)
+        return sum(1 for product in self.state.tree.products if product.labels.to_reject)
 
     @property
     def n_to_skip_labels(self):
-        return sum(1 for product in self.tree.products if product.labels.to_skip)
+        return sum(1 for product in self.state.tree.products if product.labels.to_skip)
 
     @property
     def n_good_labels(self):
-        return sum(1 for product in self.tree.products if product.labels.is_good)
+        return sum(1 for product in self.state.tree.products if product.labels.is_good)
 
     @property
     def stats(self):
         return {
-            "shop": self.shop_stats,
+            "shop": self.tree_stats,
             "manual_labels": self.manual_labels_stats,
             "predicted_labels": self.predicted_labels_stats,
             "progress": self.progress,
@@ -527,14 +542,11 @@ class LabellingTask:
 
     @property
     def n_manual_labels(self):
-        return sum(1 for product in self.tree.products if product.labels.manual)
+        return sum(1 for product in self.state.tree.products if product.labels.manual)
 
     def save_stats(self, path: Optional[str] = None):
         if path is None:
             path = self.to_path(
-                self.content_hash,
-                self.start_time,
-                self.iteration,
                 "stats",
                 "json",
             )
@@ -558,8 +570,8 @@ class LabellingTask:
             path = self.all_stats_path
 
         iteration_stats = {
-            "start_time": self.start_time.isoformat(),
-            "iteration": self.iteration,
+            "start_time": self.config.start_time.isoformat(),
+            "iteration": self.state.iteration,
             "stats": self.stats,
         }
         encoder = CustomEncoder()
@@ -569,13 +581,7 @@ class LabellingTask:
 
     @property
     def all_stats_path(self):
-        return self.to_path(
-            self.content_hash,
-            self.start_time,
-            "all",
-            "stats",
-            "jsonl",
-        )
+        return os.path.join(self.dir, "all-stats.jsonl");
 
     @property
     def progress_table(self):
@@ -632,7 +638,7 @@ class LabellingTask:
         ambiguous = self.n_products_per_ambiguous_label
         coverage = {
             label: (good[label], ambiguous[label])
-            for label in self.allowed_provided_labels | {TO_REJECT_LABEL}
+            for label in self.config.allowed_provided_labels | {TO_REJECT_LABEL}
         }
         coverage = sorted(
             coverage.items(),

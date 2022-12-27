@@ -4,11 +4,13 @@ from typing import Set
 
 import fire
 
-from labeller.labelling_task import LabellingTask
+from labeller.task import LabellingTask
 
 
 def create_task(dir: str, tree: str, allowed_labels: Set[str]):
-    LabellingTask.initialize(dir, tree, allowed_labels)
+    LabellingTask.initialize(
+        dir=dir, tree_path=tree, allowed_provided_labels=allowed_labels
+    )
 
 
 def cli():
