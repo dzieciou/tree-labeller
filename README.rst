@@ -151,6 +151,9 @@ Acknowledgements
 
 I would like to thank to:
 
-- people from StackExchange for help in developing algorithms
+- members of Computer `Science StackExchange`_ for help in developing algorithms
 - my girlfriend Renata for help in mapping our local grocery store
-- my colleagues from Samsung R&D Poland for feedback.
+- my colleagues from `Samsung R&D Poland`_ for feedback.
+
+.. _Science StackExchange: https://cs.stackexchange.com/
+.. _Samsung R&D Poland: https://research.samsung.com/srpol
