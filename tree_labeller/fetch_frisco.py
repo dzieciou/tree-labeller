@@ -12,6 +12,7 @@ def fetch():
     root, _ = parser.parse_tree(TREE_URL)
     export_tree(root)
 
+
 def cli():
     fire.Fire(fetch)
 

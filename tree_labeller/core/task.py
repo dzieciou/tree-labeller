@@ -146,7 +146,7 @@ class Config:
             yaml.dump(config, out)
 
 
-class State:
+class LabellingState:
     tree: Category
     iteration: int
 
@@ -173,7 +173,7 @@ class State:
             update_tree(tree, labels)
             iteration = parse_path(path)
 
-        return State(tree, iteration)
+        return LabellingState(tree, iteration)
 
     def save_to_verify(self, path: str):
         with open(path, "w") as f:
@@ -269,12 +269,16 @@ class LabellingTask:
             TO_REJECT_LABEL,
             TO_SKIP_LABEL,
         }
-        state = State.from_dir(dir, config.tree_path, allowed_labels)
+        state = LabellingState.from_dir(dir, config.tree_path, allowed_labels)
         task = LabellingTask(dir, config, state, allowed_labels)
         return task
 
     def __init__(
-        self, dir: str, config: Config, state: State, allowed_labels: Set[Label]
+        self,
+        dir: str,
+        config: Config,
+        state: LabellingState,
+        allowed_labels: Set[Label],
     ):
 
         assert dir != None
