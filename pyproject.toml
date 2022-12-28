@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "tree-labeller"
 version = "0.1.0"
-description = "Labels training data"
+description = "Labels tree-based data"
 authors = ["dzieciou <mgawinecki@gmail.com>"]
 
 [tool.poetry.dependencies]
