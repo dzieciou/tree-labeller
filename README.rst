@@ -55,8 +55,8 @@ Create labelling task:
 
     create_task \
         --dir ./my_labels \
-        --tree ./products.yaml \
-        --allowed-labels Alcohols,Beers
+        --tree ./tree.yaml \
+        --allowed-labels Label1,Label2,Label3
 
 Generate a sample:
 
@@ -98,11 +98,27 @@ If you decide to continue, you can do one or more of the following actions:
 Demo
 ====
 
-Download sample taxonomy file of products and their categories form Frisco.pl online shop.
+Download sample taxonomy file of products and their categories from `Frisco.pl`_ online shop.
 
 .. code-block:: bash
 
-    fetch_frisco
+    fetch_frisco > frisco.yaml
+
+Create task for labelling Frisco products with departments from `Marketpoint`_, local grocery shop in Krakow.
+
+.. code-block:: bash
+
+    create_task \
+            --dir ./marketpoint \
+            --tree ./frisco.yaml \
+            --allowed-labels Alcohols,Beers,Vegetables
+
+
+.. _Frisco.pl: https://www.frisco.pl/
+.. _Marketpoint: https://market-point.pl/sklepy/sklep-krakow-rynek-falecki-1/
+
+
+
 
 Background
 ==========
