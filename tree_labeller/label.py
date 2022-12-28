@@ -12,8 +12,6 @@ from tree_labeller.core.types import TO_REJECT_LABEL, TO_SKIP_LABEL
 
 logging.basicConfig(level=logging.INFO)
 
-PRODUCTS_PATH = "products.yaml"
-
 
 def label(
     dir: str,
