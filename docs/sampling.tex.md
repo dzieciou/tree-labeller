@@ -1,6 +1,6 @@
 # Sampling taxonomy leaves for manual labelling
 
-Our goal is to select a sample of taxonomy leaves that an annotator will manually label. Based on manual labels we will infer labels for other unlabelled leaves. Since we can select only a small subset of unlabelled leaves, we need to do it wisely. If we select leaves that have the same parent, there is high chance both will be annotated with the same label. For instance, Jack Daniel's and Johnnie Walker's both can be labelled with "Alcohols department". On the other hand, if we select Guinness beer instead of Johnnie Walker's whisky, we could cover two different shop departments: Alcohols and Beers. 
+Our goal is to select a sample of taxonomy leaves that an annotator will manually label. Based on manual labels we will be able to automatically infer labels for other unlabelled leaves. Since we can select only a small subset of unlabelled leaves, we need to do it wisely. If we select leaves that have the same parent, there is high chance both will be annotated with the same label. For instance, Jack Daniel's and Johnnie Walker's both can be labelled with "Alcohols department". On the other hand, if we select Guinness beer instead of Johnnie Walker's whisky, we could cover two different shop departments: Alcohols and Beers. 
 
 ![Example of labelling](imgs/tree_1.png)
 

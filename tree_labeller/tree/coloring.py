@@ -2,12 +2,12 @@ from typing import TypeVar, Set
 
 from anytree import NodeMixin, SymlinkNode, PreOrderIter
 
-from labeller.tree.utils import internals
+from tree_labeller.tree.utils import internals
 
 Color = TypeVar("Color")
 
 
-class ColoredNode(NodeMixin):
+class ColorableNode(NodeMixin):
     def __init__(
         self,
         target=None,
@@ -48,13 +48,13 @@ def color_tree(root: NodeMixin):
     assert any(leaf.colors for leaf in root.leaves)
     assert not any(leaf.is_multicolor() for leaf in root.leaves)
 
-    def color_from_children(node: ColoredNode):
+    def color_from_children(node: ColorableNode):
         if not node.parent:
             return
         node.parent.colors.update(node.colors)
         color_from_children(node.parent)
 
-    def color_from_parent(node: ColoredNode):
+    def color_from_parent(node: ColorableNode):
         # TODO Maybe too much recurrence for deep and breadth trees
         for child in node.children:
             if not child.colors:
@@ -68,7 +68,7 @@ def color_tree(root: NodeMixin):
     color_from_parent(root)
 
 
-def select_subtree_requiring_verification(root: ColoredNode) -> SymlinkNode:
+def select_subtree_requiring_verification(root: ColorableNode) -> SymlinkNode:
 
     mapping = {}
 

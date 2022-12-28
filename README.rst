@@ -1,77 +1,79 @@
-================
-Product Labeller
-================
+=============
+Tree Labeller
+=============
 
-Helps label training data using taxonomy information.
+Command line tools that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
 
-The output has format:
+Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided. The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label.
 
-.. code-block:: tsv
+Sample scenarios include:
 
-    name	label
-    absolut	Alkohole
-    ...
+- Assigning shop departments to products organized in a taxonomy of categories
+- Mapping taxonomy of book categories in one library to flat vocabulary of book categories in another library
+- Annotating training data organized in a tree
+
+Here's example of the first task:
+
+.. image:: docs/imgs/tree_1.png
+
 
 Install
 =======
 
-Install poetry:
+Install with pip:
 
 .. code-block:: bash
 
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-
-Install the labelling tool:
-
-.. code-block:: bash
-
-    poetry install --no-dev
-    poetry shell
+    pip install tree-labeller
 
 
 Usage
 =====
 
-Labelling
----------
+Describe your taxonomy in form of YAML file, e.g.: ``products.yaml``
 
-Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided.
+.. code-block:: yaml
 
-The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of belonging to the same shop department. Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible labels.
+    name: categories
+    children:
+    - name: Alcoholic Drinks
+      children:
+      - name: Whiskies
+        children:
+        - name: Jack Daniel's
+        - name: Johnnie Walker's
+      - name: Wines
+        children:
+        - name: Cabernet Sauvignon
+      - name: Beers
+        children:
+        - name: Guinness
 
-Here are the steps to follow.
-
-Define a name of shop. It will be used to locate data and model:
-
-.. code-block:: bash
-
-    export TARGET_SHOP=shop
-
-Create a folder where new labels will be stored:
-
-.. code-block:: bash
-
-    mkdir -p labels/${TARGET_SHOP}
-
-Define list of available departments in the shop in ``labels/${TARGET_SHOP}/departments.txt`` with each department
-in a separate line, e.g.:
+Create labelling task:
 
 .. code-block:: bash
 
-    Drogeria
-    Dżemy i miody
-    Herbata
-    Kawa
-    Konserwy mięsne i rybne
+    create_task \
+        --dir ./my_labels \
+        --tree ./products.yaml \
+        --allowed-labels Alcohols,Beers
 
-To generate a sample and run predictions:
+Generate a sample:
 
 .. code-block:: bash
 
-    label \
-        --allowed-labels labels/${TARGET_SHOP}/departments.txt \
-        --labels labels/${TARGET_SHOP}/ \
-        --n-sample 10
+    label --dir ./my_labels --sample 10
+
+Annotate a file with samples.
+
+Run predictions and generate another sample of ambiguous and non labeled items. Items in the sample are sorted starting from the most ambiguous ones, i.e., having many possible label candidates.
+
+.. code-block:: bash
+
+    label --dir ./my_labels --sample 10
+
+Repeat the process until you are satisfied.
+
 
 After each iteration you will get statistics to help you decide when to stop labelling:
 
@@ -93,34 +95,47 @@ If you decide to continue, you can do one or more of the following actions:
 - If one of departments have no products labeled so far, you can search for matching products manually and add them to the sample with correct label. For search you can use last TSV file with univocal predicted labels.
 - You can also occasionally review univocal predicted labels and correct them by adding to the sample.
 
+Demo
+====
 
-Generating name variants
-------------------------
-
-Generate name variants of labelled products:
+Download sample taxonomy file of products and their categories form Frisco.pl online shop.
 
 .. code-block:: bash
 
-    generate \
-        labels/${TARGET_SHOP}/...-good-labels.tsv \
-        datasets/labelled/${TARGET_SHOP}/train/frisco_products.tsv
+    fetch_frisco
+
+Background
+==========
+
+See theoretical background_.
+
+.. _background: docs/introduction.md
 
 Development
 ===========
 
-Install poetry.
+Install poetry:
 
+.. code-block:: bash
 
-Install environment:
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+
+Install dependencies:
 
 .. code-block:: bash
 
     poetry install
 
-
-Publish package to dev registry.
+Activate virtual environment:
 
 .. code-block:: bash
 
-    poetry publish -r dev --build
+    poetry shell
 
+Install locally to test scripts:
+
+.. code-block:: bash
+
+    deactivate
+    poetry build
+    pip install dist/tree_labeller-0.1.0-py3-none-any.whl
