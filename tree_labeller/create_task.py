@@ -5,7 +5,7 @@ from typing import Set
 
 import fire
 
-from labeller.task import LabellingTask
+from tree_labeller.core.task import LabellingTask
 
 logging.basicConfig(level=logging.INFO)
 

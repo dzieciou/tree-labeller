@@ -120,10 +120,22 @@ Install poetry:
 
     curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
-Install the labelling tool:
+Install dependencies:
 
 .. code-block:: bash
 
-    poetry install --no-dev
+    poetry install
+
+Activate virtual environment:
+
+.. code-block:: bash
+
     poetry shell
 
+Install locally to test scripts:
+
+.. code-block:: bash
+
+    deactivate
+    poetry build
+    pip install dist/tree_labeller-0.1.0-py3-none-any.whl

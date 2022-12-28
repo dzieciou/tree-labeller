@@ -3,12 +3,12 @@ import logging
 
 import fire
 
-from labeller.charts import Charts
-from labeller.progress import ProgressTracker
-from labeller.task import (
+from tree_labeller.core.charts import Charts
+from tree_labeller.core.progress import ProgressTracker
+from tree_labeller.core.task import (
     LabellingTask,
 )
-from labeller.types import TO_REJECT_LABEL, TO_SKIP_LABEL
+from tree_labeller.core.types import TO_REJECT_LABEL, TO_SKIP_LABEL
 
 logging.basicConfig(level=logging.INFO)
 

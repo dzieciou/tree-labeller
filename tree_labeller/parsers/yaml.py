@@ -2,8 +2,8 @@ from typing import Tuple
 
 import yaml
 
-from labeller.parsers.treeparser import TreeParser, ContentHash
-from labeller.types import RawCategory, RawProduct, Category, Product
+from tree_labeller.core.types import Category, Product
+from tree_labeller.parsers.treeparser import TreeParser, ContentHash
 
 
 class YamlTreeParser(TreeParser):

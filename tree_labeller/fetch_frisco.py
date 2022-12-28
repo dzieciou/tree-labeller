@@ -3,9 +3,9 @@ import os.path
 
 import fire
 
-from labeller.exporters.yaml import export_tree
+from tree_labeller.exporters.yaml import export_tree
 
-from labeller.parsers.frisco import FriscoTreeParser
+from tree_labeller.parsers.frisco import FriscoTreeParser
 
 TREE_URL = "https://commerce.frisco.pl/api/v1/integration/feeds/public?language=pl"
 

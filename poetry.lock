@@ -100,25 +100,6 @@ python2 = ["typed-ast (>=1.4.3)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
-name = "blis"
-version = "0.7.9"
-description = "The Blis BLAS-like linear algebra library, as a self-contained C-extension."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-numpy = ">=1.15.0"
-
-[[package]]
-name = "catalogue"
-version = "2.0.8"
-description = "Super lightweight function registries for your library"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "certifi"
 version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -141,7 +122,7 @@ unicode_backport = ["unicodedata2"]
 name = "click"
 version = "8.1.3"
 description = "Composable command line interface toolkit"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -166,14 +147,6 @@ python-versions = ">=3.7"
 
 [package.extras]
 toml = ["tomli"]
-
-[[package]]
-name = "cymem"
-version = "2.0.7"
-description = "Manage calls to calloc/free through Cython"
-category = "main"
-optional = false
-python-versions = "*"
 
 [[package]]
 name = "fastcache"
@@ -246,20 +219,6 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
-name = "jinja2"
-version = "3.1.2"
-description = "A very fast and expressive template engine."
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-MarkupSafe = ">=2.0"
-
-[package.extras]
-i18n = ["Babel (>=2.7)"]
-
-[[package]]
 name = "jsonlines"
 version = "3.1.0"
 description = "Library with helpers for the jsonlines file format"
@@ -269,25 +228,6 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 attrs = ">=19.2.0"
-
-[[package]]
-name = "langcodes"
-version = "3.3.0"
-description = "Tools for labeling human languages with IETF language tags"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.extras]
-data = ["language-data (>=1.1,<2.0)"]
-
-[[package]]
-name = "markupsafe"
-version = "2.1.1"
-description = "Safely add untrusted strings to HTML/XML markup."
-category = "main"
-optional = false
-python-versions = ">=3.7"
 
 [[package]]
 name = "more-itertools"
@@ -306,14 +246,6 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
-name = "murmurhash"
-version = "1.0.9"
-description = "Cython bindings for MurmurHash"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "mypy-extensions"
 version = "0.4.3"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
@@ -322,18 +254,10 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "numpy"
-version = "1.24.1"
-description = "Fundamental package for array computing in Python"
-category = "main"
-optional = false
-python-versions = ">=3.8"
-
-[[package]]
 name = "packaging"
 version = "22.0"
 description = "Core utilities for Python packages"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -345,39 +269,6 @@ category = "dev"
 optional = false
 python-versions = ">=3.7"
 
-[[package]]
-name = "pathy"
-version = "0.10.1"
-description = "pathlib.Path subclasses for local and cloud bucket storage"
-category = "main"
-optional = false
-python-versions = ">= 3.6"
-
-[package.dependencies]
-smart-open = ">=5.2.1,<7.0.0"
-typer = ">=0.3.0,<1.0.0"
-
-[package.extras]
-all = ["google-cloud-storage (>=1.26.0,<2.0.0)", "boto3", "azure-storage-blob", "pytest", "pytest-coverage", "mock", "typer-cli"]
-azure = ["azure-storage-blob"]
-gcs = ["google-cloud-storage (>=1.26.0,<2.0.0)"]
-s3 = ["boto3"]
-test = ["pytest", "pytest-coverage", "mock", "typer-cli"]
-
-[[package]]
-name = "pl-core-news-sm"
-version = "3.2.0"
-description = "Polish pipeline optimized for CPU. Components: tok2vec, morphologizer, tagger, parser, senter, ner, attribute_ruler, lemmatizer."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-spacy = ">=3.2.0,<3.3.0"
-
-[package.source]
-type = "url"
-url = "https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.2.0/pl_core_news_sm-3.2.0.tar.gz"
 [[package]]
 name = "platformdirs"
 version = "2.6.0"
@@ -402,39 +293,12 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 dev = ["pre-commit", "tox"]
 
 [[package]]
-name = "preshed"
-version = "3.0.8"
-description = "Cython hash table that trusts the keys are pre-hashed"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-cymem = ">=2.0.2,<2.1.0"
-murmurhash = ">=0.28.0,<1.1.0"
-
-[[package]]
 name = "py"
 version = "1.11.0"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
 category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-
-[[package]]
-name = "pydantic"
-version = "1.8.2"
-description = "Data validation and settings management using python 3.6 type hinting"
-category = "main"
-optional = false
-python-versions = ">=3.6.1"
-
-[package.dependencies]
-typing-extensions = ">=3.7.4.3"
-
-[package.extras]
-dotenv = ["python-dotenv (>=0.10.4)"]
-email = ["email-validator (>=1.0.3)"]
 
 [[package]]
 name = "pytest"
@@ -493,104 +357,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
-name = "smart-open"
-version = "6.3.0"
-description = "Utils for streaming large files (S3, HDFS, GCS, Azure Blob Storage, gzip, bz2...)"
-category = "main"
-optional = false
-python-versions = ">=3.6,<4.0"
-
-[package.extras]
-all = ["boto3", "google-cloud-storage (>=2.6.0)", "azure-storage-blob", "azure-common", "azure-core", "requests", "paramiko"]
-azure = ["azure-storage-blob", "azure-common", "azure-core"]
-gcs = ["google-cloud-storage (>=2.6.0)"]
-http = ["requests"]
-s3 = ["boto3"]
-ssh = ["paramiko"]
-test = ["boto3", "google-cloud-storage (>=2.6.0)", "azure-storage-blob", "azure-common", "azure-core", "requests", "paramiko", "moto", "responses", "pytest", "pytest-rerunfailures"]
-webhdfs = ["requests"]
-
-[[package]]
-name = "spacy"
-version = "3.2.5"
-description = "Industrial-strength Natural Language Processing (NLP) in Python"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-blis = ">=0.4.0,<0.8.0"
-catalogue = ">=2.0.6,<2.1.0"
-cymem = ">=2.0.2,<2.1.0"
-jinja2 = "*"
-langcodes = ">=3.2.0,<4.0.0"
-murmurhash = ">=0.28.0,<1.1.0"
-numpy = ">=1.15.0"
-packaging = ">=20.0"
-pathy = ">=0.3.5"
-preshed = ">=3.0.2,<3.1.0"
-pydantic = ">=1.7.4,<1.8 || >1.8,<1.8.1 || >1.8.1,<1.9.0"
-requests = ">=2.13.0,<3.0.0"
-smart-open = ">=5.2.1,<7.0.0"
-spacy-legacy = ">=3.0.8,<3.1.0"
-spacy-loggers = ">=1.0.0,<2.0.0"
-srsly = ">=2.4.1,<3.0.0"
-thinc = ">=8.0.12,<8.1.0"
-tqdm = ">=4.38.0,<5.0.0"
-typer = ">=0.3.0,<0.5.0"
-wasabi = ">=0.8.1,<1.1.0"
-
-[package.extras]
-apple = ["thinc-apple-ops (>=0.0.4,<1.0.0)"]
-cuda = ["cupy (>=5.0.0b4,<11.0.0)"]
-cuda100 = ["cupy-cuda100 (>=5.0.0b4,<11.0.0)"]
-cuda101 = ["cupy-cuda101 (>=5.0.0b4,<11.0.0)"]
-cuda102 = ["cupy-cuda102 (>=5.0.0b4,<11.0.0)"]
-cuda110 = ["cupy-cuda110 (>=5.0.0b4,<11.0.0)"]
-cuda111 = ["cupy-cuda111 (>=5.0.0b4,<11.0.0)"]
-cuda112 = ["cupy-cuda112 (>=5.0.0b4,<11.0.0)"]
-cuda113 = ["cupy-cuda113 (>=5.0.0b4,<11.0.0)"]
-cuda114 = ["cupy-cuda114 (>=5.0.0b4,<11.0.0)"]
-cuda115 = ["cupy-cuda115 (>=5.0.0b4,<11.0.0)"]
-cuda80 = ["cupy-cuda80 (>=5.0.0b4,<11.0.0)"]
-cuda90 = ["cupy-cuda90 (>=5.0.0b4,<11.0.0)"]
-cuda91 = ["cupy-cuda91 (>=5.0.0b4,<11.0.0)"]
-cuda92 = ["cupy-cuda92 (>=5.0.0b4,<11.0.0)"]
-ja = ["sudachipy (>=0.5.2,!=0.6.1)", "sudachidict-core (>=20211220)"]
-ko = ["natto-py (==0.9.0)"]
-lookups = ["spacy-lookups-data (>=1.0.3,<1.1.0)"]
-ray = ["spacy-ray (>=0.1.0,<1.0.0)"]
-th = ["pythainlp (>=2.0)"]
-transformers = ["spacy-transformers (>=1.1.2,<1.2.0)"]
-
-[[package]]
-name = "spacy-legacy"
-version = "3.0.10"
-description = "Legacy registered functions for spaCy backwards compatibility"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
-name = "spacy-loggers"
-version = "1.0.4"
-description = "Logging utilities for SpaCy"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
-name = "srsly"
-version = "2.4.5"
-description = "Modern high-performance serialization utilities for Python"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-catalogue = ">=2.0.3,<2.1.0"
-
-[[package]]
 name = "tabulate"
 version = "0.8.10"
 description = "Pretty-print tabular data"
@@ -624,45 +390,6 @@ python-versions = ">=3.7"
 colorama = "*"
 
 [[package]]
-name = "thinc"
-version = "8.0.17"
-description = "A refreshing functional take on deep learning, compatible with your favorite libraries"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-blis = ">=0.4.0,<0.8.0"
-catalogue = ">=2.0.4,<2.1.0"
-cymem = ">=2.0.2,<2.1.0"
-murmurhash = ">=1.0.2,<1.1.0"
-numpy = ">=1.15.0"
-preshed = ">=3.0.2,<3.1.0"
-pydantic = ">=1.7.4,<1.8 || >1.8,<1.8.1 || >1.8.1,<1.9.0"
-srsly = ">=2.4.0,<3.0.0"
-wasabi = ">=0.8.1,<1.1.0"
-
-[package.extras]
-cuda = ["cupy (>=5.0.0b4)"]
-cuda100 = ["cupy-cuda100 (>=5.0.0b4)"]
-cuda101 = ["cupy-cuda101 (>=5.0.0b4)"]
-cuda102 = ["cupy-cuda102 (>=5.0.0b4)"]
-cuda110 = ["cupy-cuda110 (>=5.0.0b4)"]
-cuda111 = ["cupy-cuda111 (>=5.0.0b4)"]
-cuda112 = ["cupy-cuda112 (>=5.0.0b4)"]
-cuda113 = ["cupy-cuda113 (>=5.0.0b4)"]
-cuda114 = ["cupy-cuda114 (>=5.0.0b4)"]
-cuda115 = ["cupy-cuda115 (>=5.0.0b4)"]
-cuda80 = ["cupy-cuda80 (>=5.0.0b4)"]
-cuda90 = ["cupy-cuda90 (>=5.0.0b4)"]
-cuda91 = ["cupy-cuda91 (>=5.0.0b4)"]
-cuda92 = ["cupy-cuda92 (>=5.0.0b4)"]
-datasets = ["ml-datasets (>=0.2.0,<0.3.0)"]
-mxnet = ["mxnet (>=1.5.1,<1.6.0)"]
-tensorflow = ["tensorflow (>=2.0.0,<2.6.0)"]
-torch = ["torch (>=1.6.0)"]
-
-[[package]]
 name = "tomli"
 version = "1.2.3"
 description = "A lil' TOML parser"
@@ -688,27 +415,10 @@ slack = ["slack-sdk"]
 telegram = ["requests"]
 
 [[package]]
-name = "typer"
-version = "0.4.2"
-description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-click = ">=7.1.1,<9.0.0"
-
-[package.extras]
-all = ["colorama (>=0.4.3,<0.5.0)", "shellingham (>=1.3.0,<2.0.0)"]
-dev = ["autoflake (>=1.3.1,<2.0.0)", "flake8 (>=3.8.3,<4.0.0)", "pre-commit (>=2.17.0,<3.0.0)"]
-doc = ["mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mdx-include (>=1.4.1,<2.0.0)"]
-test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (>=2.10.0,<3.0.0)", "coverage (>=5.2,<6.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "mypy (==0.910)", "black (>=22.3.0,<23.0.0)", "isort (>=5.0.6,<6.0.0)"]
-
-[[package]]
 name = "typing-extensions"
 version = "4.4.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -724,14 +434,6 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 brotli = ["brotlicffi (>=0.8.0)", "brotli (>=1.0.9)", "brotlipy (>=0.6.0)"]
 secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "urllib3-secure-extra", "ipaddress"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
-
-[[package]]
-name = "wasabi"
-version = "0.10.1"
-description = "A lightweight console printing and formatting toolkit"
-category = "main"
-optional = false
-python-versions = "*"
 
 [[package]]
 name = "wcwidth"
@@ -756,7 +458,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "f8d0ec344e6b522d33c122148288cc2ff9f079e6d343ea4143b2978f6074a402"
+content-hash = "b2a799f9f3fd3d22a6be299c9049b52011d82983e30d3f007890656f77914614"
 
 [metadata.files]
 aiohttp = []
@@ -775,14 +477,11 @@ black = [
     {file = "black-21.12b0-py3-none-any.whl", hash = "sha256:a615e69ae185e08fdd73e4715e260e2479c861b5740057fde6e8b4e3b7dd589f"},
     {file = "black-21.12b0.tar.gz", hash = "sha256:77b80f693a569e2e527958459634f18df9b0ba2625ba4e0c2d5da5be42e6f2b3"},
 ]
-blis = []
-catalogue = []
 certifi = []
 charset-normalizer = []
 click = []
 colorama = []
 coverage = []
-cymem = []
 fastcache = [
     {file = "fastcache-1.1.0.tar.gz", hash = "sha256:6de1b16e70335b7bde266707eb401a3aaec220fb66c5d13b02abf0eab8be782b"},
 ]
@@ -795,58 +494,23 @@ fsspec = [
     {file = "fsspec-2021.11.1.tar.gz", hash = "sha256:03683e606651d5e4bd9180525d57477bd5430e5dc68d2e459835dc14cecc3dd4"},
 ]
 idna = []
-jinja2 = []
 jsonlines = []
-langcodes = [
-    {file = "langcodes-3.3.0-py3-none-any.whl", hash = "sha256:4d89fc9acb6e9c8fdef70bcdf376113a3db09b67285d9e1d534de6d8818e7e69"},
-    {file = "langcodes-3.3.0.tar.gz", hash = "sha256:794d07d5a28781231ac335a1561b8442f8648ca07cd518310aeb45d6f0807ef6"},
-]
-markupsafe = []
 more-itertools = []
 multidict = []
-murmurhash = []
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
-numpy = []
 packaging = []
 pathspec = []
-pathy = []
-pl-core-news-sm = []
 platformdirs = []
 pluggy = [
     {file = "pluggy-0.13.1-py2.py3-none-any.whl", hash = "sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d"},
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
 ]
-preshed = []
 py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
-]
-pydantic = [
-    {file = "pydantic-1.8.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:05ddfd37c1720c392f4e0d43c484217b7521558302e7069ce8d318438d297739"},
-    {file = "pydantic-1.8.2-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:a7c6002203fe2c5a1b5cbb141bb85060cbff88c2d78eccbc72d97eb7022c43e4"},
-    {file = "pydantic-1.8.2-cp36-cp36m-manylinux2014_i686.whl", hash = "sha256:589eb6cd6361e8ac341db97602eb7f354551482368a37f4fd086c0733548308e"},
-    {file = "pydantic-1.8.2-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:10e5622224245941efc193ad1d159887872776df7a8fd592ed746aa25d071840"},
-    {file = "pydantic-1.8.2-cp36-cp36m-win_amd64.whl", hash = "sha256:99a9fc39470010c45c161a1dc584997f1feb13f689ecf645f59bb4ba623e586b"},
-    {file = "pydantic-1.8.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:a83db7205f60c6a86f2c44a61791d993dff4b73135df1973ecd9eed5ea0bda20"},
-    {file = "pydantic-1.8.2-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:41b542c0b3c42dc17da70554bc6f38cbc30d7066d2c2815a94499b5684582ecb"},
-    {file = "pydantic-1.8.2-cp37-cp37m-manylinux2014_i686.whl", hash = "sha256:ea5cb40a3b23b3265f6325727ddfc45141b08ed665458be8c6285e7b85bd73a1"},
-    {file = "pydantic-1.8.2-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:18b5ea242dd3e62dbf89b2b0ec9ba6c7b5abaf6af85b95a97b00279f65845a23"},
-    {file = "pydantic-1.8.2-cp37-cp37m-win_amd64.whl", hash = "sha256:234a6c19f1c14e25e362cb05c68afb7f183eb931dd3cd4605eafff055ebbf287"},
-    {file = "pydantic-1.8.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:021ea0e4133e8c824775a0cfe098677acf6fa5a3cbf9206a376eed3fc09302cd"},
-    {file = "pydantic-1.8.2-cp38-cp38-manylinux1_i686.whl", hash = "sha256:e710876437bc07bd414ff453ac8ec63d219e7690128d925c6e82889d674bb505"},
-    {file = "pydantic-1.8.2-cp38-cp38-manylinux2014_i686.whl", hash = "sha256:ac8eed4ca3bd3aadc58a13c2aa93cd8a884bcf21cb019f8cfecaae3b6ce3746e"},
-    {file = "pydantic-1.8.2-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:4a03cbbe743e9c7247ceae6f0d8898f7a64bb65800a45cbdc52d65e370570820"},
-    {file = "pydantic-1.8.2-cp38-cp38-win_amd64.whl", hash = "sha256:8621559dcf5afacf0069ed194278f35c255dc1a1385c28b32dd6c110fd6531b3"},
-    {file = "pydantic-1.8.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:8b223557f9510cf0bfd8b01316bf6dd281cf41826607eada99662f5e4963f316"},
-    {file = "pydantic-1.8.2-cp39-cp39-manylinux1_i686.whl", hash = "sha256:244ad78eeb388a43b0c927e74d3af78008e944074b7d0f4f696ddd5b2af43c62"},
-    {file = "pydantic-1.8.2-cp39-cp39-manylinux2014_i686.whl", hash = "sha256:05ef5246a7ffd2ce12a619cbb29f3307b7c4509307b1b49f456657b43529dc6f"},
-    {file = "pydantic-1.8.2-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:54cd5121383f4a461ff7644c7ca20c0419d58052db70d8791eacbbe31528916b"},
-    {file = "pydantic-1.8.2-cp39-cp39-win_amd64.whl", hash = "sha256:4be75bebf676a5f0f87937c6ddb061fa39cbea067240d98e298508c1bda6f3f3"},
-    {file = "pydantic-1.8.2-py3-none-any.whl", hash = "sha256:fec866a0b59f372b7e776f2d7308511784dace622e0992a0b59ea3ccee0ae833"},
-    {file = "pydantic-1.8.2.tar.gz", hash = "sha256:26464e57ccaafe72b7ad156fdaa4e9b9ef051f69e175dbbb463283000c05ab7b"},
 ]
 pytest = [
     {file = "pytest-5.4.3-py3-none-any.whl", hash = "sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1"},
@@ -892,27 +556,19 @@ six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
-smart-open = []
-spacy = []
-spacy-legacy = []
-spacy-loggers = []
-srsly = []
 tabulate = []
 termcolor = []
 termgraph = [
     {file = "termgraph-0.5.3-py3-none-any.whl", hash = "sha256:c181c168c2278a7f7161de05b1033396a2f6b06ab260ddf987b0320fae93ff8e"},
     {file = "termgraph-0.5.3.tar.gz", hash = "sha256:36ff2098e41eeab1e7cdda7366dc3e5b514ea799fa3e77537564492a7edefdd5"},
 ]
-thinc = []
 tomli = [
     {file = "tomli-1.2.3-py3-none-any.whl", hash = "sha256:e3069e4be3ead9668e21cb9b074cd948f7b3113fd9c8bba083f48247aab8b11c"},
     {file = "tomli-1.2.3.tar.gz", hash = "sha256:05b6166bff487dc068d322585c7ea4ef78deed501cc124060e0f238e89a9231f"},
 ]
 tqdm = []
-typer = []
 typing-extensions = []
 urllib3 = []
-wasabi = []
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},

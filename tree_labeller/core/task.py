@@ -11,9 +11,9 @@ from typing import Iterable, Set, Optional, Dict, List, Callable
 
 import yaml
 
-from labeller import predictor
-from labeller.parsers.yaml import YamlTreeParser
-from labeller.types import (
+from tree_labeller.core import predictor
+from tree_labeller.parsers.yaml import YamlTreeParser
+from tree_labeller.core.types import (
     TO_REJECT_LABEL,
     TO_SKIP_LABEL,
     ProductId,

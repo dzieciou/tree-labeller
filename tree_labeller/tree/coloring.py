@@ -2,7 +2,7 @@ from typing import TypeVar, Set
 
 from anytree import NodeMixin, SymlinkNode, PreOrderIter
 
-from labeller.tree.utils import internals
+from tree_labeller.tree.utils import internals
 
 Color = TypeVar("Color")
 
