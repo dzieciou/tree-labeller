@@ -10,14 +10,13 @@ from typing import Generator
 import fsspec as fs
 from tqdm import tqdm
 
+from tree_labeller.core.types import RawCategory, RawProduct
 from tree_labeller.parsers.treeparser import TreeParser, ContentHash
 from tree_labeller.tree.utils import internals
-from tree_labeller.core.types import RawCategory, RawProduct
 
 ROOT_CATEGORY_NAME = "categories"
 
 Json = Dict[str, Any]
-
 
 CACHE_OPTIONS = {
     "cache_storage": "./tmp/frisco",

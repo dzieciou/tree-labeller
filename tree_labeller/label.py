@@ -17,7 +17,6 @@ def label(
     dir: str,
     sample: int = 100,
 ):
-
     task = LabellingTask.from_dir(dir)
     task.predict_labels(sample)
 

@@ -2,7 +2,6 @@ import csv
 import itertools
 import logging
 import os.path
-import re
 import shutil
 from collections import Counter
 from datetime import datetime

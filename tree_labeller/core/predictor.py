@@ -1,5 +1,6 @@
 from anytree import PreOrderIter
 
+from tree_labeller.core.types import Category, Product
 from tree_labeller.tree.coloring import (
     ColorableNode,
     color_tree,
@@ -7,7 +8,6 @@ from tree_labeller.tree.coloring import (
 )
 from tree_labeller.tree.distant_leaves import find_distant_leaves
 from tree_labeller.tree.utils import internals
-from tree_labeller.core.types import Category, Product
 
 
 def _to_colorable_tree(tree):
