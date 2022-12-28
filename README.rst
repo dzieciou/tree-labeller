@@ -4,8 +4,6 @@ Tree Labeller
 
 Command line tools that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
 
-Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided. The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label.
-
 Sample scenarios include:
 
 - Assigning shop departments to products organized in a taxonomy of categories
@@ -16,6 +14,7 @@ Here's example of the first task:
 
 .. image:: docs/imgs/tree_1.png
 
+Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided. The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label.
 
 Install
 =======
