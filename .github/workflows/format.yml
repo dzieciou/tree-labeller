@@ -1,9 +1,9 @@
-name: test
+name: format
 
 on: pull_request
 
 jobs:
-  test:
+  format:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
