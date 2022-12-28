@@ -110,9 +110,9 @@ Create task for labelling Frisco products with departments from `Marketpoint`_, 
 .. code-block:: bash
 
     create_task \
-            --dir ./marketpoint \
-            --tree ./frisco.yaml \
-            --allowed-labels Alcohols,Beers,Vegetables
+        --dir ./marketpoint \
+        --tree ./frisco.yaml \
+        --allowed-labels Alcohols,Beers,Vegetables
 
 Sample products for labelling:
 
