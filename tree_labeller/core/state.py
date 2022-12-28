@@ -9,7 +9,7 @@ from tree_labeller.core.types import Label, ProductId, Category
 from tree_labeller.parsers.yaml import YamlTreeParser
 
 
-def _parse_path(path: str):
+def _parse_path(path: str) -> int:
     fname = os.path.basename(path)
     m = re.match(
         r"(?P<iteration>\d+)-(to-verify|good-labels).tsv",
@@ -21,7 +21,7 @@ def _parse_path(path: str):
     return iteration
 
 
-def load_labels(tsv_path: str, allowed_labels: Set[Label]) -> Dict[ProductId, Label]:
+def _load_labels(tsv_path: str, allowed_labels: Set[Label]) -> Dict[ProductId, Label]:
     missing = 0
     selected = 0
     ambiguous = 0
@@ -105,7 +105,7 @@ class LabellingState:
         paths = glob.glob(os.path.join(dir, "*.tsv"))
         if paths:
             path = max(paths, key=os.path.getctime)
-            labels = load_labels(path, allowed_labels)
+            labels = _load_labels(path, allowed_labels)
             _update_tree(tree, labels)
             iteration = _parse_path(path)
 
