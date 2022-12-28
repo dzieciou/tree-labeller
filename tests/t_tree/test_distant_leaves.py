@@ -1,6 +1,6 @@
 from anytree import AnyNode, RenderTree, ContRoundStyle
 
-from labeller.tree.distant_leaves import (
+from tree_labeller.tree.distant_leaves import (
     _to_binary_tree,
     find_distant_leaves,
     _find_distant_leaves_binary_tree,
