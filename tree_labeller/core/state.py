@@ -112,6 +112,15 @@ class LabellingState:
         return LabellingState(tree, iteration)
 
     def save_to_verify(self, path: str):
+        # TODO Make serialization/deserialization of tree to/from yaml and labels to/from TSV
+        #      independent of whether we talk about books, products or whatever.
+        #      Mandatory fields for product are: id, label, category/parent
+        #      All other fields are optional (name, brand). They should be read from Product.__dict__
+        #      Mandatory fields for category are: id, parent.
+        #      All other fields are optional (name). They should be read from Category.__dict__
+        #      Should we read it from all products or first one? Same for categories...
+        #      This may require changing also parser to
+        #       This will require changes to YAML parser
         with open(path, "w") as f:
             writer = csv.DictWriter(
                 f,
