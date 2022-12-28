@@ -2,7 +2,7 @@
 Tree Labeller
 =============
 
-Command line tools that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
+The command line tool that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
 
 Sample scenarios include:
 
