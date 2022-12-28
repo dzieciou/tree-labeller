@@ -17,7 +17,7 @@ Same products can be organized differently, depending on the shop. See, for inst
 
 .. image:: imgs/marketpoint.svg
 
-The arrangement of departments in my local grocery shop. Sometimes, related products are split into two distant locations, e.g., most vegetable preserves are in Fruits & vegetable preserves on the left except for canned tomatoes that can be found in Tomato preserves in the middle. Sometimes, same products can be found in two distant departments, e.g., cheese can be both in Diary and in Cheese (by weight).
+Sometimes, related products are split into two distant locations, e.g., most vegetable preserves are in Fruits & vegetable preserves on the left except for canned tomatoes that can be found in Tomato preserves in the middle. Sometimes, same products can be found in two distant departments, e.g., cheese can be both in Diary and in Cheese (by weight).
 
 Preparing taxonomy
 ------------------

@@ -143,3 +143,13 @@ Install locally to test scripts:
     deactivate
     poetry build
     pip install dist/tree_labeller-0.1.0-py3-none-any.whl
+
+
+
+Acknowledgements
+----------------
+
+I would like to thank to:
+- people from StackExchange for help in developing algorithms
+- my girlfriend Renata for help in mapping our local grocery store
+- my colleagues from Samsung R&D Poland for feedback.

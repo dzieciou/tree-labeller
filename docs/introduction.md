@@ -73,10 +73,5 @@ Further reading
 The problem we are tackling here is similar to taxonomy mapping. See ["SCHEMA - An Algorithm for Automated
 Product Taxonomy Mapping in E-commerce"][1] for a sample method on that or ["Ontology Matching"][2] book for a survey of taxonomy mapping methods.
 
-Acknowledgements
-----------------
-
-I would like to thank people from StackExchange for help in developing algorithms, my girlfriend Renata for help in mapping our local grocery store and my work mates for feedback during Lighting Talks.
-
 [1]: https://link.springer.com/content/pdf/10.1007/978-3-642-30284-8_27.pdf
 [2]: http://www.filosofiacienciaarte.org/attachments/article/1129/Je%CC%81ro%CC%82me%20Euzenat-Ontology%20Matching.pdf
