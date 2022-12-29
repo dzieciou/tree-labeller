@@ -11,6 +11,7 @@ import fsspec as fs
 from tqdm import tqdm
 
 from tree_labeller.core.types import Category, Product
+from tree_labeller.core.utils import remove_leaf_categories_without_product
 from tree_labeller.parsers.treeparser import TreeParser, ContentHash
 from tree_labeller.tree.utils import internals
 
@@ -26,20 +27,21 @@ CACHE_OPTIONS = {
 
 
 class FriscoTreeParser(TreeParser):
-    def parse_tree(self, path: str) -> Tuple[Category, ContentHash]:
+    def parse_tree(self, path: str) -> Category:
         logging.info(f"Downloading Frisco products dump form {path}...")
         with fs.open(
             "filecache::" + path,
             filecache=CACHE_OPTIONS,
         ) as f:
-            return self._parse_content(f.read())
+            tree = self._parse_content(f.read())
+            remove_leaf_categories_without_product(tree)
+            return tree
 
-    def _parse_content(self, content: str) -> Tuple[Category, ContentHash]:
-        content_hash = hashlib.md5(content).hexdigest()
+    def _parse_content(self, content: str) -> Category:
         content = json.loads(content)
         tree = self._parse_categories(content)
         self._attach_products(tree, content)
-        return tree, content_hash
+        return tree
 
     def _parse_categories(self, content: Json) -> Category:
         def parse_one(category: Json):

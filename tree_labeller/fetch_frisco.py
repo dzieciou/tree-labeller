@@ -9,8 +9,8 @@ TREE_URL = "https://commerce.frisco.pl/api/v1/integration/feeds/public?language=
 
 def fetch():
     parser = FriscoTreeParser()
-    root, _ = parser.parse_tree(TREE_URL)
-    export_tree(root)
+    tree = parser.parse_tree(TREE_URL)
+    export_tree(tree)
 
 
 def cli():

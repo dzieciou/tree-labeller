@@ -109,13 +109,11 @@ class Product(NodeMixin):
     name: ProductName
     brand: str
 
-    def __init__(
-        self, id: ProductId, name: ProductName, brand: str, category: Category
-    ):
+    def __init__(self, id: ProductId, name: ProductName, category: Category, **attrs):
         self.id = id
         self.name = name
-        self.brand = brand
         self.parent = category
+        self.attrs = attrs
 
     @property
     def category(self):
@@ -138,7 +136,7 @@ class LabelableProduct(Product):
     labels: Labels
 
     def __init__(
-        self, id: ProductId, name: ProductName, brand: str, category: LabelableCategory
+        self, id: ProductId, name: ProductName, category: LabelableCategory, **attrs
     ):
-        super().__init__(id, name, brand, category)
+        super().__init__(id, name, category, **attrs)
         self.labels = Labels()

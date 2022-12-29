@@ -8,5 +8,5 @@ ContentHash = str
 
 
 class TreeParser:
-    def parse_tree(self, path: str) -> Tuple[Category, ContentHash]:
+    def parse_tree(self, path: str) -> Category:
         return None

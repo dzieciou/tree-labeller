@@ -31,19 +31,28 @@ Describe your taxonomy in form of YAML file, e.g.: ``tree.yaml``
 .. code-block:: yaml
 
     name: categories
+    id: 1
     children:
     - name: Alcoholic Drinks
+      id: 11
       children:
       - name: Whiskies
+        id: 111
         children:
         - name: Jack Daniel's
+          id: 1111
         - name: Johnnie Walker's
+          id: 1112
       - name: Wines
+        id: 112
         children:
         - name: Cabernet Sauvignon
+          id: 1121
       - name: Beers
+        id: 113
         children:
         - name: Guinness
+          id: 1131
 
 Create labelling task:
 

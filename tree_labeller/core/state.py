@@ -3,9 +3,10 @@ import glob
 import logging
 import os
 import re
-from typing import Set, Dict
+from typing import Set, Dict, Iterable
 
-from tree_labeller.core.types import Label, ProductId, LabelableCategory
+from tree_labeller.core.types import Label, ProductId, LabelableCategory, Product
+from tree_labeller.core.utils import remove_leaf_categories_without_product
 from tree_labeller.parsers.yaml import YamlTreeParser
 
 
@@ -69,20 +70,7 @@ def _update_tree(tree: LabelableCategory, labels: Set[Label]):
         product.labels.manual = label
 
 
-def _remove_leaf_categories_without_product(root: LabelableCategory):
-    removed = True
-    n_removed = 0
-    while removed:
-        removed = False
-        for leaf in root.leaves:
-            if isinstance(leaf, LabelableCategory):
-                leaf.parent = None
-                removed = True
-                n_removed += 1
-    logging.debug(f"Removed {n_removed} categories without product.")
-
-
-class LabellingState:
+class LabelingState:
     tree: LabelableCategory
     iteration: int
 
@@ -98,8 +86,8 @@ class LabellingState:
 
     @classmethod
     def from_dir(cls, dir: str, tree_path: str, allowed_labels: Set[str]):
-        tree, _ = YamlTreeParser().parse_tree(tree_path)
-        _remove_leaf_categories_without_product(tree)
+        tree = YamlTreeParser().parse_tree(tree_path)
+        remove_leaf_categories_without_product(tree)
 
         iteration = 0
         paths = glob.glob(os.path.join(dir, "*.tsv"))
@@ -109,68 +97,68 @@ class LabellingState:
             _update_tree(tree, labels)
             iteration = _parse_path(path)
 
-        return LabellingState(tree, iteration)
+        return LabelingState(tree, iteration)
 
     def save_to_verify(self, path: str):
-        # TODO Make serialization/deserialization of tree to/from yaml and labels to/from TSV
-        #      independent of whether we talk about books, products or whatever.
-        #      Mandatory fields for product are: id, label, category/parent
-        #      All other fields are optional (name, brand). They should be read from Product.__dict__
-        #      Mandatory fields for category are: id, parent.
-        #      All other fields are optional (name). They should be read from Category.__dict__
-        #      Should we read it from all products or first one? Same for categories...
-        #      This may require changing also parser to
-        #       This will require changes to YAML parser
+        to_verify = [
+            product
+            for product in self.tree.products
+            if product.labels.selected or product.labels.manual
+        ]
+        to_verify = sorted(
+            to_verify,
+            key=lambda product: (
+                -len(product.labels.to_verify),
+                sorted(product.labels.to_verify),
+            ),
+        )
+
         with open(path, "w") as f:
             writer = csv.DictWriter(
                 f,
                 delimiter="\t",
-                fieldnames=["product_id", "name", "brand", "category", "label"],
+                fieldnames=self._get_fieldnames(to_verify),
             )
             writer.writeheader()
 
-            to_verify = [
-                product
-                for product in self.tree.products
-                if product.labels.selected or product.labels.manual
-            ]
-            to_verify = sorted(
-                to_verify,
-                key=lambda product: (
-                    -len(product.labels.to_verify),
-                    sorted(product.labels.to_verify),
-                ),
-            )
             for product in to_verify:
                 writer.writerow(
                     {
-                        "product_id": product.id,
+                        "id": product.id,
                         "name": product.name,
-                        "brand": product.brand,
                         "category": product.category_name,
-                        "label": "|".join(product.labels.to_verify),
+                        "label": "|".join(sorted(product.labels.to_verify)),
+                        **product.attrs,
                     }
                 )
 
     def save_good_predicted_labels(self, path: str):
+        products_with_good_labels = [
+            product for product in self.tree.products if product.labels.is_good
+        ]
         with open(path, "w") as f:
             writer = csv.DictWriter(
                 f,
                 delimiter="\t",
-                fieldnames=["product_id", "name", "brand", "category", "label"],
+                fieldnames=self._get_fieldnames(products_with_good_labels),
             )
             writer.writeheader()
-            for product in self.tree.products:
-                if product.labels.is_good:
-                    writer.writerow(
-                        {
-                            "product_id": product.id,
-                            "name": product.name,
-                            "brand": product.brand,
-                            "category": product.category_name,
-                            "label": next(iter(product.labels.predicted)),
-                        }
-                    )
+            for product in products_with_good_labels:
+                writer.writerow(
+                    {
+                        "id": product.id,
+                        "name": product.name,
+                        "category": product.category_name,
+                        "label": product.labels.good_label,
+                        **product.attrs,
+                    }
+                )
+
+    def _get_fieldnames(self, products: Iterable[Product]):
+        attr_names = set(
+            attr_name for product in products for attr_name in product.attrs.keys()
+        )
+        return ["id", "name", *sorted(attr_names), "category", "label"]
 
     def get_category(self, category_id: int):
         return self._categories_by_id[int(category_id)]

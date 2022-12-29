@@ -7,10 +7,10 @@ from tree_labeller.parsers.treeparser import TreeParser, ContentHash
 
 
 class YamlTreeParser(TreeParser):
-    def parse_tree(self, path: str) -> Tuple[LabelableCategory, ContentHash]:
+    def parse_tree(self, path: str) -> LabelableCategory:
         with open(path) as input:
             dct = yaml.full_load(input)
-        return CustomDictImporter().import_(dct), None
+        return CustomDictImporter().import_(dct)
 
 
 class CustomDictImporter(object):

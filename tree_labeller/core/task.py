@@ -10,7 +10,7 @@ from typing import Iterable, Set, Optional, List, Callable
 import yaml
 
 from tree_labeller.core import predictor
-from tree_labeller.core.state import LabellingState
+from tree_labeller.core.state import LabelingState
 from tree_labeller.core.types import (
     TO_REJECT_LABEL,
     TO_SKIP_LABEL,
@@ -105,7 +105,7 @@ class LabellingTask:
             TO_REJECT_LABEL,
             TO_SKIP_LABEL,
         }
-        state = LabellingState.from_dir(dir, config.tree_path, allowed_labels)
+        state = LabelingState.from_dir(dir, config.tree_path, allowed_labels)
         task = LabellingTask(dir, config, state, allowed_labels)
         return task
 
@@ -113,7 +113,7 @@ class LabellingTask:
         self,
         dir: str,
         config: Config,
-        state: LabellingState,
+        state: LabelingState,
         allowed_labels: Set[Label],
     ):
 
