@@ -1,10 +1,7 @@
+# Distributing labelling budget
 
-=============================
-Distributing labelling budget
-=============================
 
-Formalizing problem
--------------------
+## Formalizing problem
 
 If $\mathcal{Y}$ is a set of classes (labels or shop departments in our example), and $\mathcal{X}$ is a space of all possible products and product groups, then our goal is to find a classifier function $f: \mathcal{X} \to \mathcal{Y}$. This sounds like a [multiclass classification](https://en.wikipedia.org/wiki/Multiclass_classification) problem, although we are not necessarily going to use machine learning to solve it. 
 
@@ -18,8 +15,7 @@ We have the budget to manually label only $n$ of $m$ products, where $m=\vert\ma
 Products are organized in categories that make up a taxonomy $T$. More formally, a taxonomy, is a tree, where leaves stand 
 for products and inner nodes are product categories.
 
-Labelling in iterations
------------------------
+## Labelling in iterations
 
 My idea is to label products iteratively.
 
@@ -41,8 +37,7 @@ Repeat until there are no products with ambiguous predictions ($\vert S_i \vert 
 budget ($\sum_{j=1}^{i}{\vert X_j \vert} \geq n $). The ultimate labelling will come from both manual labels
 (for $\bigcup_{j=1}^{i}{X_{j}}$) and unambiguous predictions (for $\bigcup_{j=1}^{i}{R_{j}}$).
 
-Considerations
---------------
+## Considerations
 
 We have one annotator, predicting next label costs nothing (compared to manual cost), so given a budget <img src="svgs/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode" align=middle width=9.86687624999999pt height=14.15524440000002pt/>, so we can have <img src="svgs/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode" align=middle width=9.86687624999999pt height=14.15524440000002pt/> iterations, in each we select only one product for manual labelling.
 
