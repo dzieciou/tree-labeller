@@ -104,13 +104,6 @@ Documentation
 .. _Predicting labels: docs/predicting.md
 
 
-Background
-==========
-
-See theoretical background_.
-
-.. _background: docs/introduction.md
-
 Development
 ===========
 
