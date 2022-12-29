@@ -2,6 +2,7 @@ from tree_labeller.parsers.yaml import YamlTreeParser
 
 import pytest
 
+
 def test_parse(tmp_path):
     yaml_doc = """
 name: categories
