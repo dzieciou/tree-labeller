@@ -1,6 +1,4 @@
-=================
-Predicting labels
-=================
+# Predicting labels
 
 Both product and category nodes in a taxonomy can be labelled. Each can have one or more labels predicted. If a node
 has multiple labels predicted, then we call it ambiguous prediction.

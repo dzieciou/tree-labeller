@@ -1,10 +1,7 @@
+# Distributing labelling budget
 
-=============================
-Distributing labelling budget
-=============================
 
-Formalizing problem
--------------------
+## Formalizing problem
 
 If <img src="svgs/fce9019a5e1fa63e079199cd9b11c55e.svg?invert_in_darkmode" align=middle width=12.337954199999992pt height=22.465723500000017pt/> is a set of classes (labels or shop departments in our example), and <img src="svgs/7da75f4e61cdeabf944740206b511812.svg?invert_in_darkmode" align=middle width=14.132466149999988pt height=22.465723500000017pt/> is a space of all possible products and product groups, then our goal is to find a classifier function <img src="svgs/66ac6408d7fc5921ca31194bdcb08df9.svg?invert_in_darkmode" align=middle width=75.55685114999999pt height=22.831056599999986pt/>. This sounds like a [multiclass classification](https://en.wikipedia.org/wiki/Multiclass_classification) problem, although we are not necessarily going to use machine learning to solve it. 
 
@@ -18,8 +15,7 @@ We have the budget to manually label only <img src="svgs/55a049b8f161ae7cfeb0197
 Products are organized in categories that make up a taxonomy <img src="svgs/2f118ee06d05f3c2d98361d9c30e38ce.svg?invert_in_darkmode" align=middle width=11.889314249999991pt height=22.465723500000017pt/>. More formally, a taxonomy, is a tree, where leaves stand 
 for products and inner nodes are product categories.
 
-Labelling in iterations
------------------------
+## Labelling in iterations
 
 My idea is to label products iteratively.
 
@@ -41,8 +37,7 @@ Repeat until there are no products with ambiguous predictions (<img src="svgs/c1
 budget (<img src="svgs/77e26f659508bed2a277eb15d2113492.svg?invert_in_darkmode" align=middle width=105.12371594999999pt height=31.75825949999999pt/>). The ultimate labelling will come from both manual labels
 (for <img src="svgs/8b5f51cbd69b19bcd7d49c6f07f6272a.svg?invert_in_darkmode" align=middle width=59.73190574999998pt height=31.75825949999999pt/>) and unambiguous predictions (for <img src="svgs/affb5ec0de99c455da0189c50279e339.svg?invert_in_darkmode" align=middle width=58.59463004999999pt height=31.75825949999999pt/>).
 
-Considerations
---------------
+## Considerations
 
 We have one annotator, predicting next label costs nothing (compared to manual cost), so given a budget <img src="svgs/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode" align=middle width=9.86687624999999pt height=14.15524440000002pt/>, so we can have <img src="svgs/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode" align=middle width=9.86687624999999pt height=14.15524440000002pt/> iterations, in each we select only one product for manual labelling.
 
