@@ -5,7 +5,7 @@ import os
 import re
 from typing import Set, Dict
 
-from tree_labeller.core.types import Label, ProductId, Category
+from tree_labeller.core.types import Label, ProductId, LabelableCategory
 from tree_labeller.parsers.yaml import YamlTreeParser
 
 
@@ -62,20 +62,20 @@ def _load_labels(tsv_path: str, allowed_labels: Set[Label]) -> Dict[ProductId, L
     return labels
 
 
-def _update_tree(tree: Category, labels: Set[Label]):
+def _update_tree(tree: LabelableCategory, labels: Set[Label]):
     products_by_id = {product.id: product for product in tree.leaves}
     for product_id, label in labels.items():
         product = products_by_id[product_id]
         product.labels.manual = label
 
 
-def _remove_leaf_categories_without_product(root: Category):
+def _remove_leaf_categories_without_product(root: LabelableCategory):
     removed = True
     n_removed = 0
     while removed:
         removed = False
         for leaf in root.leaves:
-            if isinstance(leaf, Category):
+            if isinstance(leaf, LabelableCategory):
                 leaf.parent = None
                 removed = True
                 n_removed += 1
@@ -83,10 +83,10 @@ def _remove_leaf_categories_without_product(root: Category):
 
 
 class LabellingState:
-    tree: Category
+    tree: LabelableCategory
     iteration: int
 
-    def __init__(self, tree: Category, iteration: int):
+    def __init__(self, tree: LabelableCategory, iteration: int):
         self.tree = tree
         self.iteration = iteration
         self._categories_by_id = {

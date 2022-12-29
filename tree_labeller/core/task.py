@@ -15,8 +15,8 @@ from tree_labeller.core.types import (
     TO_REJECT_LABEL,
     TO_SKIP_LABEL,
     Label,
-    Category,
-    Product,
+    LabelableCategory,
+    LabelableProduct,
 )
 
 CONFIGURATION_FILE = "config.yaml"
@@ -125,7 +125,7 @@ class LabellingTask:
         self.config = config
         self.state = state
         self.allowed_labels = allowed_labels
-        self.predictor: Callable[[Category, int], None] = predictor.predict
+        self.predictor: Callable[[LabelableCategory, int], None] = predictor.predict
 
     @property
     def n_products(self):
@@ -417,10 +417,12 @@ class LabellingTask:
         self.state.iteration += 1
 
 
-def save_products(products: Iterable[Product], path: str):
+def save_products(products: Iterable[LabelableProduct], path: str):
     products = sorted(products, key=lambda product: product.category_name)
     with open(path, "w") as f:
-        writer = csv.DictWriter(f, fieldnames=Product.fieldnames, delimiter="\t")
+        writer = csv.DictWriter(
+            f, fieldnames=LabelableProduct.fieldnames, delimiter="\t"
+        )
         writer.writeheader()
         for product in products:
             writer.writerow(product.asdict())

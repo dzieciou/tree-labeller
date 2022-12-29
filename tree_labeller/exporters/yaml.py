@@ -4,10 +4,10 @@ from typing import Optional
 import yaml
 from anytree.exporter import DictExporter
 
-from tree_labeller.core.types import RawCategory
+from tree_labeller.core.types import Category
 
 
-def export_tree(tree: RawCategory, path: Optional[str] = None):
+def export_tree(tree: Category, path: Optional[str] = None):
     assert tree != None
     dct = DictExporter().export(tree)
 

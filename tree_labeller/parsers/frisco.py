@@ -10,7 +10,7 @@ from typing import Generator
 import fsspec as fs
 from tqdm import tqdm
 
-from tree_labeller.core.types import RawCategory, RawProduct
+from tree_labeller.core.types import Category, Product
 from tree_labeller.parsers.treeparser import TreeParser, ContentHash
 from tree_labeller.tree.utils import internals
 
@@ -26,7 +26,7 @@ CACHE_OPTIONS = {
 
 
 class FriscoTreeParser(TreeParser):
-    def parse_tree(self, path: str) -> Tuple[RawCategory, ContentHash]:
+    def parse_tree(self, path: str) -> Tuple[Category, ContentHash]:
         logging.info(f"Downloading Frisco products dump form {path}...")
         with fs.open(
             "filecache::" + path,
@@ -34,20 +34,20 @@ class FriscoTreeParser(TreeParser):
         ) as f:
             return self._parse_content(f.read())
 
-    def _parse_content(self, content: str) -> Tuple[RawCategory, ContentHash]:
+    def _parse_content(self, content: str) -> Tuple[Category, ContentHash]:
         content_hash = hashlib.md5(content).hexdigest()
         content = json.loads(content)
         tree = self._parse_categories(content)
         self._attach_products(tree, content)
         return tree, content_hash
 
-    def _parse_categories(self, content: Json) -> RawCategory:
+    def _parse_categories(self, content: Json) -> Category:
         def parse_one(category: Json):
             name = category["name"]["pl"]
             parent_path = category["parentPath"].split(",")
             id = int(parent_path[0])
             parent_id = int(parent_path[1]) if len(parent_path) > 1 else None
-            yield RawCategory(name, id=id), parent_id
+            yield Category(name, id=id), parent_id
             if "children" in category:
                 for child_json in category["children"]:
                     yield from parse_one(child_json)
@@ -57,7 +57,7 @@ class FriscoTreeParser(TreeParser):
             for node, parent_id in parse_one(category):
                 indexed_nodes[node.id] = (node, parent_id)
 
-        root = RawCategory(ROOT_CATEGORY_NAME, id=0)
+        root = Category(ROOT_CATEGORY_NAME, id=0)
         for node, parent_id in tqdm(indexed_nodes.values(), desc="Parsing categories"):
             parent, _ = indexed_nodes.get(parent_id, (root, None))
             node.parent = parent
@@ -65,8 +65,8 @@ class FriscoTreeParser(TreeParser):
         return root
 
     def _attach_products(
-        self, categories_root: RawCategory, content: Json
-    ) -> Generator[RawProduct, None, None]:
+        self, categories_root: Category, content: Json
+    ) -> Generator[Product, None, None]:
         categories_by_id = {
             int(category.id): category
             for category in tqdm(internals(categories_root), desc="Indexing categories")
@@ -82,7 +82,7 @@ class FriscoTreeParser(TreeParser):
                 if subbrand:
                     brand = f"{brand} {subbrand}"
 
-                RawProduct(
+                Product(
                     id=product["id"],
                     name=product["name"]["pl"].strip(),
                     brand=brand,

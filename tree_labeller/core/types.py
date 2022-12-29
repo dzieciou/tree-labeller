@@ -59,14 +59,14 @@ class Labels:
         return {}
 
 
-class RawCategory(NodeMixin):
-    def __init__(self, name: str, id: str, parent: "RawCategory" = None):
+class Category(NodeMixin):
+    def __init__(self, name: str, id: str, parent: "Category" = None):
         self.name = name
         self.id = id
         self.parent = parent
 
     def __copy__(self):
-        return RawCategory(self.name, self.id)
+        return Category(self.name, self.id)
 
     @property
     def long_name(self):
@@ -78,18 +78,16 @@ class RawCategory(NodeMixin):
     def __repr__(self):
         return self.long_name
 
-    def add_product(self, product: "Product"):
+    def add_product(self, product: "LabelableProduct"):
         self.products.add(product)
 
     @property
     def products(self):
-        return [node for node in self.leaves if isinstance(node, RawProduct)]
+        return [node for node in self.leaves if isinstance(node, Product)]
 
     @property
     def categories(self):
-        return [
-            node for node in PreOrderIter(self.root) if isinstance(node, RawCategory)
-        ]
+        return [node for node in PreOrderIter(self.root) if isinstance(node, Category)]
 
     @property
     def n_products(self):
@@ -100,19 +98,19 @@ class RawCategory(NodeMixin):
         return len(self.products)
 
 
-class Category(RawCategory):
-    def __init__(self, name: str, id: str, parent: "Category" = None):
+class LabelableCategory(Category):
+    def __init__(self, name: str, id: str, parent: "LabelableCategory" = None):
         super().__init__(name, id, parent)
         self.labels = Labels()
 
 
-class RawProduct(NodeMixin):
+class Product(NodeMixin):
     id: ProductId
     name: ProductName
     brand: str
 
     def __init__(
-        self, id: ProductId, name: ProductName, brand: str, category: RawCategory
+        self, id: ProductId, name: ProductName, brand: str, category: Category
     ):
         self.id = id
         self.name = name
@@ -136,11 +134,11 @@ class RawProduct(NodeMixin):
         return self.id
 
 
-class Product(RawProduct):
+class LabelableProduct(Product):
     labels: Labels
 
     def __init__(
-        self, id: ProductId, name: ProductName, brand: str, category: Category
+        self, id: ProductId, name: ProductName, brand: str, category: LabelableCategory
     ):
         super().__init__(id, name, brand, category)
         self.labels = Labels()

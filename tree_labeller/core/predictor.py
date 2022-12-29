@@ -1,6 +1,6 @@
 from anytree import PreOrderIter
 
-from tree_labeller.core.types import Category, Product
+from tree_labeller.core.types import LabelableCategory, LabelableProduct
 from tree_labeller.tree.coloring import (
     ColorableNode,
     color_tree,
@@ -25,9 +25,9 @@ def _to_colorable_tree(tree):
     return mapping[tree]
 
 
-def predict(tree: Category, n_sample: int):
-    assert all(isinstance(leaf, Product) for leaf in tree.leaves)
-    assert all(isinstance(internal, Category) for internal in internals(tree))
+def predict(tree: LabelableCategory, n_sample: int):
+    assert all(isinstance(leaf, LabelableProduct) for leaf in tree.leaves)
+    assert all(isinstance(internal, LabelableCategory) for internal in internals(tree))
     assert all(node.labels.predicted is None for node in PreOrderIter(tree))
     assert all(category.labels.manual is None for category in internals(tree))
 
