@@ -10,10 +10,6 @@ Sample scenarios include:
 - Mapping taxonomy of book categories in one library to flat vocabulary of book categories in another library
 - Annotating training data organized in a tree
 
-Here's example of the first task:
-
-.. image:: docs/imgs/tree_1.png
-
 Labelling with the tool is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided. The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label.
 
 Install
@@ -151,9 +147,9 @@ Acknowledgements
 
 I would like to thank to:
 
-- members of Computer `Science StackExchange`_ for help in developing algorithms
+- members of `Computer Science Stack Exchange`_ for help in developing algorithms
 - my girlfriend Renata for help in mapping our local grocery store
 - my colleagues from `Samsung R&D Poland`_ for feedback.
 
-.. _Science StackExchange: https://cs.stackexchange.com/
+.. _Computer Science Stack Exchange: https://cs.stackexchange.com/
 .. _Samsung R&D Poland: https://research.samsung.com/srpol
