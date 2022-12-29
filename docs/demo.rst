@@ -17,7 +17,8 @@ Imagine you have a large pile of products, and you want to categorize those prod
 
 But... did I say labeling *each* group manually? There might still be many more groups than we can label manually. Fortunately, groups of products are organized into larger groups, and again, products from those larger groups often tend to be located in the same department. Although, with certain exceptions. For instance, Jack Daniel's whisky and Cabernet Sauvignon wine are in the Alcohols department, but Guinness can be found in my grocery store in a different department, Beers. Even though whiskies, wines, and beers are in the same large group of alcoholic drinks.
 
-![image-title](imgs/tree_1.png)
+
+.. image:: imgs/tree_1.png
 
 
 Preparing source taxonomy
