@@ -1,0 +1,7 @@
+allowed_labels:
+- Alhocols
+- Beers
+dir: /home/dzieciou/projects/tree-labeller/demo/marketpoint
+original_tree_path: /home/dzieciou/projects/tree-labeller/frisco.yaml
+start_time: 2023-01-01 23:02:10.297280
+tree_path: /home/dzieciou/projects/tree-labeller/demo/marketpoint/frisco.yaml
