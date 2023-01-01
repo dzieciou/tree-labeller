@@ -1,8 +1,12 @@
 #!/usr/bin/env python
+import logging
+
 import fire
 
 from tree_labeller.exporters.yaml import export_tree
 from tree_labeller.parsers.frisco import FriscoTreeParser
+
+logging.basicConfig(level=logging.DEBUG)
 
 TREE_URL = "https://commerce.frisco.pl/api/v1/integration/feeds/public?language=pl"
 
