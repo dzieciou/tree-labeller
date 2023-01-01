@@ -3,7 +3,7 @@ Prepares training data from frisco
 """
 import json
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Literal
 
 import fsspec as fs
 from tqdm import tqdm
@@ -15,8 +15,7 @@ from tree_labeller.tree.utils import internals
 
 Json = Dict[str, Any]
 
-ROOT_CATEGORY_NAME = "categories"
-LANGUAGE_CODE = "pl"
+LANGUAGE_CODE = Literal["pl", "en"]
 CACHE_OPTIONS = {
     "cache_storage": "./tmp/frisco",
     "cache_check": False,
@@ -25,6 +24,12 @@ CACHE_OPTIONS = {
 
 
 class FriscoTreeParser(TreeParser):
+    def __int__(
+        self, root_category_name: str = "categories", lang: LANGUAGE_CODE = "pl"
+    ):
+        self.root_category_name = root_category_name
+        self.lang = lang
+
     def parse_tree(self, urlpath: str) -> Category:
         logging.info(f"Downloading Frisco products dump form {urlpath}...")
         with fs.open(
@@ -43,7 +48,7 @@ class FriscoTreeParser(TreeParser):
 
     def _parse_categories(self, content: Json) -> Category:
         def parse_one(category: Json):
-            name = category["name"][LANGUAGE_CODE]
+            name = category["name"][self.lang]
             parent_path = category["parentPath"].split(",")
             id = int(parent_path[0])
             parent_id = int(parent_path[1]) if len(parent_path) > 1 else None
@@ -57,7 +62,7 @@ class FriscoTreeParser(TreeParser):
             for node, parent_id in parse_one(category):
                 indexed_nodes[node.id] = (node, parent_id)
 
-        root = Category(ROOT_CATEGORY_NAME, id=0)
+        root = Category(self.root_category_name, id=0)
         for node, parent_id in tqdm(indexed_nodes.values(), desc="Parsing categories"):
             parent, _ = indexed_nodes.get(parent_id, (root, None))
             node.parent = parent
@@ -84,7 +89,7 @@ class FriscoTreeParser(TreeParser):
 
             Product(
                 id=product["id"],
-                name=product["name"][LANGUAGE_CODE].strip(),
+                name=product["name"][self.lang].strip(),
                 brand=brand,
                 category=categories_by_id[int(category_id)],
             )
