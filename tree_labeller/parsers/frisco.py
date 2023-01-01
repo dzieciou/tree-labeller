@@ -1,24 +1,22 @@
 """
 Prepares training data from frisco
 """
-import hashlib
 import json
 import logging
-from typing import Dict, Any, Tuple
-from typing import Generator
+from typing import Dict, Any
 
 import fsspec as fs
 from tqdm import tqdm
 
 from tree_labeller.core.types import Category, Product
 from tree_labeller.core.utils import remove_leaf_categories_without_product
-from tree_labeller.parsers.treeparser import TreeParser, ContentHash
+from tree_labeller.parsers.treeparser import TreeParser
 from tree_labeller.tree.utils import internals
-
-ROOT_CATEGORY_NAME = "categories"
 
 Json = Dict[str, Any]
 
+ROOT_CATEGORY_NAME = "categories"
+LANGUAGE_CODE = "pl"
 CACHE_OPTIONS = {
     "cache_storage": "./tmp/frisco",
     "cache_check": False,
@@ -27,25 +25,25 @@ CACHE_OPTIONS = {
 
 
 class FriscoTreeParser(TreeParser):
-    def parse_tree(self, path: str) -> Category:
-        logging.info(f"Downloading Frisco products dump form {path}...")
+    def parse_tree(self, urlpath: str) -> Category:
+        logging.info(f"Downloading Frisco products dump form {urlpath}...")
         with fs.open(
-            "filecache::" + path,
+            "filecache::" + urlpath,
             filecache=CACHE_OPTIONS,
         ) as f:
             tree = self._parse_content(f.read())
             remove_leaf_categories_without_product(tree)
             return tree
 
-    def _parse_content(self, content: str) -> Category:
-        content = json.loads(content)
-        tree = self._parse_categories(content)
-        self._attach_products(tree, content)
+    def _parse_content(self, jsonString: str) -> Category:
+        jsonString = json.loads(jsonString)
+        tree = self._parse_categories(jsonString)
+        self._attach_products(tree, jsonString)
         return tree
 
     def _parse_categories(self, content: Json) -> Category:
         def parse_one(category: Json):
-            name = category["name"]["pl"]
+            name = category["name"][LANGUAGE_CODE]
             parent_path = category["parentPath"].split(",")
             id = int(parent_path[0])
             parent_id = int(parent_path[1]) if len(parent_path) > 1 else None
@@ -66,27 +64,27 @@ class FriscoTreeParser(TreeParser):
 
         return root
 
-    def _attach_products(
-        self, categories_root: Category, content: Json
-    ) -> Generator[Product, None, None]:
+    def _attach_products(self, tree: Category, content: Json):
         categories_by_id = {
             int(category.id): category
-            for category in tqdm(internals(categories_root), desc="Indexing categories")
+            for category in tqdm(internals(tree), desc="Indexing categories")
         }
         for product in tqdm(content["products"], desc="Parsing products"):
-            if (
+            if not (
                 "primaryCategory" in product
                 and "parentId" in product["primaryCategory"]
             ):
-                category_id = int(product["primaryCategory"]["parentId"])
-                brand = product["brand"]
-                subbrand = product.get("subbrand")
-                if subbrand:
-                    brand = f"{brand} {subbrand}"
+                continue
 
-                Product(
-                    id=product["id"],
-                    name=product["name"]["pl"].strip(),
-                    brand=brand,
-                    category=categories_by_id[int(category_id)],
-                )
+            category_id = int(product["primaryCategory"]["parentId"])
+            brand = product["brand"]
+            subbrand = product.get("subbrand")
+            if subbrand:
+                brand = f"{brand} {subbrand}"
+
+            Product(
+                id=product["id"],
+                name=product["name"][LANGUAGE_CODE].strip(),
+                brand=brand,
+                category=categories_by_id[int(category_id)],
+            )

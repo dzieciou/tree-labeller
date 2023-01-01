@@ -1,9 +1,7 @@
-from typing import Tuple
-
 import yaml
 
 from tree_labeller.core.types import LabelableCategory, LabelableProduct
-from tree_labeller.parsers.treeparser import TreeParser, ContentHash
+from tree_labeller.parsers.treeparser import TreeParser
 
 
 class YamlTreeParser(TreeParser):
