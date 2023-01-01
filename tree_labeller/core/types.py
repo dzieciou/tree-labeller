@@ -97,6 +97,14 @@ class Category(NodeMixin):
     def n_categories(self):
         return len(self.products)
 
+    def __eq__(self, other):
+        if not isinstance(other, Category):
+            return False
+        return self.name == other.name and self.id == other.id
+
+    def __repr__(self):
+        return f"name='{self.name}', id={self.id}"
+
 
 class LabelableCategory(Category):
     def __init__(self, name: str, id: str, parent: "LabelableCategory" = None):
@@ -105,13 +113,12 @@ class LabelableCategory(Category):
 
 
 class Product(NodeMixin):
-    id: ProductId
     name: ProductName
-    brand: str
+    id: ProductId
 
-    def __init__(self, id: ProductId, name: ProductName, category: Category, **attrs):
-        self.id = id
+    def __init__(self, name: ProductName, id: ProductId, category: Category, **attrs):
         self.name = name
+        self.id = id
         self.parent = category
         self.attrs = attrs
 
@@ -131,12 +138,24 @@ class Product(NodeMixin):
     def product_id(self):
         return self.id
 
+    def __eq__(self, other):
+        if not isinstance(other, Product):
+            return False
+        return (
+            self.name == other.name
+            and self.id == other.id
+            and self.attrs == other.attrs
+        )
+
+    def __repr__(self):
+        return f"name='{self.name}', id={self.id}, attrs={self.attrs}"
+
 
 class LabelableProduct(Product):
     labels: Labels
 
     def __init__(
-        self, id: ProductId, name: ProductName, category: LabelableCategory, **attrs
+        self, name: ProductName, id: ProductId, category: LabelableCategory, **attrs
     ):
-        super().__init__(id, name, category, **attrs)
+        super().__init__(name, id, category, **attrs)
         self.labels = Labels()
