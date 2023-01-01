@@ -24,7 +24,7 @@ CACHE_OPTIONS = {
 
 
 class FriscoTreeParser(TreeParser):
-    def __int__(
+    def __init__(
         self, root_category_name: str = "categories", lang: LANGUAGE_CODE = "pl"
     ):
         self.root_category_name = root_category_name

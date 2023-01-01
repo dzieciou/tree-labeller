@@ -38,4 +38,5 @@ children:
 
 def assert_tree_equality(t1: NodeMixin, t2: NodeMixin):
     for n1, n2 in zip(PreOrderIter(t1), PreOrderIter(t2)):
+        assert type(n1) == type(n2)
         assert n1 == n2

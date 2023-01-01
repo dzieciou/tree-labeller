@@ -78,6 +78,9 @@ class Category(NodeMixin):
     def __repr__(self):
         return self.long_name
 
+    def __hash__(self):
+        return hash(self.id)
+
     def add_product(self, product: "LabelableProduct"):
         self.products.add(product)
 
@@ -149,6 +152,9 @@ class Product(NodeMixin):
 
     def __repr__(self):
         return f"name='{self.name}', id={self.id}, attrs={self.attrs}"
+
+    def __hash__(self):
+        return hash(self.id)
 
 
 class LabelableProduct(Product):
