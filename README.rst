@@ -108,8 +108,8 @@ In the labelling task directory the following artifacts are generated:
 ==================== ============================================================================
 Filename             Description
 ==================== ============================================================================
-config.yaml          Project configuration
-tree.yaml            Taxonomy to label
+config.yaml          Labeling task configuration.
+tree.yaml            Taxonomy to label.
 [n]-to-verify.tsv    Taxonomy leaves selected after n-th iteration for labelling/verification.
 [n]-good.tsv         Taxonomy leaves with non-ambiguous labels predicted after n-th iteration.
 [n]-mapping.tsv      Maps taxonomy categories (inner nodes) to labels after n-th iteration.
