@@ -103,7 +103,7 @@ If you decide to continue, you can do one or more of the following actions:
 Task artifacts
 =================
 
-In the labelling task directory the following artifacts are generated.
+In the labelling task directory the following artifacts are generated:
 
 ==================== ============================================================================
 Filename             Description
