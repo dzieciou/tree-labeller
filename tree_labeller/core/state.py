@@ -5,7 +5,13 @@ import os
 import re
 from typing import Set, Dict, Iterable
 
-from tree_labeller.core.types import Label, ProductId, LabelableCategory, Product
+from tree_labeller.core.types import (
+    Label,
+    ProductId,
+    LabelableCategory,
+    Product,
+    LabelableMixin,
+)
 from tree_labeller.core.utils import remove_leaf_categories_without_product
 from tree_labeller.parsers.yaml import YamlTreeParser
 
@@ -131,6 +137,48 @@ class LabelingState:
                         **product.attrs,
                     }
                 )
+
+    def save_mapping(self, path: str):
+
+        with open(path, "w") as f:
+            writer = csv.DictWriter(
+                f,
+                delimiter="\t",
+                fieldnames=["label", "category", "id"],
+            )
+            writer.writeheader()
+
+            for category_mapping in self.to_mapping():
+                writer.writerow(category_mapping)
+
+    def to_mapping(self):
+        def check_children(node: LabelableMixin):
+            if isinstance(node, Product):
+                return
+            if node.labels.is_good:
+                yield node
+                return
+            for child in node.children:
+                yield from check_children(child)
+
+        root_categories = check_children(self.tree)
+        root_categories = sorted(
+            root_categories,
+            key=lambda category: (
+                category.labels.good_label,
+                category.depth,
+                category.id,
+            ),
+        )
+        mapping = [
+            {
+                "id": category.id,
+                "category": category.long_name,
+                "label": category.labels.good_label,
+            }
+            for category in root_categories
+        ]
+        return mapping
 
     def save_good_predicted_labels(self, path: str):
         products_with_good_labels = [

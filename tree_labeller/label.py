@@ -44,6 +44,12 @@ def label(
             f"(don't forget to skip rejected products).\n"
         )
 
+    path = task.try_save_mapping()
+    if path:
+        print(
+            f"\nI have saved mapping from tree categories to labels in:\n" f"{path}.\n"
+        )
+
     path = task.try_save_labels_to_verify()
     if path:
         print(

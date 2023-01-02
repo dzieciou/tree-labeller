@@ -159,11 +159,26 @@ class LabellingTask:
 
         if path is None:
             path = self.to_path(
-                "good-labels",
+                "good",
                 "tsv",
             )
 
         self.state.save_good_predicted_labels(path)
+
+        return path
+
+    def try_save_mapping(self, path: Optional[str] = None) -> Optional[str]:
+
+        if self.n_good_labels == 0:
+            return None
+
+        if path is None:
+            path = self.to_path(
+                "mapping",
+                "tsv",
+            )
+
+        self.state.save_mapping(path)
 
         return path
 

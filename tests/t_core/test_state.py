@@ -90,6 +90,29 @@ def test_save_good_predicted_labels(tmp_path):
     ]
 
 
+def test_to_mapping():
+    tree = LabelableCategory(id=0, name="categories")
+    tree.labels.predicted = {"A", "B"}
+    category1 = LabelableCategory(id=1, name="category1", parent=tree)
+    category1.labels.predicted = {"B"}
+    category11 = LabelableCategory(id=11, name="category11", parent=category1)
+    category11.labels.predicted = {"B"}
+    category12 = LabelableCategory(id=12, name="category12", parent=category1)
+    category12.labels.predicted = {"B"}
+    category2 = LabelableCategory(id=2, name="category2", parent=tree)
+    category2.labels.predicted = {"A"}
+    category3 = LabelableCategory(id=3, name="category3", parent=tree)
+    category3.labels.predicted = {"A"}
+
+    state = LabelingState(tree, iteration=1)
+    mapping = state.to_mapping()
+    assert mapping == [
+        {"id": 2, "category": "categories>category2", "label": "A"},
+        {"id": 3, "category": "categories>category3", "label": "A"},
+        {"id": 1, "category": "categories>category1", "label": "B"},
+    ]
+
+
 def test_from_dir():
     # TODO: Test
     pass
