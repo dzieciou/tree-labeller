@@ -13,7 +13,7 @@ from tree_labeller.parsers.yaml import YamlTreeParser
 def _parse_path(path: str) -> int:
     fname = os.path.basename(path)
     m = re.match(
-        r"(?P<iteration>\d+)-(to-verify|good-labels).tsv",
+        r"(?P<iteration>\d+)-(to-verify|good).tsv",
         fname,
     )
     assert m is not None
