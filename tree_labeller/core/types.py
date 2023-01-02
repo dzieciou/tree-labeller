@@ -60,7 +60,11 @@ class Labels:
 
 
 class LabelableMixin:
-    labels = Labels()
+    @property
+    def labels(self):
+        if not hasattr(self, "_labels"):
+            self._labels = Labels()
+        return self._labels
 
 
 class Category(NodeMixin):

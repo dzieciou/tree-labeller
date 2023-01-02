@@ -31,7 +31,7 @@ def _load_labels(tsv_path: str, allowed_labels: Set[Label]) -> Dict[ProductId, L
         labels = {}
         for row in rows:
             selected += 1
-            product_id = row["product_id"]
+            product_id = row["id"]
             label = row["label"].strip()
             if not label:
                 missing += 1

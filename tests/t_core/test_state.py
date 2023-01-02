@@ -88,3 +88,8 @@ def test_save_good_predicted_labels(tmp_path):
             "name": "product2",
         },
     ]
+
+
+def test_from_dir():
+    # TODO: Test
+    pass
