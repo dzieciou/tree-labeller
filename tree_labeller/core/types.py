@@ -58,6 +58,7 @@ class Labels:
             return {self.manual}
         return {}
 
+
 class LabelableMixin:
     labels = Labels()
 
@@ -112,11 +113,9 @@ class Category(NodeMixin):
         return f"name='{self.name}', id={self.id}"
 
 
-
 class LabelableCategory(Category, LabelableMixin):
     def __init__(self, name: str, id: str, parent: "LabelableCategory" = None):
         super().__init__(name, id, parent)
-
 
 
 class Product(NodeMixin):
@@ -162,7 +161,6 @@ class Product(NodeMixin):
 
 
 class LabelableProduct(Product, LabelableMixin):
-
     def __init__(
         self, name: ProductName, id: ProductId, category: LabelableCategory, **attrs
     ):
