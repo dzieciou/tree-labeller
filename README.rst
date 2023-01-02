@@ -100,6 +100,21 @@ If you decide to continue, you can do one or more of the following actions:
 - If one of departments have no products labeled so far, you can search for matching products manually and add them to the sample with correct label. For search you can use last TSV file with univocal predicted labels.
 - You can also occasionally review univocal predicted labels and correct them by adding to the sample.
 
+Project artifacts
+=================
+
+ ====================== ============================================================================
+  filename               description
+ ====================== ============================================================================
+  `config.yaml`          Project configuration
+  `tree.yaml`            Taxonomy to label
+  `[n]-to-verify.tsv`    Taxonomy leaves selected after n-th iteration for labelling/verification.
+  `[n]-good.tsv`         Taxonomy leaves with non-ambiguous labels predicted after n-th iteration.
+  `[n]-mapping.tsv`      Maps taxonomy categories (inner nodes) to labels after n-th iteration.
+  `[n]-stats.json`       Labeling statistics after n-th iteration.
+  `all-stats.jsonl`      Sequence of all iterations statistics accumulated so far.
+ ====================== ============================================================================
+
 Documentation
 =============
 
