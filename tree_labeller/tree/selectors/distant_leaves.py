@@ -8,7 +8,7 @@ from tqdm import tqdm
 # TODO Use Node instead of AnyNode
 
 
-def find_distant_leaves(root: NodeMixin, n: int):
+def select_distant_leaves(root: NodeMixin, n: int):
     """
     Find n leaves at that farthest apart in a given arbitrary tree.
 
@@ -21,9 +21,9 @@ def find_distant_leaves(root: NodeMixin, n: int):
     [1]: https://cs.stackexchange.com/questions/134068/finding-n-farthest-leaves-in-a-tree
     """
     binary_tree = _to_binary_tree(root)
-    leaves, total_distance = _find_distant_leaves_binary_tree(binary_tree, n)
+    leaves, total_distance = _select_distant_leaves_binary_tree(binary_tree, n)
     leaves = {leaf.target for leaf in leaves}
-    return leaves, total_distance
+    return leaves
 
 
 class BlankNode(AnyNode):
@@ -71,7 +71,7 @@ def _count_leaves(node):
     return len(node.leaves)
 
 
-def _find_distant_leaves_binary_tree(root: NodeMixin, n: int):
+def _select_distant_leaves_binary_tree(root: NodeMixin, n: int):
     """
     Find n leaves at that farthest apart in a given binary tree.
 

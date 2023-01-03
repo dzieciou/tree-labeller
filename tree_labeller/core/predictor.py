@@ -6,7 +6,7 @@ from tree_labeller.tree.coloring import (
     color_tree,
     select_subtree_requiring_verification,
 )
-from tree_labeller.tree.distant_leaves import find_distant_leaves
+from tree_labeller.tree.selectors import select_distant_leaves, sample
 from tree_labeller.tree.utils import internals
 
 
@@ -24,6 +24,7 @@ def _to_colorable_tree(tree):
         mapping[node] = new_node
     return mapping[tree]
 
+sampler = sample # select_distant_leaves
 
 def predict(tree: LabelableCategory, n_sample: int):
     assert all(isinstance(leaf, LabelableProduct) for leaf in tree.leaves)
@@ -43,7 +44,7 @@ def predict(tree: LabelableCategory, n_sample: int):
 
     requires_verification = select_subtree_requiring_verification(colorable_tree)
     if requires_verification:
-        sampled_requires_verification, _ = find_distant_leaves(
+        sampled_requires_verification = sampler(
             requires_verification, n_sample
         )
         sampled_requires_verification = [

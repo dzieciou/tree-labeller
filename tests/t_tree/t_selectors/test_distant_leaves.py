@@ -1,9 +1,9 @@
 from anytree import AnyNode, RenderTree, ContRoundStyle
 
-from tree_labeller.tree.distant_leaves import (
+from tree_labeller.tree.selectors.distant_leaves import (
     _to_binary_tree,
-    find_distant_leaves,
-    _find_distant_leaves_binary_tree,
+    select_distant_leaves,
+    _select_distant_leaves_binary_tree,
 )
 
 
@@ -25,7 +25,7 @@ def test_to_binary_tree():
     print(RenderTree(binary_tree, style=ContRoundStyle()))
 
 
-def test_find_distant_leaves():
+def test_select_distant_leaves():
 
     v = AnyNode(id="v")
     v1 = AnyNode(v, id="v1")
@@ -37,12 +37,12 @@ def test_find_distant_leaves():
     print(RenderTree(v, style=ContRoundStyle()))
     print()
 
-    leaves, total_distance = find_distant_leaves(v, 3)
+    leaves, total_distance = select_distant_leaves(v, 3)
     # assert total_distance == 500
     assert leaves == {v2, v3, v11} or leaves == {v2, v3, v12} or leaves == {v2, v3, v13}
 
 
-def test_find_distant_leaves_2():
+def test_select_distant_leaves_2():
 
     v = AnyNode(id="v")
     v1 = AnyNode(v, id="v1")
@@ -58,11 +58,11 @@ def test_find_distant_leaves_2():
     print(RenderTree(v, style=ContRoundStyle()))
     print()
 
-    leaves, _total_distance = find_distant_leaves(v, 3)
+    leaves = select_distant_leaves(v, 3)
     assert leaves == {v2, v3, v113}
 
 
-def test_find_distant_leaves_binary_tree_1():
+def test_select_distant_leaves_binary_tree_1():
 
     v = AnyNode(id="v")
     v1 = AnyNode(parent=v, id="v1")
@@ -72,11 +72,11 @@ def test_find_distant_leaves_binary_tree_1():
     print(RenderTree(v, style=ContRoundStyle()))
     print()
 
-    leaves, _total_distance = _find_distant_leaves_binary_tree(v, 1)
+    leaves = _select_distant_leaves_binary_tree(v, 1)
     assert leaves == {v2} or leaves == {v11} or leaves == {v12}
 
 
-def test_find_distant_leaves_binary_tree_2():
+def test_select_distant_leaves_binary_tree_2():
 
     v = AnyNode(id="v")
     v1 = AnyNode(parent=v, id="v1")
@@ -87,5 +87,5 @@ def test_find_distant_leaves_binary_tree_2():
     print(RenderTree(v, style=ContRoundStyle()))
     print()
 
-    leaves, _total_distance = _find_distant_leaves_binary_tree(v, 2)
+    leaves = _select_distant_leaves_binary_tree(v, 2)
     assert leaves == {v2, v12} or leaves == {v2, v11}
