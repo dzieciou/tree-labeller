@@ -24,7 +24,9 @@ def _to_colorable_tree(tree):
         mapping[node] = new_node
     return mapping[tree]
 
-sampler = sample # select_distant_leaves
+
+sampler = sample  # select_distant_leaves
+
 
 def predict(tree: LabelableCategory, n_sample: int):
     assert all(isinstance(leaf, LabelableProduct) for leaf in tree.leaves)
@@ -44,9 +46,7 @@ def predict(tree: LabelableCategory, n_sample: int):
 
     requires_verification = select_subtree_requiring_verification(colorable_tree)
     if requires_verification:
-        sampled_requires_verification = sampler(
-            requires_verification, n_sample
-        )
+        sampled_requires_verification = sampler(requires_verification, n_sample)
         sampled_requires_verification = [
             node.target for node in sampled_requires_verification
         ]

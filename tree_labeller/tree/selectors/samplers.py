@@ -9,7 +9,9 @@ def sample(tree: NodeMixin, n: int):
         yield tree
         return
     children = list(tree.children)
-    leaves_by_child = [min(len(child.children),len(child.leaves)) for child in children]
+    leaves_by_child = [
+        min(len(child.children), len(child.leaves)) for child in children
+    ]
     samples = random.choices(children, weights=leaves_by_child, k=n)
     child_counts = Counter(samples)
     print(child_counts)
