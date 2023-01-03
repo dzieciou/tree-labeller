@@ -87,9 +87,9 @@ def _find_distant_leaves_binary_tree(root: NodeMixin, n: int):
         if isinstance(node, BlankNode):
             # This is intermediary node inserted during conversation to binary tree
             return 0.0
-        # Promote nodes that that represent main categories in the taxonomy
-        # We want don't want to get 10 nodes that are far away from all other nodes
-        # but are leaving in the same very deep subtree, e.g.,
+        # Promote nodes that represent main categories in the taxonomy
+        # We don't want to get 10 nodes that are far away from all other nodes
+        # but live in the same very deep subtree, e.g.,
         # we don't want to get 10 types of orange juice
         return 1000 / ((node.depth + 1) ** 20)
 
