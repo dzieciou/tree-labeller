@@ -37,7 +37,7 @@ def test_select_distant_leaves():
     print(RenderTree(v, style=ContRoundStyle()))
     print()
 
-    leaves, total_distance = select_distant_leaves(v, 3)
+    leaves = select_distant_leaves(v, 3)
     # assert total_distance == 500
     assert leaves == {v2, v3, v11} or leaves == {v2, v3, v12} or leaves == {v2, v3, v13}
 
@@ -72,7 +72,7 @@ def test_select_distant_leaves_binary_tree_1():
     print(RenderTree(v, style=ContRoundStyle()))
     print()
 
-    leaves = _select_distant_leaves_binary_tree(v, 1)
+    leaves, _ = _select_distant_leaves_binary_tree(v, 1)
     assert leaves == {v2} or leaves == {v11} or leaves == {v12}
 
 
@@ -87,5 +87,5 @@ def test_select_distant_leaves_binary_tree_2():
     print(RenderTree(v, style=ContRoundStyle()))
     print()
 
-    leaves = _select_distant_leaves_binary_tree(v, 2)
+    leaves, _ = _select_distant_leaves_binary_tree(v, 2)
     assert leaves == {v2, v12} or leaves == {v2, v11}
