@@ -2,20 +2,20 @@
 Tree Labeller
 =============
 
-Command line tools that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
-
-Labelling is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided. The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label.
+The command line tool that helps label all leaves of a tree based only on a small sample of manually labelled leaves.
 
 Sample scenarios include:
 
 - Assigning shop departments to products organized in a taxonomy of categories
 - Mapping taxonomy of book categories in one library to flat vocabulary of book categories in another library
-- Annotating training data organized in a tree
+
+This can be helpful when migrating data from one e-commerce system to another or preparing labelled data for machine learning project.
 
 Here's example of the first task:
 
 .. image:: docs/imgs/tree_1.png
 
+Labelling with the tool is a semi-automatic iterative process. You start by labeling few samples and the rule-based prediction algorithm tries to learn and tag the rest of the data set for you. You then correct predicted labels for a sample of most ambiguous items and the algorithm repeats prediction based on labels you provided. The algorithm suggests the most diverse sample of items to label, i.e. coming from different categories, so you don't waste time with samples that have high chance of having same label.
 
 Install
 =======
@@ -30,24 +30,33 @@ Install with pip:
 Usage
 =====
 
-Describe your taxonomy in form of YAML file, e.g.: ``products.yaml``
+Describe your taxonomy in form of YAML file, e.g.: ``tree.yaml``
 
 .. code-block:: yaml
 
     name: categories
+    id: 1
     children:
     - name: Alcoholic Drinks
+      id: 11
       children:
       - name: Whiskies
+        id: 111
         children:
         - name: Jack Daniel's
+          id: 1111
         - name: Johnnie Walker's
+          id: 1112
       - name: Wines
+        id: 112
         children:
         - name: Cabernet Sauvignon
+          id: 1121
       - name: Beers
+        id: 113
         children:
         - name: Guinness
+          id: 1131
 
 Create labelling task:
 
@@ -55,8 +64,8 @@ Create labelling task:
 
     create_task \
         --dir ./my_labels \
-        --tree ./products.yaml \
-        --allowed-labels Alcohols,Beers
+        --tree ./tree.yaml \
+        --allowed-labels Label1,Label2,Label3
 
 Generate a sample:
 
@@ -70,7 +79,7 @@ Run predictions and generate another sample of ambiguous and non labeled items. 
 
 .. code-block:: bash
 
-    label --dir ./my_labels --sample 10
+    label ./my_labels --sample 10
 
 Repeat the process until you are satisfied.
 
@@ -95,21 +104,39 @@ If you decide to continue, you can do one or more of the following actions:
 - If one of departments have no products labeled so far, you can search for matching products manually and add them to the sample with correct label. For search you can use last TSV file with univocal predicted labels.
 - You can also occasionally review univocal predicted labels and correct them by adding to the sample.
 
-Demo
-====
+Task artifacts
+=================
 
-Download sample taxonomy file of products and their categories form Frisco.pl online shop.
+In the labelling task directory the following artifacts are generated:
 
-.. code-block:: bash
+==================== ============================================================================
+Filename             Description
+==================== ============================================================================
+config.yaml          Labeling task configuration.
+tree.yaml            Taxonomy to label.
+[n]-to-verify.tsv    Taxonomy leaves selected after n-th iteration for labelling/verification.
+[n]-good.tsv         Taxonomy leaves with non-ambiguous labels predicted after n-th iteration.
+[n]-mapping.tsv      Maps taxonomy categories (inner nodes) to labels after n-th iteration.
+[n]-stats.json       Labeling statistics after n-th iteration.
+all-stats.jsonl      Sequence of all iterations statistics accumulated so far.
+==================== ============================================================================
 
-    fetch_frisco
 
-Background
-==========
 
-See theoretical background_.
 
-.. _background: docs/introduction.md
+Documentation
+=============
+
+* `Demo`_
+* `Sampling taxonomy leaves for manual labelling`_
+* `Distributing labelling budget`_
+* `Predicting labels`_
+
+.. _Demo: docs/demo.rst
+.. _Sampling taxonomy leaves for manual labelling: docs/sampling.md
+.. _Distributing labelling budget: docs/budget.md
+.. _Predicting labels: docs/predicting.md
+
 
 Development
 ===========
@@ -139,3 +166,17 @@ Install locally to test scripts:
     deactivate
     poetry build
     pip install dist/tree_labeller-0.1.0-py3-none-any.whl
+
+
+
+Acknowledgements
+----------------
+
+I would like to thank to:
+
+- members of `Computer Science Stack Exchange`_ for help in developing algorithms
+- my girlfriend Renata for help in mapping our local grocery store
+- my colleagues from `Samsung R&D Poland`_ for feedback.
+
+.. _Computer Science Stack Exchange: https://cs.stackexchange.com/
+.. _Samsung R&D Poland: https://research.samsung.com/srpol

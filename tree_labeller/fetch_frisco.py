@@ -1,23 +1,20 @@
 #!/usr/bin/env python
-import os.path
+import logging
 
 import fire
 
 from tree_labeller.exporters.yaml import export_tree
-
 from tree_labeller.parsers.frisco import FriscoTreeParser
 
-TREE_URL = "https://commerce.frisco.pl/api/v1/integration/feeds/public?language=pl"
+logging.basicConfig(level=logging.DEBUG)
 
-TREE_YAML = "products.yaml"
+TREE_URL = "https://commerce.frisco.pl/api/v1/integration/feeds/public?language=pl"
 
 
 def fetch():
     parser = FriscoTreeParser()
-    root, _ = parser.parse_tree(TREE_URL)
-    path = os.path.abspath(TREE_YAML)
-    export_tree(root, path)
-    print(f"Saved product dump to: {path}")
+    tree = parser.parse_tree(TREE_URL)
+    export_tree(tree)
 
 
 def cli():

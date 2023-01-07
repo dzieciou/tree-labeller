@@ -69,7 +69,6 @@ def color_tree(root: NodeMixin):
 
 
 def select_subtree_requiring_verification(root: ColorableNode) -> SymlinkNode:
-
     mapping = {}
 
     def create_link(node: NodeMixin, new_parent: SymlinkNode = None):

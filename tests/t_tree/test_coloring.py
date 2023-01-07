@@ -3,7 +3,7 @@ from typing import Set
 import pytest
 from anytree import PreOrderIter
 
-from labeller.tree.coloring import (
+from tree_labeller.tree.coloring import (
     ColorableNode,
     select_subtree_requiring_verification,
     color_tree,

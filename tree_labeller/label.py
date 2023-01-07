@@ -17,7 +17,6 @@ def label(
     dir: str,
     sample: int = 100,
 ):
-
     task = LabellingTask.from_dir(dir)
     task.predict_labels(sample)
 
@@ -43,6 +42,12 @@ def label(
             f"\nI have saved {task.n_good_labels} product labels to {path}.\n\n"
             f"You can use them for training a classifier "
             f"(don't forget to skip rejected products).\n"
+        )
+
+    path = task.try_save_mapping()
+    if path:
+        print(
+            f"\nI have saved mapping from tree categories to labels in:\n" f"{path}.\n"
         )
 
     path = task.try_save_labels_to_verify()

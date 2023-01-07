@@ -17,7 +17,7 @@ class ProgressTracker:
         self.task = task
 
     def update_progress(self) -> str:
-        fname = f"{self.task.state.iteration}-iteration-stats.json"
+        fname = f"{self.task.state.iteration}-stats.json"
         path = os.path.join(self.task.dir, fname)
         self._save_iteration_stats(path)
 

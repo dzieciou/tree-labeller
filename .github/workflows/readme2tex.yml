@@ -6,9 +6,9 @@ name: readme2tex-action
 # events but only for the master branch
 on:
   push:
-    branches: [feature/docs-2)]
+    branches: [feature/demo]
   pull_request:
-    branches: [main]
+    branches: [master2]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

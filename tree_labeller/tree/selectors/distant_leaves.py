@@ -8,7 +8,7 @@ from tqdm import tqdm
 # TODO Use Node instead of AnyNode
 
 
-def find_distant_leaves(root: NodeMixin, n: int):
+def select_distant_leaves(root: NodeMixin, n: int):
     """
     Find n leaves at that farthest apart in a given arbitrary tree.
 
@@ -21,9 +21,9 @@ def find_distant_leaves(root: NodeMixin, n: int):
     [1]: https://cs.stackexchange.com/questions/134068/finding-n-farthest-leaves-in-a-tree
     """
     binary_tree = _to_binary_tree(root)
-    leaves, total_distance = _find_distant_leaves_binary_tree(binary_tree, n)
+    leaves, total_distance = _select_distant_leaves_binary_tree(binary_tree, n)
     leaves = {leaf.target for leaf in leaves}
-    return leaves, total_distance
+    return leaves
 
 
 class BlankNode(AnyNode):
@@ -71,7 +71,7 @@ def _count_leaves(node):
     return len(node.leaves)
 
 
-def _find_distant_leaves_binary_tree(root: NodeMixin, n: int):
+def _select_distant_leaves_binary_tree(root: NodeMixin, n: int):
     """
     Find n leaves at that farthest apart in a given binary tree.
 
@@ -87,9 +87,9 @@ def _find_distant_leaves_binary_tree(root: NodeMixin, n: int):
         if isinstance(node, BlankNode):
             # This is intermediary node inserted during conversation to binary tree
             return 0.0
-        # Promote nodes that that represent main categories in the taxonomy
-        # We want don't want to get 10 nodes that are far away from all other nodes
-        # but are leaving in the same very deep subtree, e.g.,
+        # Promote nodes that represent main categories in the taxonomy
+        # We don't want to get 10 nodes that are far away from all other nodes
+        # but live in the same very deep subtree, e.g.,
         # we don't want to get 10 types of orange juice
         return 1000 / ((node.depth + 1) ** 20)
 

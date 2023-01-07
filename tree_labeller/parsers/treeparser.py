@@ -1,12 +1,6 @@
-from typing import Tuple
-
-ContentHash = str
-
-from tree_labeller.core.types import RawCategory
-
-ContentHash = str
+from tree_labeller.core.types import Category
 
 
 class TreeParser:
-    def parse_tree(self, path: str) -> Tuple[RawCategory, ContentHash]:
+    def parse_tree(self, path: str) -> Category:
         return None

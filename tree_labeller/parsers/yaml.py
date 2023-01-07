@@ -1,16 +1,14 @@
-from typing import Tuple
-
 import yaml
 
-from tree_labeller.core.types import Category, Product
-from tree_labeller.parsers.treeparser import TreeParser, ContentHash
+from tree_labeller.core.types import LabelableCategory, LabelableProduct
+from tree_labeller.parsers.treeparser import TreeParser
 
 
 class YamlTreeParser(TreeParser):
-    def parse_tree(self, path: str) -> Tuple[Category, ContentHash]:
+    def parse_tree(self, path: str) -> LabelableCategory:
         with open(path) as input:
             dct = yaml.full_load(input)
-        return CustomDictImporter().import_(dct), None
+        return CustomDictImporter().import_(dct)
 
 
 class CustomDictImporter(object):
@@ -24,10 +22,10 @@ class CustomDictImporter(object):
         attrs = dict(data)
         children = attrs.pop("children", [])
         if children:
-            node = Category(parent=parent, **attrs)
+            node = LabelableCategory(parent=parent, **attrs)
         else:
             try:
-                node = Product(category=parent, **attrs)
+                node = LabelableProduct(category=parent, **attrs)
             except TypeError:
                 # Some leaves might be not products but categories without products
                 return parent
