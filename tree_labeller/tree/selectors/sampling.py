@@ -17,6 +17,7 @@ from anytree import NodeMixin, LevelOrderGroupIter, PreOrderIter, SymlinkNode
 # To support reproducibility
 random.seed(42)
 
+
 def sample(tree: NodeMixin, k: int):
 
     categories_only = view_without_leaves(tree)
@@ -32,17 +33,17 @@ def sample(tree: NodeMixin, k: int):
     return sampled_products
 
 
-
 def view_without_leaves(tree: NodeMixin):
     mapping = {}
     for node in PreOrderIter(tree):
-        if node.is_leaf: # Product, while we only want Categories/Inner Nodes
+        if node.is_leaf:  # Product, while we only want Categories/Inner Nodes
             continue
         mapped_parent = None if node.is_root else mapping[node.parent]
         mapped_node = SymlinkNode(target=node, parent=mapped_parent)
         mapping[node] = mapped_node
 
     return mapping[tree]
+
 
 def calc_prob(tree: NodeMixin):
     tree.prob = 1.0
@@ -51,7 +52,6 @@ def calc_prob(tree: NodeMixin):
         for child in children:
             if not child.is_root:
                 child.prob = child.parent.prob * prob
-
 
 
 def weighted_sample_without_replacement(population, weights, k=1):
@@ -67,6 +67,3 @@ def weighted_sample_without_replacement(population, weights, k=1):
                 weights[i] = 0.0
                 indices.append(i)
     return [population[i] for i in indices]
-
-
-
