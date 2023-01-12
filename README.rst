@@ -20,9 +20,15 @@ Labelling with the tool is a semi-automatic iterative process. You start by labe
 Install
 =======
 
-The library is not present in any public PyPI. Once it will be published, we will provide installation instructions.
+Prerequisites: Python 3.8, 3.9.
 
-For now, follow development guidelines.
+To install the library:
+
+.. code-block:: bash
+
+    pip install git+https://github.com/dzieciou/tree-labeller.git
+    export PATH=$PATH:$HOME/.local/bin
+
 
 Usage
 =====
