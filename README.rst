@@ -20,12 +20,9 @@ Labelling with the tool is a semi-automatic iterative process. You start by labe
 Install
 =======
 
-Install with pip:
+The library is not present in any public PyPI. Once it will be published, we will provide installation instructions.
 
-.. code-block:: bash
-
-    pip install tree-labeller
-
+For now, follow development guidelines.
 
 Usage
 =====
@@ -145,7 +142,7 @@ Install poetry:
 
 .. code-block:: bash
 
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    curl -sSL https://install.python-poetry.org | python3 -
 
 Install dependencies:
 
