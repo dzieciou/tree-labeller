@@ -9,25 +9,32 @@
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
   </head>
   <body class="p-3">
-    <h1>tree-labeller</h1>
-    <div class="alert alert-primary">
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Input File URL</label>
-            <input type="text" class="form-control" id="input-url" value="http://192.168.0.143:5500/demo/marketpoint/frisco.yaml"/>
-          </div>
-          <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Input labels</label>
-            <input type="text" class="form-control" id="input-labels" value="paper,glass,plastic,metal,organic,mixed" />
-          </div>
-          <button type="button" class="btn btn-primary" id="input-button">Create Task</button>
-    </div>
-    <div id="task" class="d-none alert alert-success">
-        <h3 id="progress"></h3>
-        <ul id="params"></ul>
-        <div id="actions"></div>
-    </div>
+    <main style="max-width: 720px; margin: 0px auto;">
+        <h1><a href="https://github.com/dzieciou/tree-labeller">🌳 tree-labeller</a></h1>
+        <hr/>
+        <div id="input-form" class="alert alert-primary">
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Input File URL</label>
+                <input type="text" class="form-control" id="input-url" value="http://192.168.0.143:5500/demo/small.yaml"/>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Input labels</label>
+                <input type="text" class="form-control" id="input-labels" value="paper,glass,plastic,metal,organic,mixed" />
+            </div>
+            <button type="button" class="btn btn-primary" id="input-button">Create Task</button>
+        </div>
 
+        <div id="progress" class="d-none alert alert-info"></div>
+        <div id="task" class="d-none alert alert-success">
+            <h3 id="title"></h3>
+            <ul id="params"></ul>
+            <div id="actions"></div>
+        </div>
+        <button class="btn btn-sm btn-primary float-end" id="download">Download Mapping</button>
+
+    </main>
     <py-config>
+        terminal = false
         packages = [
             "termgraph", "PyYAML", "anytree", "tqdm", "jsonlines", "tabulate"
         ]
@@ -36,7 +43,7 @@
         from = "../tree_labeller"
         to_folder = "tree_labeller"
         files = [
-            "label.py", "fetch_frisco.py", "create_task.py", "__init__.py",
+            "label.py", "create_task.py", "__init__.py",
             "core/__init__.py", "core/charts.py", "core/progress.py", "core/task.py", "core/types.py",
             "core/predictor.py", "core/state.py", "core/utils.py",
             "tree/__init__.py", "tree/coloring.py", "tree/utils.py",
