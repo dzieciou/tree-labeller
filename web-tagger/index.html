@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+  </head>
+  <body class="p-3">
+    <h1>tree-labeller</h1>
+    <div class="alert alert-primary">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Input File URL</label>
+            <input type="text" class="form-control" id="input-url" value="http://192.168.0.143:5500/demo/marketpoint/frisco.yaml"/>
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Input labels</label>
+            <input type="text" class="form-control" id="input-labels" value="paper,glass,plastic,metal,organic,mixed" />
+          </div>
+          <button type="button" class="btn btn-primary" id="input-button">Create Task</button>
+    </div>
+    <div id="task" class="d-none alert alert-success">
+        <h3 id="progress"></h3>
+        <ul id="params"></ul>
+        <div id="actions"></div>
+    </div>
+
+    <py-config>
+        packages = [
+            "termgraph", "PyYAML", "anytree", "tqdm", "jsonlines", "tabulate"
+        ]
+
+        [[fetch]]
+        from = "../tree_labeller"
+        to_folder = "tree_labeller"
+        files = [
+            "label.py", "fetch_frisco.py", "create_task.py", "__init__.py",
+            "core/__init__.py", "core/charts.py", "core/progress.py", "core/task.py", "core/types.py",
+            "core/predictor.py", "core/state.py", "core/utils.py",
+            "tree/__init__.py", "tree/coloring.py", "tree/utils.py",
+            "tree/selectors/__init__.py", "tree/selectors/distant_leaves.py", "tree/selectors/sampling.py", 
+            "parsers/__init__.py", "parsers/yaml.py", "parsers/treeparser.py"
+        ]
+      </py-config>
+    <py-script src="./main.py"></py-script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
+<!-- https://github.com/dzieciou/tree-labeller/archive/refs/heads/master.zip -->
