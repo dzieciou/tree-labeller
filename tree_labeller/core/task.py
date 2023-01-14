@@ -9,9 +9,9 @@ from typing import Iterable, Set, Optional, List, Callable
 
 import yaml
 
-from tree_labeller.core import predictor
-from tree_labeller.core.state import LabelingState
-from tree_labeller.core.types import (
+from . import predictor
+from .state import LabelingState
+from .types import (
     TO_REJECT_LABEL,
     TO_SKIP_LABEL,
     Label,
@@ -39,6 +39,7 @@ class Config:
         allowed_labels: Set[str],
         start_time: Optional[datetime] = None,
     ):
+        print(dir)
         assert os.path.isdir(dir)
 
         unique_labels = set(allowed_labels)
@@ -93,7 +94,7 @@ class LabellingTask:
             allowed_labels=allowed_provided_labels,
         )
         config.to_yaml(os.path.join(dir, CONFIGURATION_FILE))
-        logging.info(f"Created task in: {dir}")
+        logging.info(f"Creating task in: {dir}")
 
         return cls.from_dir(dir)
 
@@ -107,6 +108,7 @@ class LabellingTask:
         }
         state = LabelingState.from_dir(dir, config.tree_path, allowed_labels)
         task = LabellingTask(dir, config, state, allowed_labels)
+        logging.info("Done")
         return task
 
     def __init__(

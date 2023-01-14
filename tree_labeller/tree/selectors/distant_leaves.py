@@ -1,7 +1,8 @@
 from collections import defaultdict
 
 from anytree import NodeMixin, PostOrderIter, PreOrderIter, SymlinkNode, AnyNode
-from fastcache import clru_cache
+#from fastcache import clru_cache
+from functools import lru_cache
 from tqdm import tqdm
 
 
@@ -66,7 +67,7 @@ def _to_binary_tree(root: NodeMixin):
     return mapping[root]
 
 
-@clru_cache(maxsize=None)
+@lru_cache(maxsize=None)
 def _count_leaves(node):
     return len(node.leaves)
 

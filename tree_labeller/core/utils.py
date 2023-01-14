@@ -1,6 +1,6 @@
 import logging
 
-from tree_labeller.core.types import Category
+from .types import Category
 
 
 def remove_leaf_categories_without_product(tree: Category):
