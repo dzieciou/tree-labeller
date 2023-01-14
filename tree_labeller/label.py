@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import logging
 
-import fire
 
 from tree_labeller.core.charts import Charts
 from tree_labeller.core.progress import ProgressTracker
@@ -63,9 +62,6 @@ def label(
         )
 
 
-def cli():
-    fire.Fire(label)
-
-
 if __name__ == "__main__":
-    cli()
+    import fire
+    fire.Fire(label)
