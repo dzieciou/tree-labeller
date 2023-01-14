@@ -55,6 +55,7 @@ def calc_prob(tree: NodeMixin):
 
 
 def weighted_sample_without_replacement(population, weights, k=1):
+    k = min(len(weights), k)
     weights = list(weights)
     positions = range(len(population))
     indices = []
