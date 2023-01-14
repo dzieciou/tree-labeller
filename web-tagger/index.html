@@ -15,7 +15,7 @@
         <div id="input-form" class="alert alert-primary">
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Input File URL</label>
-                <input type="text" class="form-control" id="input-url" value="http://192.168.0.143:5500/demo/small.yaml"/>
+                <input type="text" class="form-control" id="input-url" value="https://pawelkubiak.me/tree-labeller/demo/small.yaml"/>
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Input labels</label>
@@ -40,7 +40,7 @@
         ]
 
         [[fetch]]
-        from = "../tree_labeller"
+        from = "https://raw.githubusercontent.com/pkubiak/tree-labeller/feature/poc-web-tagger/tree_labeller"
         to_folder = "tree_labeller"
         files = [
             "label.py", "create_task.py", "__init__.py",
