@@ -1,61 +1,134 @@
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Web Tree-Labeller</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-  </head>
-  <body class="p-3">
-    <main style="max-width: 720px; margin: 0px auto;">
-        <h1><a href="https://github.com/dzieciou/tree-labeller">🌳 tree-labeller</a></h1>
-        <hr/>
-        <div id="input-form" class="alert alert-primary">
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Input File URL</label>
-                <input type="text" class="form-control" id="input-url" value="https://pawelkubiak.me/tree-labeller/demo/small.yaml"/>
-                <div id="passwordHelpBlock" class="form-text">
-                    big example: https://raw.githubusercontent.com/dzieciou/tree-labeller/master/demo/marketpoint/frisco.yaml
+
+    <link rel="stylesheet" id="theme" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+<div class="d-flex" style="min-height: 100vh;">
+    <nav id="sidebarMenu" class="navbar-dark sidebar" style="width:300px; flex-shrink: 0;flex-grow: 0; position: relative">
+        
+        <div id="sm2" class="sidebar-sticky bg-dark text-light d-flex flex-column" style="position:fixed; width: 300px">
+            <button id="toggle-button" class="btn btn-outline-primary position-absolute border-left-0 swap-x px-2" style="z-index: -1; top:10px; left: 300px; border-left:0;border-top-left-radius: 0;border-bottom-left-radius: 0;;" type="button" onclick="toggleMenu()">
+                <svg height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg>
+            </button>
+            <h3 class="m-0 bg-primary">
+                <a class="navbar-brand d-block p-3" href="https://github.com/dzieciou/tree-labeller" target="_blank">
+                    <img src="https://icons.iconarchive.com/icons/custom-icon-design/flatastic-5/512/Binary-tree-icon.png" height="28" class="me-1"/> tree-labeller
+                </a>
+            </h3>
+            <div class="p-3 flex-fill" style="overflow-y:auto">
+                <!-- <p class="text-justify">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum laborum ducimus animi iure sit aliquid facilis quas dolor adipisci esse.
+                </p> -->
+
+                
+                <h5 class="text-light">Theme</h5>
+                <select class="form-select form-select-sm mb-3" id="themesList" onchange="setTheme()"></select>
+
+                <div id="statistics">
+                    <span class="text-muted">
+                        Start labeling task to get statistics
+                    </span>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Input labels</label>
-                <input type="text" class="form-control" id="input-labels" value="paper,glass,plastic,metal,organic,mixed" />
-            </div>
-            <button type="button" class="btn btn-primary" id="input-button">Create Task</button>
-        </div>
 
-        <div id="progress" class="d-none alert alert-info"></div>
-        <div id="task" class="d-none alert alert-success">
-            <h3 id="title"></h3>
-            <ul id="params"></ul>
-            <div id="actions"></div>
-        </div>
-        <button class="btn btn-sm btn-primary float-end" id="download">Download Mapping</button>
+                <details class="mt-2 border-top border-primary pt-2 text-justify">
+                    <summary class="mb-2">Labelling Help</summary>
+                    <p class="border-start border-primary border-4 ps-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis molestias maiores exercitationem praesentium libero esse aliquid, consectetur, repellendus repudiandae ea quia ullam laudantium aperiam incidunt nulla? Ipsam laboriosam optio dignissimos.</p>
+                    <p class="border-start border-primary border-4 ps-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis molestias maiores exercitationem praesentium libero esse aliquid, consectetur, repellendus repudiandae ea quia ullam laudantium aperiam incidunt nulla? Ipsam laboriosam optio dignissimos.</p>
+                </details>
+            </div>
 
+            <div class="d-grid gap-2 p-2">
+                <button class="btn btn-primary" type="button" id="downloadMapping" disabled>Download mapping</button>
+                <button class="btn btn-primary" type="button" id="downloadPredictedLabels" disabled>Download predicted labels</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="px-md-4 py-3 flex-fill position-relative align-self-center">
+        <button id="loadingSpinner" class="d-none btn btn-outline-primary border-0 d-block mx-auto my-4" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span id="loadingLabel">Lorem ipsum dolor, sit</span>
+        </button>
+
+        <div class="col-lg-7 col-sm-10 col-md-9 col-xxl-5 justify-content-center" style="margin:0 auto">
+            <section id="input-form">
+                <div class="card border-primary mb-3">
+                    <div class="card-header bg-primary text-light">Create Task</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Taxonomy file url:</label>
+                            <input type="text" class="form-control" id="input-url" value="" placeholder="your file url"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Labels:</label>
+                            <input type="text" class="form-control" id="input-labels" value="" placeholder="your labels"/>
+                            <div class="form-text">Separate multiple labels with <mark>|</mark> character</div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" onclick="preloadSmallSample()">Preload small sample</button>
+                            <button type="button" class="btn btn-secondary" onclick="preloadLargeSample()">Preload large sample</button>
+                            <button type="button" class="btn btn-primary" id="createTaskBtn">Create Task</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        
+
+            <section id="taskForm" class="d-none">
+                <div class="card bg-primary text-light border-primary">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item text-muted" id="taskCategory"></li>
+                    </ul>
+                    <div class="card-body">
+                        <h2 class="card-title text-center my-3" id="taskName"></h2>
+                    </div>
+                    <ul class="list-group list-group-flush" id="taskParams"></ul>
+                </div>
+                <div id="taskButtons"></div>
+            </section>
+
+            <section class="d-none" id="successForm">
+                <div class="alert alert-success">
+                    <strong>Well done!</strong> <br/>You successfully finished tree labeling! 
+                    Now you can download final <b>mapping</b> and <b>predicted labels</b> by
+                    clicking corresponding buttons in bottom left.
+                </div>
+            </section>
+        </div>
     </main>
-    <py-config>
-        terminal = false
-        packages = [
-            "termgraph", "PyYAML", "anytree", "tqdm", "jsonlines", "tabulate"
-        ]
+</div>
 
-        [[fetch]]
-        from = "https://raw.githubusercontent.com/pkubiak/tree-labeller/feature/poc-web-tagger/tree_labeller"
-        to_folder = "tree_labeller"
-        files = [
-            "label.py", "create_task.py", "__init__.py",
-            "core/__init__.py", "core/charts.py", "core/progress.py", "core/task.py", "core/types.py",
-            "core/predictor.py", "core/state.py", "core/utils.py",
-            "tree/__init__.py", "tree/coloring.py", "tree/utils.py",
-            "tree/selectors/__init__.py", "tree/selectors/distant_leaves.py", "tree/selectors/sampling.py", 
-            "parsers/__init__.py", "parsers/yaml.py", "parsers/treeparser.py"
-        ]
-      </py-config>
-    <py-script src="./main.py"></py-script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-  </body>
+<py-config>
+    terminal = false
+    packages = [
+        "termgraph", "PyYAML", "anytree", "tqdm", "jsonlines", "tabulate"
+    ]
+
+    [[fetch]]
+    from = "https://raw.githubusercontent.com/pkubiak/tree-labeller/feature/poc-web-tagger/tree_labeller"
+    to_folder = "tree_labeller"
+    files = [
+        "label.py", "create_task.py", "__init__.py",
+        "core/__init__.py", "core/charts.py", "core/progress.py", "core/task.py", "core/types.py",
+        "core/predictor.py", "core/state.py", "core/utils.py",
+        "tree/__init__.py", "tree/coloring.py", "tree/utils.py",
+        "tree/selectors/__init__.py", "tree/selectors/distant_leaves.py", "tree/selectors/sampling.py", 
+        "parsers/__init__.py", "parsers/yaml.py", "parsers/treeparser.py"
+    ]
+</py-config>
+<py-script src="./main.py"></py-script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="main.js"></script>
+</body>
 </html>
-<!-- https://github.com/dzieciou/tree-labeller/archive/refs/heads/master.zip -->
