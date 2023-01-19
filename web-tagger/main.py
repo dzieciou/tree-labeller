@@ -138,7 +138,7 @@ def check_progress():
         set_statistics({
             "progress": {
                 "Iteration": ITERATION,
-                "Task": "∞"
+                "Item": "∞"
             },
             "labels": {
                 "Provided": f"{stats['manual_labels']['n_allowed_labels']}",
