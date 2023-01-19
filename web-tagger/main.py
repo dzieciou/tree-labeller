@@ -161,17 +161,17 @@ def load_tasks():
     label(dir="output/", sample=10)
     check_progress()
 
-    if not os.path.exists(f"output/{ITERATION}-to-verify.tsv"):
-        hide_progress()
-        qs('#taskForm').classList.add('d-none')
-        qs('#successForm').classList.remove('d-none')
-        return 
-
     if os.path.exists(f"output/{ITERATION}-mapping.tsv"):
         qs('#downloadMapping').disabled = ''
     
     if os.path.exists(f"output/{ITERATION}-good.tsv"):
         qs('#downloadPredictedLabels').disabled = ''
+
+    if not os.path.exists(f"output/{ITERATION}-to-verify.tsv"):
+        hide_progress()
+        qs('#taskForm').classList.add('d-none')
+        qs('#successForm').classList.remove('d-none')
+        return 
 
     with open(f"output/{ITERATION}-to-verify.tsv") as file:
         tsv = csv.DictReader(file, delimiter="\t")
