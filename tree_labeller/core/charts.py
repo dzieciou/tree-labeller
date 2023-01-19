@@ -1,7 +1,7 @@
 from termgraph.termgraph import chart, AVAILABLE_COLORS
 
-from tree_labeller.core.task import LabellingTask
-from tree_labeller.core.types import TO_REJECT_LABEL, TO_SKIP_LABEL
+from .task import LabellingTask
+from .types import TO_REJECT_LABEL, TO_SKIP_LABEL
 
 
 def _get_label_name(label: str) -> str:
