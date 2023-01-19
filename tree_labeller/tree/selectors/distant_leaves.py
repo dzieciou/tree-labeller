@@ -1,8 +1,7 @@
 from collections import defaultdict
+from functools import lru_cache
 
 from anytree import NodeMixin, PostOrderIter, PreOrderIter, SymlinkNode, AnyNode
-#from fastcache import clru_cache
-from functools import lru_cache
 from tqdm import tqdm
 
 

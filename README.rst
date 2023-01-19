@@ -20,11 +20,14 @@ Labelling with the tool is a semi-automatic iterative process. You start by labe
 Install
 =======
 
-Install with pip:
+Prerequisites: Python 3.8, 3.9.
+
+To install the library:
 
 .. code-block:: bash
 
-    pip install tree-labeller
+    pip install git+https://github.com/dzieciou/tree-labeller.git
+    export PATH=$PATH:$HOME/.local/bin
 
 
 Usage
@@ -145,7 +148,7 @@ Install poetry:
 
 .. code-block:: bash
 
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    curl -sSL https://install.python-poetry.org | python3 -
 
 Install dependencies:
 
