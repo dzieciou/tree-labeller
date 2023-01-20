@@ -19,11 +19,12 @@ random.seed(42)
 
 
 def sample(tree: NodeMixin, k: int):
-
     categories_only = view_without_leaves(tree)
     calc_prob(categories_only)
     population = categories_only.leaves
     weights = [leaf.prob for leaf in population]
+
+    k = min(len(weights), k)
     sampled_categories = weighted_sample_without_replacement(population, weights, k)
     sampled_categories = (category.target for category in sampled_categories)
     sampled_products = set()
@@ -55,7 +56,9 @@ def calc_prob(tree: NodeMixin):
 
 
 def weighted_sample_without_replacement(population, weights, k=1):
-    k = min(len(weights), k)
+    assert len(population) == len(weights)
+    assert k >= len(population)
+
     weights = list(weights)
     positions = range(len(population))
     indices = []
