@@ -14,6 +14,10 @@ def create_task(dir: str, tree: str, allowed_labels: Set[str]):
     )
 
 
-if __name__ == "__main__":
+def cli():
     import fire
     fire.Fire(create_task)
+
+
+if __name__ == "__main__":
+    cli()

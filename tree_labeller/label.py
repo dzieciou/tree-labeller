@@ -62,6 +62,10 @@ def label(
         )
 
 
-if __name__ == "__main__":
+def cli():
     import fire
     fire.Fire(label)
+
+
+if __name__ == "__main__":
+    cli()
