@@ -17,11 +17,13 @@ INDEX = 0
 def qs(selector):
     return document.querySelector(selector)
 
-def el(tag, id=None, class_=None, text=None):
+def el(tag, id=None, class_=None, text=None, **kwargs):
     e = document.createElement(tag)
     if id: e.id = e
     if class_: e.className = class_
     if text: e.innerText = text
+    for k, v in kwargs.items():
+        setattr(e, k, v)
     return e
 
 
@@ -74,7 +76,7 @@ def create_label_button(label, value, className):
 def display_task():
     task = TASKS[INDEX]
     qs('#taskForm').classList.remove('d-none')
-    qs('#stats_progress_Task').innerText = f"{INDEX+1} / {len(TASKS)}"
+    qs('#stats_progress_Item').innerText = f"{INDEX+1} / {len(TASKS)}"
     qs('#taskName').innerText = task['name']
     qs('#taskCategory').innerText = task['category'].replace(">", " » ")
 
@@ -88,13 +90,14 @@ def display_task():
     # # Display Task Buttons
     predicted = set(task['label'].split('|'))
     predicted.discard('')
-    other = (set(LABELS)|{'?','!'}) - predicted
+    other = (set(LABELS) | {'?','!'}) - predicted
     print(">>>>>>>>>>", predicted, other)
 
     qs('#taskButtons').innerHTML = ""
     for title, labels in [("Predicted", sorted(predicted)), ("Other", sorted(other))]:
         e = el("div", class_="text-center mb-3 mt-4")
         e.appendChild(el("h3", class_="d-inline me-2 align-middle", text=f"{title}:"))
+
         for value in labels:
             cls = 'primary' if title == 'Predicted' else 'secondary'
             if value == '?':
@@ -113,20 +116,19 @@ def display_task():
 
 
 def set_statistics(stats):
-    container = document.getElementById('statistics')
+    container = qs('#statistics')
     container.innerHTML = ""
 
     for name, props in stats.items():
-        h5 = document.createElement('h5')
-        h5.innerText = name
-        h5.className = 'text-light'
+        h5 = el('h5', innerText=name, className='text-light')
         container.appendChild(h5)
-        dl = document.createElement('dl')
-        dl.className = "row opacity-50 mb-3"
-        html = ''
+        
+        html = ""
         for k, v in props.items():
             html += f'<dt class="col-sm-8">{k}:</dt><dd class="col-sm-4" id="stats_{name}_{k}">{v}</dd>'
-        dl.innerHTML = html
+
+        dl = el('dl', className="row opacity-50 mb-3")
+        dl.innerHTML=html
         container.appendChild(dl)
 
 
@@ -197,10 +199,8 @@ def download_file(path, fname):
     blob = Blob.new([content], {type : 'application/text'})
     url = window.URL.createObjectURL(blob) 
 
-    downloadLink = document.createElement("a");
-    downloadLink.href = url;
-    downloadLink.download = fname;
-    document.body.appendChild(downloadLink);
+    downloadLink = el("a", href=url, download=fname)
+    document.body.appendChild(downloadLink)
     downloadLink.click();
 
 
@@ -214,8 +214,8 @@ def download_predicted_labels(event):
 
 async def create_task_fn(*args):
     global LABELS
-    url = document.getElementById('input-url').value
-    LABELS = document.getElementById('input-labels').value.split("|")
+    url = qs('#input-url').value
+    LABELS = qs('#input-labels').value.split("|")
 
     print(">>", url, LABELS)
 
@@ -225,7 +225,7 @@ async def create_task_fn(*args):
 
     print(os.getcwd(), os.path.exists("tree.yaml"), os.path.getsize("tree.yaml"))
 
-    document.getElementById('input-form').classList.add('d-none')
+    qs('#input-form').classList.add('d-none')
     display_progress("Creating Task")
 
     def task():

@@ -55,13 +55,13 @@ nav {
 
 #sm2,
 nav {
-    transition: margin-left 1s;
+    transition: margin-left 0.5s;
 }
 .minimized {
     margin-left: -300px;
 }
 svg {
-    transition: transform 1s;
+    transition: transform 0.5s;
 }
 .swap-x svg {
     transform: scaleX(-1);
