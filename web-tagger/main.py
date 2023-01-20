@@ -98,6 +98,11 @@ def display_task():
         e = el("div", class_="text-center mb-3 mt-4")
         e.appendChild(el("h3", class_="d-inline me-2 align-middle", text=f"{title}:"))
 
+        for k in '?!':
+            if k in labels:
+                labels.remove(k)
+                labels.append(k)
+
         for value in labels:
             cls = 'primary' if title == 'Predicted' else 'secondary'
             if value == '?':
