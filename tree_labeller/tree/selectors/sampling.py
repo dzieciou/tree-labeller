@@ -57,7 +57,7 @@ def calc_prob(tree: NodeMixin):
 
 def weighted_sample_without_replacement(population, weights, k=1):
     assert len(population) == len(weights)
-    assert k >= len(population)
+    assert k <= len(population)
 
     weights = list(weights)
     positions = range(len(population))
