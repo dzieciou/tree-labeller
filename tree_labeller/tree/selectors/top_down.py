@@ -15,7 +15,7 @@ Finally, for each selected category a random product is drawn.
 import random
 from collections import defaultdict
 from itertools import zip_longest
-from typing import Set
+from typing import Set, Generator
 
 from anytree import NodeMixin, LevelOrderGroupIter, PreOrderIter, SymlinkNode
 
@@ -27,7 +27,7 @@ def select_top_down(tree: NodeMixin, k: int) -> Set[NodeMixin]:
     return _select_products(selected_categories)
 
 
-def _select_products(categories: Set[NodeMixin]):
+def _select_products(categories: Set[NodeMixin]) -> Set[NodeMixin]:
     selected_products = set()
     for category in categories:
         product = random.choice(category.leaves)
@@ -47,7 +47,7 @@ def _select_categories(tree: NodeMixin, k: int) -> Set[NodeMixin]:
     return selected_categories
 
 
-def _iterate(tree: NodeMixin, shuffle: bool = True):
+def _iterate(tree: NodeMixin, shuffle: bool = True) -> Generator[NodeMixin, None, None]:
     for children in LevelOrderGroupIter(tree):
         if shuffle:
             children = list(children)
@@ -59,7 +59,7 @@ def _iterate(tree: NodeMixin, shuffle: bool = True):
             yield from (node for node in selected if node != None)
 
 
-def _view_without_leaves(tree: NodeMixin):
+def _view_without_leaves(tree: NodeMixin) -> SymlinkNode:
     mapping = {}
     for node in PreOrderIter(tree):
         if node.is_leaf:  # Product, while we only want Categories/Inner Nodes
