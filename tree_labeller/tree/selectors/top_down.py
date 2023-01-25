@@ -26,10 +26,11 @@ def select_top_down(tree: NodeMixin, k: int):
     return selected_products
 
 
-def iterate(tree: NodeMixin):
+def iterate(tree: NodeMixin, shuffle: bool = True):
     for children in LevelOrderGroupIter(tree):
-        children = list(children)
-        random.shuffle(children)
+        if shuffle:
+            children = list(children)
+            random.shuffle(children)
         children_per_parent = defaultdict(list)
         for child in children:
             children_per_parent[child.parent].append(child)
