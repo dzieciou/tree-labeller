@@ -1,9 +1,10 @@
+import random
 from collections import defaultdict
 from itertools import zip_longest
-import random
 
 from anytree import NodeMixin, LevelOrderGroupIter, PreOrderIter, SymlinkNode
 
+random.seed(42)
 
 def select_top_down(tree: NodeMixin, k: int):
     categories_only = view_without_leaves(tree)
@@ -28,9 +29,11 @@ def select_top_down(tree: NodeMixin, k: int):
 
 def iterate(tree: NodeMixin):
     for children in LevelOrderGroupIter(tree):
-        children_per_parent = defaultdict(set)
+        children = list(children)
+        random.shuffle(children)
+        children_per_parent = defaultdict(list)
         for child in children:
-            children_per_parent[child.parent].add(child)
+            children_per_parent[child.parent].append(child)
         for selected in zip_longest(*children_per_parent.values()):
             yield from (node for node in selected if node != None)
 
