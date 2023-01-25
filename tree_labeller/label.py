@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import logging
+from random import random
 
 import fire
 
@@ -12,6 +13,8 @@ from tree_labeller.core.types import TO_REJECT_LABEL, TO_SKIP_LABEL
 
 logging.basicConfig(level=logging.INFO)
 
+# Make behaviour of sampling reproducible
+random.seed(42)
 
 def label(
     dir: str,

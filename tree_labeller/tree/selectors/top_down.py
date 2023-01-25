@@ -4,7 +4,6 @@ from itertools import zip_longest
 
 from anytree import NodeMixin, LevelOrderGroupIter, PreOrderIter, SymlinkNode
 
-random.seed(42)
 
 def select_top_down(tree: NodeMixin, k: int):
     categories_only = view_without_leaves(tree)
