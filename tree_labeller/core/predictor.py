@@ -6,7 +6,7 @@ from tree_labeller.tree.coloring import (
     color_tree,
     select_subtree_requiring_verification,
 )
-from tree_labeller.tree.selectors import select_distant_leaves, sample, select_top_down
+from tree_labeller.tree.selectors import select_top_down
 from tree_labeller.tree.utils import internals
 
 

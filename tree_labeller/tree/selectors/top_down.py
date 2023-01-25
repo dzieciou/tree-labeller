@@ -2,9 +2,7 @@ from collections import defaultdict
 from itertools import zip_longest
 import random
 
-from anytree import NodeMixin, LevelOrderGroupIter
-
-from .sampling import view_without_leaves
+from anytree import NodeMixin, LevelOrderGroupIter, PreOrderIter, SymlinkNode
 
 
 def select_top_down(tree: NodeMixin, k: int):
@@ -40,3 +38,15 @@ def iterate(tree: NodeMixin):
             children_per_parent[child.parent].add(child)
         for selected in zip_longest(*children_per_parent.values()):
             yield from (node for node in selected if node != None)
+
+
+def view_without_leaves(tree: NodeMixin):
+    mapping = {}
+    for node in PreOrderIter(tree):
+        if node.is_leaf:  # Product, while we only want Categories/Inner Nodes
+            continue
+        mapped_parent = None if node.is_root else mapping[node.parent]
+        mapped_node = SymlinkNode(target=node, parent=mapped_parent)
+        mapping[node] = mapped_node
+
+    return mapping[tree]
