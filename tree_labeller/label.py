@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import logging
-from random import random
+import random
 
 import fire
 

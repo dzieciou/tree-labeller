@@ -37,7 +37,7 @@ def test_select_categories():
     assert nodes == {"b", "g"}
 
     nodes = {node.name for node in top_down._select_categories(f, k=3)}
-    assert  nodes == {'h', 'i', 'c'}
+    assert nodes == {"h", "i", "c"}
 
     with pytest.raises(AssertionError):
         # Too many categories to select
