@@ -17,16 +17,11 @@ def select_top_down(tree: NodeMixin, k: int):
         if len(selected_categories) == k:
             break
 
-    # Some categories might be non leaf
-    selected_categories = (
-        random.choice(category.leaves) for category in selected_categories
-    )
-
     # back from view to original tree
     selected_categories = (category.target for category in selected_categories)
     selected_products = set()
     for category in selected_categories:
-        product = random.choice(category.children)
+        product = random.choice(category.leaves)
         selected_products.add(product)
     return selected_products
 
