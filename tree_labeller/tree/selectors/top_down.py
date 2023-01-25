@@ -39,8 +39,7 @@ def _select_categories(tree: NodeMixin, k: int) -> Set[NodeMixin]:
     assert len(tree.leaves) >= k
     selected_categories = set()
     for category in _iterate(tree):
-        if category.parent != None:
-            selected_categories.discard(category.parent)
+        selected_categories.discard(category.parent)
         selected_categories.add(category)
         if len(selected_categories) == k:
             break
