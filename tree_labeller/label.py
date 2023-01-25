@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.INFO)
 # Make behaviour of sampling reproducible
 random.seed(42)
 
+
 def label(
     dir: str,
     sample: int = 100,
