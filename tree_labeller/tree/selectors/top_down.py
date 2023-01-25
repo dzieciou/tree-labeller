@@ -1,32 +1,53 @@
+"""
+Selects a subset of k leaves from a tree, following a top-down approach.
+
+Let's call leaves -- products and inner nodes -- categories.
+
+The idea is to sample products from as many root categories as your budget k permits.
+
+If the budget permits choosing more than one product from a root category, then subcategories from root categories are selected, and so on.
+
+Subcategories are selected in a specific way. For each root category, 1st subcategory is selected, then 2nd subcategory, and so on as long as there is still a budget. This way selected subcategories will represent as many root categories as the budget permits.
+
+Finally, for each selected category a random product is drawn.
+"""
+
 import random
 from collections import defaultdict
 from itertools import zip_longest
+from typing import Set
 
 from anytree import NodeMixin, LevelOrderGroupIter, PreOrderIter, SymlinkNode
 
 
-def select_top_down(tree: NodeMixin, k: int):
-    categories_only = view_without_leaves(tree)
-    assert len(categories_only.leaves) >= k
+def select_top_down(tree: NodeMixin, k: int) -> Set[NodeMixin]:
+    categories_only = _view_without_leaves(tree)
+    selected_categories = _select_categories(categories_only, k)
+    selected_categories = {c.target for c in selected_categories}
+    return _select_products(selected_categories)
 
-    selected_categories = set()
-    for category in iterate(categories_only):
-        if category.parent != None:
-            selected_categories.discard(category.parent)
-        selected_categories.add(category)
-        if len(selected_categories) == k:
-            break
 
-    # back from view to original tree
-    selected_categories = (category.target for category in selected_categories)
+def _select_products(categories: Set[NodeMixin]):
     selected_products = set()
-    for category in selected_categories:
+    for category in categories:
         product = random.choice(category.leaves)
         selected_products.add(product)
     return selected_products
 
 
-def iterate(tree: NodeMixin, shuffle: bool = True):
+def _select_categories(tree: NodeMixin, k: int) -> Set[NodeMixin]:
+    assert len(tree.leaves) >= k
+    selected_categories = set()
+    for category in _iterate(tree):
+        if category.parent != None:
+            selected_categories.discard(category.parent)
+        selected_categories.add(category)
+        if len(selected_categories) == k:
+            break
+    return selected_categories
+
+
+def _iterate(tree: NodeMixin, shuffle: bool = True):
     for children in LevelOrderGroupIter(tree):
         if shuffle:
             children = list(children)
@@ -38,7 +59,7 @@ def iterate(tree: NodeMixin, shuffle: bool = True):
             yield from (node for node in selected if node != None)
 
 
-def view_without_leaves(tree: NodeMixin):
+def _view_without_leaves(tree: NodeMixin):
     mapping = {}
     for node in PreOrderIter(tree):
         if node.is_leaf:  # Product, while we only want Categories/Inner Nodes
