@@ -19,10 +19,9 @@ random.seed(42)
 
 def label(
     dir: str,
-    sample: int = 100,
 ):
     task = LabellingTask.from_dir(dir)
-    task.predict_labels(sample)
+    task.predict_labels()
 
     tracker = ProgressTracker(task)
     print("\nHere is the labelling progress.py made so far:\n")

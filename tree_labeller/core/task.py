@@ -125,7 +125,9 @@ class LabellingTask:
         self.config = config
         self.state = state
         self.allowed_labels = allowed_labels
-        self.predictor: Callable[[LabelableCategory, int], None] = predictor.predict
+        self.predictor: Callable[
+            [LabelableCategory, int], Set[Label]
+        ] = predictor.predict
 
     @property
     def n_products(self):
@@ -427,8 +429,8 @@ class LabellingTask:
             / self.n_allowed_provided_labels,
         }
 
-    def predict_labels(self, n_sample: int):
-        self.predictor(self.state.tree, n_sample)
+    def predict_labels(self):
+        self.predictor(self.state.tree, self.allowed_labels)
         self.state.iteration += 1
 
 
