@@ -126,7 +126,7 @@ class LabellingTask:
         self.state = state
         self.allowed_labels = allowed_labels
         self.predictor: Callable[
-            [LabelableCategory, int], Set[Label]
+            [LabelableCategory, Set[Label]], None
         ] = predictor.predict
 
     @property
