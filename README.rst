@@ -74,7 +74,7 @@ Generate a sample:
 
 .. code-block:: bash
 
-    label --dir ./my_labels --sample 10
+    label --dir ./my_labels
 
 Annotate a file with samples.
 
@@ -82,7 +82,7 @@ Run predictions and generate another sample of ambiguous and non labeled items. 
 
 .. code-block:: bash
 
-    label ./my_labels --sample 10
+    label ./my_labels
 
 Repeat the process until you are satisfied.
 

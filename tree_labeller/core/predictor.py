@@ -1,6 +1,8 @@
-from anytree import PreOrderIter
+from typing import Set
 
-from tree_labeller.core.types import LabelableCategory, LabelableProduct
+from anytree import PreOrderIter, NodeMixin
+
+from tree_labeller.core.types import LabelableCategory, LabelableProduct, Label
 from tree_labeller.tree.coloring import (
     ColorableNode,
     color_tree,
@@ -28,7 +30,7 @@ def _to_colorable_tree(tree):
 sampler = select_top_down  # select_distant_leaves
 
 
-def predict(tree: LabelableCategory, n_sample: int):
+def predict(tree: LabelableCategory, allowed_labels: Set[Label]):
     assert all(isinstance(leaf, LabelableProduct) for leaf in tree.leaves)
     assert all(isinstance(internal, LabelableCategory) for internal in internals(tree))
     assert all(node.labels.predicted is None for node in PreOrderIter(tree))
@@ -46,9 +48,14 @@ def predict(tree: LabelableCategory, n_sample: int):
 
     requires_verification = select_subtree_requiring_verification(colorable_tree)
     if requires_verification:
-        sampled_requires_verification = sampler(requires_verification, n_sample)
+        sample_size = get_sample_size(requires_verification, allowed_labels)
+        sampled_requires_verification = sampler(requires_verification, sample_size)
         sampled_requires_verification = [
             node.target.target for node in sampled_requires_verification
         ]
         for leaf in sampled_requires_verification:
             leaf.labels.selected = True
+
+
+def get_sample_size(tree: NodeMixin, allowed_labels: Set[Label]):
+    return max(len(allowed_labels), len(tree.children))
