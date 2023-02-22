@@ -2,7 +2,7 @@
 name = "tree-labeller"
 version = "0.1.0"
 description = "Labels tree-based data"
-authors = ["Maciej Gawinecki <mgawinecki@gmail.com>", "Paweł Kubiak <pkubiak>"]
+authors = ["Maciej Gawinecki <mgawinecki@gmail.com>", "Paweł Kubiak <pawel.kubiak@protonmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"
