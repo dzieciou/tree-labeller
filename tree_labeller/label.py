@@ -29,7 +29,6 @@ def label(
     # FIXME If we don't save stats (e.g. with check_only flag) they won't be seen here
     #       perhaps we should get that information from memory, not from file
     print(tracker.update_progress())
-
     charts = Charts(task)
     print("\nHere is how many products you labelled for each department so far: \n")
     charts.print_manual_labels_coverage()
