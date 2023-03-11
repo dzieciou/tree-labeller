@@ -21,7 +21,11 @@ from anytree import NodeMixin, LevelOrderGroupIter, PreOrderIter, SymlinkNode
 
 
 def select_top_down(tree: NodeMixin, k: int) -> Set[NodeMixin]:
+    """
+    k is max sample size, the actual sample size might be smaller
+    """
     categories_only = _view_without_leaves(tree)
+    k = min(len(categories_only.leaves), k)
     selected_categories = _select_categories(categories_only, k)
     selected_categories = {c.target for c in selected_categories}
     return _select_products(selected_categories)
