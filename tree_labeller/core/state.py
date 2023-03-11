@@ -5,15 +5,15 @@ import os
 import re
 from typing import Set, Dict, Iterable
 
-from tree_labeller.core.types import (
+from .types import (
     Label,
     ProductId,
     LabelableCategory,
     Product,
     LabelableMixin,
 )
-from tree_labeller.core.utils import remove_leaf_categories_without_product
-from tree_labeller.parsers.yaml import YamlTreeParser
+from .utils import remove_leaf_categories_without_product
+from ..parsers.yaml import YamlTreeParser
 
 
 def _parse_path(path: str) -> int:

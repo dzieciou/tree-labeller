@@ -5,7 +5,7 @@ import os
 from jsonlines import jsonlines
 from tabulate import tabulate
 
-from tree_labeller.core.task import LabellingTask
+from .task import LabellingTask
 
 
 class ProgressTracker:

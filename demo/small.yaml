@@ -1,0 +1,258 @@
+name: categories
+id: 0
+children:
+- name: Bakalie, pestki, ziarna
+  id: 2970
+  children:
+  - name: Bakalie
+    id: 586
+    children:
+    - name: "Migda\u0142y"
+      id: 2984
+      children:
+      - name: "Migda\u0142y Nonpareil"
+        id: '131564'
+        brand: KRESTO
+      - name: "P\u0142atki migda\u0142owe"
+        id: '104761'
+        brand: HEBAR
+      - name: "Migda\u0142y blanszowane BIO"
+        id: '14688'
+        brand: BIO PLANET
+      - name: "Migda\u0142y blanszowane"
+        id: '1213'
+        brand: BAKALLAND
+      - name: "Migda\u0142 w p\u0142atkach"
+        id: '7993'
+        brand: BAKALLAND
+      - name: "Migda\u0142y suszone"
+        id: '131651'
+        brand: BIG NATURE
+      - name: "Migda\u0142y p\u0142atki"
+        id: '40047'
+        brand: KRESTO
+      - name: "P\u0142atki migda\u0142owe"
+        id: '108911'
+        brand: HEBAR
+      - name: "Migda\u0142y"
+        id: '48529'
+        brand: SANTE
+      - name: "P\u0142atki migda\u0142owe"
+        id: '46341'
+        brand: FRESCO
+      - name: "Migda\u0142y suszone"
+        id: '137700'
+        brand: BIG NATURE
+      - name: "Migda\u0142y blanszowane"
+        id: '108453'
+        brand: KRESTO
+      - name: "Migda\u0142y blanszowane BIO"
+        id: '6747'
+        brand: BIO PLANET
+    - name: Orzechy
+      id: 10351
+      children:
+      - name: Orzechy arachidowe niesolone
+        id: '135021'
+        brand: BAKALIOWA KRAINA
+      - name: Orzechy brazylijskie
+        id: '104769'
+        brand: HEBAR
+      - name: Pistacje
+        id: '116527'
+        brand: KRESTO
+      - name: "Orzechy w\u0142oskie w \u0142upinie"
+        id: '40422'
+        brand: FRISCO FRESH
+      - name: "Orzechy laskowe blanszowane pra\u017Cone"
+        id: '105929'
+        brand: BAKALLAND
+      - name: Orzeszki pinii
+        id: '108763'
+        brand: KRESTO
+      - name: Orzechy laskowe
+        id: '48557'
+        brand: SANTE
+      - name: Orzechy nerkowca
+        id: '137701'
+        brand: BIG NATURE
+      - name: Orzechy brazylijskie
+        id: '97849'
+        brand: HEBAR
+      - name: "Orzechy w\u0142oskie"
+        id: '131565'
+        brand: KRESTO
+      - name: Orzechy nerkowca BIO
+        id: '6744'
+        brand: BIO PLANET
+      - name: "Orzechy laskowe \u0142uskane"
+        id: '131649'
+        brand: BIG NATURE
+      - name: "Orzechy laskowe w \u0142upinie"
+        id: '40423'
+        brand: FRISCO FRESH
+      - name: "Orzechy laskowe \u0142uskane"
+        id: '137703'
+        brand: BIG NATURE
+      - name: Orzechy brazylijskie
+        id: '137702'
+        brand: BIG NATURE
+      - name: Orzechy nerkowca BIO
+        id: '14686'
+        brand: BIO PLANET
+      - name: "Nerkowce lekko solone pra\u017Cone"
+        id: '109613'
+        brand: BAKALLAND
+      - name: Orzechy laskowe
+        id: '102687'
+        brand: HEBAR
+      - name: Orzechy nerkowca
+        id: '40045'
+        brand: KRESTO
+      - name: "Orzeszki ziemne pra\u017Cone niesolone"
+        id: '97843'
+        brand: HEBAR
+      - name: "Orzechy w\u0142oskie \u0142uskane"
+        id: '136884'
+        brand: BIG NATURE
+      - name: "Pistacje pra\u017Cone solone"
+        id: '97851'
+        brand: HEBAR
+      - name: Orzechy nerkowca BIO
+        id: '53162'
+        brand: BIO PLANET
+      - name: "Orzechy w\u0142oskie \u0142uskane"
+        id: '98597'
+        brand: HEBAR
+      - name: Orzechy nerkowca
+        id: '47433'
+        brand: BAKALLAND
+      - name: Pistacje
+        id: '16271'
+        brand: KRESTO
+      - name: Orzechy nerkowca
+        id: '104753'
+        brand: HEBAR
+      - name: Orzechy Pinii
+        id: '4003'
+        brand: FRISCO FRESH
+      - name: Orzechy laskowe
+        id: '104767'
+        brand: HEBAR
+      - name: Orzechy pistacjowe
+        id: '534'
+        brand: BAKALLAND
+      - name: Mieszanka orzechowa
+        id: '135013'
+        brand: BAKALIOWA KRAINA
+      - name: "Orzeszki ziemne light pra\u017Cone bez t\u0142uszczu i soli"
+        id: '2821'
+        brand: FELIX
+      - name: Pistacje
+        id: '59673'
+        brand: KRESTO
+      - name: Orzechy nerkowca BIO
+        id: '878'
+        brand: BIO PLANET
+      - name: "Orzechy w\u0142oskie"
+        id: '46361'
+        brand: FRESCO
+      - name: "Orzechy w\u0142oskie"
+        id: '5356'
+        brand: KRESTO
+      - name: Orzechy laskowe
+        id: '47435'
+        brand: BAKALLAND
+      - name: Orzechy laskowe
+        id: '16269'
+        brand: KRESTO
+      - name: "Orzechy ziemne pra\u017Cone niesolone (po\u0142\xF3wki)"
+        id: '136880'
+        brand: BIG NATURE
+      - name: "Orzechy w\u0142oskie"
+        id: '104749'
+        brand: HEBAR
+      - name: "Mix orzech\xF3w (migda\u0142y arachidowe nerkowce laskowe)"
+        id: '135203'
+        brand: KRESTO
+      - name: Orzechy nerkowca
+        id: '97839'
+        brand: HEBAR
+      - name: "Orzechy w\u0142oskie"
+        id: '39698'
+        brand: BAKALLAND
+      - name: Orzechy laskowe
+        id: '46345'
+        brand: FRESCO
+    - name: "\u017Burawina s\u0142odzona cukrem trzcinowym BIO"
+      id: '6902'
+      brand: BIO PLANET
+    - name: Morele suszone bezglutenowe BIO
+      id: '6753'
+      brand: BIO PLANET
+    - name: Rodzynki
+      id: '46287'
+      brand: FRESCO
+    - name: Figi suszone
+      id: '126405'
+      brand: HEBAR
+    - name: Daktyle bez pestek
+      id: '104741'
+      brand: HEBAR
+    - name: "\u015Aliwki kalifornijskie bez pestek BIO (suszone) bezglutenowe"
+      id: '6750'
+      brand: BIO PLANET
+    - name: "\u015Aliwki suszone (ca\u0142e owoce)"
+      id: '48491'
+      brand: BAKALLAND
+    - name: "Morele suszone (ca\u0142e owoce)"
+      id: '4841'
+      brand: BAKALLAND
+    - name: Rodzynki luksusowe
+      id: '8032'
+      brand: BAKALLAND
+    - name: "Morwa suszona bia\u0142a"
+      id: '131652'
+      brand: BIG NATURE
+    - name: "\u015Aliwki suszone"
+      id: '46411'
+      brand: FRESCO
+    - name: Bakalie w miodzie akacjowym
+      id: '135958'
+      brand: "SPI\u017BARNIA ANNY WALCZY\u0143SKIEJ"
+    - name: "\u017Burawina suszona z zag\u0119szczonym sokiem jab\u0142kowym BIO"
+      id: '106399'
+      brand: BAKALLAND BIO
+    - name: Daktyle bez pestek suszone bezglutenowe BIO
+      id: '7481'
+      brand: BIO PLANET
+    - name: "Wi\xF3rki kokosowe bezglutenowe BIO"
+      id: '6748'
+      brand: BIO PLANET
+    - name: "Wi\xF3rki kokosowe"
+      id: '6308'
+      brand: KRESTO
+    - name: "\u017Burawina suszona"
+      id: '97859'
+      brand: HEBAR
+    - name: Rodzynki Jumbo
+      id: '108447'
+      brand: KRESTO
+    - name: Morele suszone naturalnie
+      id: '122349'
+      brand: HEBAR
+    - name: "\u017Burawina ci\u0119ta"
+      id: '137332'
+      brand: BIG NATURE
+    - name: "\u015Aliwki bez pestek BIO (suszone)"
+      id: '127027'
+      brand: BIO PLANET
+    - name: "Kasztany jadalne w \u0142upinie"
+      id: '140635'
+      brand: FRISCO FRESH
+    - name: Rodzynki
+      id: '6490'
+      brand: KRESTO
+    - name: "Wi\xF3rki kokosowe bezglutenowe BIO"
+      id: '101359'
+      brand: BIO PLANET

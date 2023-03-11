@@ -3,8 +3,6 @@
 import logging
 from typing import Set
 
-import fire
-
 from tree_labeller.core.task import LabellingTask
 
 logging.basicConfig(level=logging.INFO)
@@ -17,6 +15,7 @@ def create_task(dir: str, tree: str, allowed_labels: Set[str]):
 
 
 def cli():
+    import fire
     fire.Fire(create_task)
 
 

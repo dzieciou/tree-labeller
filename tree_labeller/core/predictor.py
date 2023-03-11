@@ -1,13 +1,13 @@
 from anytree import PreOrderIter
 
-from tree_labeller.core.types import LabelableCategory, LabelableProduct
-from tree_labeller.tree.coloring import (
+from .types import LabelableCategory, LabelableProduct
+from ..tree.coloring import (
     ColorableNode,
     color_tree,
     select_subtree_requiring_verification,
 )
-from tree_labeller.tree.selectors import select_top_down
-from tree_labeller.tree.utils import internals
+from ..tree.selectors import select_top_down
+from ..tree.utils import internals
 
 
 def _to_colorable_tree(tree):

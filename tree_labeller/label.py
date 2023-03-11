@@ -2,7 +2,6 @@
 import logging
 import random
 
-import fire
 
 from tree_labeller.core.charts import Charts
 from tree_labeller.core.progress import ProgressTracker
@@ -68,6 +67,7 @@ def label(
 
 
 def cli():
+    import fire
     fire.Fire(label)
 
 
